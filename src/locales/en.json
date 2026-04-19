@@ -1,0 +1,39 @@
+{
+    "navbar": {
+        "home": "Home",
+        "products": "Products",
+        "cart": "Cart",
+        "categories": "Categories",
+    
+   
+        "men": "Men",
+        "women": "Women",
+        "unisex": "Unisex",
+        "sport": "Sport"
+    },
+    "productcard": {
+        "sale": "SALE",
+        "currency": "EGP"
+    },
+    "hero": {
+        "newSeasonArrivals": "New Season Arrivals",
+        "heroDescription": "Upgrade your wardrobe with the latest trends in fashion at unbeatable prices.",
+        "shopNow": "Shop Now",
+        "explore": "Explore",
+        "bigSaleTitle": "⚡ Big Sale",
+        "bigSaleSubtitle": "Discover all discounted products",
+        "exploreOffers": "Explore Offers",
+        "sportTitle": "👟 Sport Collection",
+        "sportSubtitle": "New arrivals for athletes",
+        "shopSports": "Shop Sports"
+    },
+    
+    "footer": {
+        "about": "عن الموقع",
+        "contact": "تواصل معنا",
+        "rights": "© جميع الحقوق محفوظة لسنتو ستور",
+        "social": "تابعنا على",
+       
+        "contactText": "تواصل معنا عبر البريد الإلكتروني أو وسائل التواصل الاجتماعي"
+    }
+}
