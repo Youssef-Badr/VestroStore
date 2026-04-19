@@ -320,7 +320,7 @@ function ProductCard({ product }) {
         
         <div className={`flex items-center gap-4 ${isRTL ? "flex-row-reverse" : "flex-row"} justify-center`}>
           <div className="flex items-baseline gap-1">
-            <span className="text-[#86FE05] font-black text-3xl sm:text-4xl italic tracking-tighter leading-none">{product.price}</span>
+            <span className="text-black font-black text-3xl sm:text-4xl italic tracking-tighter leading-none">{product.price}</span>
             <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 italic">{isRTL ? "ج.م" : "EGP"}</span>
           </div>
 
