@@ -373,7 +373,7 @@ return (
                 onClick={() => navigate(-1)} 
                 className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-colors z-10"
               >
-                <ChevronLeft size={24} className={`${isRTL ? 'rotate-180' : ''} text-slate-900 dark:text-[#86FE05]`} />
+                <ChevronLeft size={24} className={`${isRTL ? 'rotate-180' : ''} text-slate-900 dark:text-[#6bc905]`} />
               </button>
 
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -417,7 +417,7 @@ return (
         }
       }}
       placeholder={isRTL ? "الاسم بالكامل" : "Full Name"}
-      className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border ${nameError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-bold text-slate-900 dark:text-white`}
+      className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border ${nameError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-[#6fd107] outline-none transition-all font-bold text-slate-900 dark:text-white`}
     />
   </div>
   
@@ -433,7 +433,7 @@ return (
 <div className="relative group">
   <Phone 
     size={18} 
-    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#86FE05] transition-colors`} 
+    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#71d307] transition-colors`} 
   />
   <input
     type="tel" 
@@ -442,7 +442,7 @@ return (
     value={formData.phone} 
     onChange={handleChange}
     placeholder={isRTL ? "رقم الهاتف" : "Phone Number"}
-    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
+    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#68c405] outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
   />
 </div>
 
@@ -450,7 +450,7 @@ return (
 <div className="relative group">
   <Phone 
     size={18} 
-    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#86FE05] transition-colors`} 
+    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#67c206] transition-colors`} 
   />
   <input
     type="tel" 
@@ -458,17 +458,17 @@ return (
     value={formData.secondaryPhone || ''} 
     onChange={handleChange}
     placeholder={isRTL ? "رقم هاتف إضافي (اختياري)" : "Secondary Phone (Optional)"}
-    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
+    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6bcb06] outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
   />
 </div>
 
 
               <div className="relative group">
-                <Mail size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#86FE05] transition-colors`} />
+                <Mail size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#70d307] transition-colors`} />
                 <input
                   type="email" name="email" value={formData.email} onChange={handleChange}
                   placeholder={isRTL ? "البريد الإلكتروني (اختياري)" : "Email (Optional)"}
-                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-bold text-slate-900 dark:text-white`}
+                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6fd106] outline-none transition-all font-bold text-slate-900 dark:text-white`}
                 />
               </div>
             </div>
@@ -482,7 +482,7 @@ return (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <select
                 name="city" value={formData.city} onChange={handleChange} required
-                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
+                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#69c606] outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
               >
                 <option value="">{isRTL ? "المحافظة" : "Select City"}</option>
                 {citiesList.map((c) => (
@@ -492,7 +492,7 @@ return (
 
               <select
                 name="district" value={formData.bostaDistrictId} onChange={handleChange} required
-                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
+                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6fd106] outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
               >
                 <option value="">{isRTL ? "الحي / المنطقة" : "Select District"}</option>
                 {districts.map((d) => (
@@ -502,19 +502,19 @@ return (
             </div>
 
             <div className="relative group">
-              <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#86FE05]`} />
+              <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#6fcd09]`} />
               <input
                 type="text" name="address" required value={formData.address} onChange={handleChange}
                 autoComplete="new-address"
                 placeholder={isRTL ? "العنوان بالتفصيل (اسم الشارع / علامة مميزة)" : "Detailed Address"}
-                className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-bold text-slate-900 dark:text-white`}
+                className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6dcd06] outline-none transition-all font-bold text-slate-900 dark:text-white`}
               />
             </div>
 
             <div className="grid grid-cols-3 gap-3">
-              <input type="text" name="buildingNumber" placeholder={isRTL ? "عمارة" : "Bldg"} value={formData.buildingNumber} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#86FE05]" />
-              <input type="text" name="floor" placeholder={isRTL ? "دور" : "Floor"} value={formData.floor} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#86FE05]" />
-              <input type="text" name="apartment" placeholder={isRTL ? "شقة" : "Apt"} value={formData.apartment} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#86FE05]" />
+              <input type="text" name="buildingNumber" placeholder={isRTL ? "عمارة" : "Bldg"} value={formData.buildingNumber} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#6cc908]" />
+              <input type="text" name="floor" placeholder={isRTL ? "دور" : "Floor"} value={formData.floor} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#6cc908]" />
+              <input type="text" name="apartment" placeholder={isRTL ? "شقة" : "Apt"} value={formData.apartment} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#6cc908]" />
             </div>
           </section>
 
@@ -527,7 +527,7 @@ return (
               <button
                 type="button"
                 onClick={() => setShowDiscountModal(true)}
-                className="text-[11px] font-black text-[#86FE05] uppercase italic hover:underline"
+                className="text-[11px] font-black text-[#71d407] uppercase italic hover:underline"
               >
                 ✨ {isRTL ? "استعرض العروض" : "View Offers"}
               </button>
@@ -535,18 +535,18 @@ return (
             
             <div className="flex gap-2">
               <div className="relative flex-1 group">
-                <Tag size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#86FE05]`} />
+                <Tag size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#6cc908]`} />
                 <input
                   type="text" name="discountCode" value={formData.discountCode} 
                   onChange={(e) => setFormData(p => ({...p, discountCode: e.target.value.toUpperCase()}))}
                   placeholder={isRTL ? "أدخل الكود هنا" : "Enter Code"}
-                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#86FE05] outline-none transition-all font-black text-slate-900 dark:text-[#86FE05] uppercase`}
+                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6cc908] outline-none transition-all font-black text-slate-900 dark:text-[#6cc908] uppercase`}
                 />
               </div>
               <button
                 type="button"
                 onClick={() => validateDiscount()}
-                className="px-6 bg-slate-900 dark:bg-white text-white dark:text-black rounded-[1.5rem] font-black uppercase italic text-xs hover:bg-[#86FE05] dark:hover:bg-[#86FE05] transition-colors"
+                className="px-6 bg-slate-900 dark:bg-white text-white dark:text-black rounded-[1.5rem] font-black uppercase italic text-xs hover:bg-[#6cc908] dark:hover:bg-[#6cc908] transition-colors"
               >
                 {isRTL ? "تفعيل" : "Apply"}
               </button>
@@ -582,16 +582,16 @@ return (
             return (
               <div 
                 key={disc._id} 
-                className="relative group overflow-hidden rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-[#86FE05]/20 p-5 hover:border-[#86FE05] transition-all bg-slate-50/50 dark:bg-white/5"
+                className="relative group overflow-hidden rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-[#86FE05]/20 p-5 hover:border-[#6cc908] transition-all bg-slate-50/50 dark:bg-white/5"
               >
                 {/* الجزء العلوي: الكود والزر */}
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex flex-col">
-                    <span className="text-2xl font-black italic text-slate-900 dark:text-[#86FE05] tracking-tighter uppercase">
+                    <span className="text-2xl font-black italic text-slate-900 dark:text-[#6cc908] tracking-tighter uppercase">
                       {disc.code}
                     </span>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#86FE05] animate-pulse"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#6cc908] animate-pulse"></span>
                       <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
                         {isFreeShipping 
                           ? (isRTL ? "شحن مجاني" : "FREE SHIPPING") 
@@ -610,7 +610,7 @@ return (
                       validateDiscount(disc.code);
                       setShowDiscountModal(false);
                     }}
-                    className="bg-black dark:bg-[#86FE05] text-[#86FE05] dark:text-black px-5 py-2 rounded-full text-[10px] font-black uppercase italic shadow-lg active:scale-95 transition-all"
+                    className="bg-black dark:bg-[#6cc908] text-[#6cc908] dark:text-black px-5 py-2 rounded-full text-[10px] font-black uppercase italic shadow-lg active:scale-95 transition-all"
                   >
                     {isRTL ? "نسخ وتفعيل" : "Copy & Apply"}
                   </button>
@@ -641,12 +641,12 @@ return (
                   {disc.appliesToAll ? (
                     /* حالة: العرض يشمل كل شيء */
                     <div className="flex items-center gap-2 py-1">
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#86FE05]/20 text-[#86FE05]">
+                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#86FE05]/20 text-[#6cc908]">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span className="text-[10px] font-black uppercase italic text-[#86FE05] dark:text-[#86FE05]">
+                      <span className="text-[10px] font-black uppercase italic text-[#6cc908] dark:text-[#6cc908]">
                         {isRTL ? "يشمل جميع منتجات المتجر" : "Applied to all products"}
                       </span>
                     </div>
@@ -670,14 +670,14 @@ return (
                             href={`/product/${p._id}`} // لينك لصفحة المنتج
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-shrink-0 flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 hover:border-[#86FE05] transition-all group/item"
+                            className="flex-shrink-0 flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 hover:border-[#6cc908] transition-all group/item"
                           >
                             <img 
                               src={p.images?.[0]?.url || p.image} 
                               className="w-8 h-8 rounded-xl object-cover grayscale group-hover/item:grayscale-0 transition-all shadow-sm"
                               alt={p.name}
                             />
-                            <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 max-w-[80px] truncate group-hover/item:text-[#86FE05]">
+                            <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 max-w-[80px] truncate group-hover/item:text-[#6cc908]">
                               {p.name}
                             </span>
                           </a>
@@ -710,18 +710,18 @@ return (
             <div className="grid grid-cols-2 gap-4">
               <div 
                 onClick={() => setFormData(p => ({...p, paymentMethod: 'cash'}))}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'cash' ? 'border-[#86FE05] bg-[#86FE05]/5 shadow-[0_0_30px_#86FE0515]' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
+                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'cash' ? 'border-[#6cc908] bg-[#86FE05]/5 shadow-[0_0_30px_#86FE0515]' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
               >
-                <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-[#86FE05]' : 'text-slate-400'} />
+                <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-[#6cc908]' : 'text-slate-400'} />
                 <span className={`text-[10px] font-black uppercase italic ${formData.paymentMethod === 'cash' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                   {isRTL ? "عند الاستلام" : "Cash"}
                 </span>
               </div>
               <div 
                 onClick={() => setFormData(p => ({...p, paymentMethod: 'card'}))}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'card' ? 'border-[#86FE05] bg-[#86FE05]/5 shadow-[0_0_30px_#86FE0515]' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
+                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'card' ? 'border-[#6cc908] bg-[#86FE05]/5 shadow-[0_0_30px_#86FE0515]' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
               >
-                <CreditCard size={28} className={formData.paymentMethod === 'card' ? 'text-[#86FE05]' : 'text-slate-400'} />
+                <CreditCard size={28} className={formData.paymentMethod === 'card' ? 'text-[#6cc908]' : 'text-slate-400'} />
                 <span className={`text-[10px] font-black uppercase italic ${formData.paymentMethod === 'card' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                   {isRTL ? "فيزا / ماستر" : "Card"}
                 </span>
@@ -731,11 +731,11 @@ return (
 
          {/* 💎 Vestro Dynamic Discount Summary */}
 {discountInfo && (
-  <div className="rounded-[2.5rem] bg-white dark:bg-[#0A0A0A] p-6 border-[3px] border-black dark:border-[#86FE05] relative overflow-hidden shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(134,254,5,0.2)]">
+  <div className="rounded-[2.5rem] bg-white dark:bg-[#0A0A0A] p-6 border-[3px] border-black dark:border-[#6cc908] relative overflow-hidden shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(134,254,5,0.2)]">
     
     {/* Header: Title and Type */}
     <div className="flex justify-between items-center mb-6">
-      <div className="bg-black text-[#86FE05] px-4 py-1 rounded-full text-xs font-black italic uppercase">
+      <div className="bg-black text-[#6cc908] px-4 py-1 rounded-full text-xs font-black italic uppercase">
         {discountInfo.discountType === 'free_shipping' ? '🚚 FREE SHIPPING MODE' : '🔥 OFFER ACTIVE'}
       </div>
       <span className="text-black dark:text-white font-black text-xl italic">{discountInfo.discountCode}</span>
@@ -756,7 +756,7 @@ return (
             priceDisplay = (
               <div className="flex flex-col items-end">
                 <span className="text-[10px] text-slate-400 line-through font-bold">{item.price} EGP</span>
-                <span className="text-sm font-black text-black dark:text-[#86FE05]">
+                <span className="text-sm font-black text-black dark:text-[#6cc908]">
                   {Math.round(item.price * (1 - discountInfo.percentage / 100))} EGP
                 </span>
               </div>
@@ -767,7 +767,7 @@ return (
             priceDisplay = (
               <div className="flex flex-col items-end">
                 <span className="text-[10px] text-red-500 font-black uppercase italic">Get Unit</span>
-                <span className="text-sm font-black bg-[#86FE05] text-black px-2 rounded-md tracking-tighter">FREE / DISCOUNTED</span>
+                <span className="text-sm font-black bg-[#6cc908] text-black px-2 rounded-md tracking-tighter">FREE / DISCOUNTED</span>
               </div>
             );
           }
@@ -778,7 +778,7 @@ return (
             key={idx} 
             className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
               isApp 
-                ? 'bg-white border-2 border-black dark:border-[#86FE05] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' 
+                ? 'bg-white border-2 border-black dark:border-[#6cc908] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' 
                 : 'bg-slate-50 opacity-40'
             }`}
           >
@@ -786,7 +786,7 @@ return (
               <div className="relative">
                 <img src={item.image} className="w-14 h-14 rounded-xl object-cover border-2 border-black" alt="" />
                 {isApp && (
-                  <div className="absolute -top-2 -left-2 bg-black text-[#86FE05] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#86FE05]">
+                  <div className="absolute -top-2 -left-2 bg-black text-[#6cc908] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#6cc908]">
                     {isRTL ? "مشمول" : "INCL."}
                   </div>
                 )}
@@ -806,9 +806,9 @@ return (
     </div>
 
     {/* Total Savings: الواجهة القوية */}
-    <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 border-[#86FE05]">
+    <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 border-[#6cc908]">
       <div>
-        <p className="text-[#86FE05] text-[10px] font-black uppercase tracking-widest mb-1">
+        <p className="text-[#6cc908] text-[10px] font-black uppercase tracking-widest mb-1">
           {isRTL ? "إجمالي التوفير" : "TOTAL SAVINGS"}
         </p>
         <h3 className="text-white text-3xl font-black italic tracking-tighter">
@@ -818,7 +818,7 @@ return (
       <div className="text-right">
          {discountInfo.freeShippingApplied && (
             <div className="flex flex-col items-end">
-                <span className="bg-[#86FE05] text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic mb-1">
+                <span className="bg-[#6cc908] text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic mb-1">
                    Free Delivery
                 </span>
                 <span className="text-white/50 text-[8px] font-bold uppercase">Applied to Order</span>
@@ -838,13 +838,13 @@ return (
 
             <div className="flex justify-between items-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
               <span>{isRTL ? "تكلفة الشحن" : "Shipping"}</span>
-              <span className={shippingCost === 0 && selectedCityObj ? "text-[#86FE05] font-black italic" : "text-white"}>
+              <span className={shippingCost === 0 && selectedCityObj ? "text-[#6cc908] font-black italic" : "text-white"}>
                 {!selectedCityObj ? (isRTL ? "بانتظار العنوان" : "Waiting for address") : (shippingCost === 0 ? (isRTL ? "شحن مجاني 🎁" : "FREE SHIPPING 🎁") : `+${shippingCost} EGP`)}
               </span>
             </div>
 
             {discountInfo && (
-              <div className="flex justify-between items-center text-[#86FE05] text-[10px] font-black uppercase tracking-[0.2em]">
+              <div className="flex justify-between items-center text-[#6cc908] text-[10px] font-black uppercase tracking-[0.2em]">
                 <span>{isRTL ? "الخصم" : "Discount"}</span>
                 <span className="italic">-{discountInfo.discountAmount} EGP</span>
               </div>
@@ -852,7 +852,7 @@ return (
 
             <div className="pt-6 border-t border-white/10 flex justify-between items-end">
               <div>
-                <span className="text-[10px] font-black text-[#86FE05] uppercase tracking-[0.3em] mb-1 block">
+                <span className="text-[10px] font-black text-[#6cc908] uppercase tracking-[0.3em] mb-1 block">
                   {isRTL ? "المبلغ الإجمالي" : "Grand Total"}
                 </span>
                 <div className="text-4xl font-black italic leading-none tracking-tighter">
@@ -860,7 +860,7 @@ return (
                 </div>
               </div>
               <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
-                 <Home size={20} className="text-[#86FE05] opacity-50" />
+                 <Home size={20} className="text-[#6cc908] opacity-50" />
               </div>
             </div>
           </div>
@@ -869,7 +869,7 @@ return (
           <button
             type="submit" disabled={loading}
             className={`w-full py-6 rounded-[2rem] font-black uppercase italic tracking-[0.2em] transition-all shadow-2xl relative overflow-hidden group
-              ${loading ? 'bg-slate-800 cursor-wait' : 'bg-[#86FE05] text-black hover:scale-[1.02] active:scale-95 shadow-[#86FE05]/20 hover:shadow-[#86FE05]/40'}
+              ${loading ? 'bg-slate-800 cursor-wait' : 'bg-[#6cc908] text-black hover:scale-[1.02] active:scale-95 shadow-[#86FE05]/20 hover:shadow-[#86FE05]/40'}
             `}
           >
             {loading ? (

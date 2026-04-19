@@ -109,9 +109,9 @@ const [position, setPosition] = useState({
 
               <div className="flex gap-5">
                 {[
-                  { icon: <FaFacebookF />, link: "https://facebook.com/vestro", color: "hover:bg-[#1877F2]" },
-                  { icon: <FaInstagram />, link: "https://instagram.com/vestro", color: "hover:bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF]" },
-                  { icon: <FaTiktok />, link: "https://tiktok.com/@vestro", color: "hover:bg-black" }
+                  { icon: <FaFacebookF />, link: "https://www.facebook.com/share/1E4b9xJXs2/?mibextid=wwXIfr", color: "hover:bg-[#1877F2]" },
+                  { icon: <FaInstagram />, link: "https://www.instagram.com/vestroeg?igsh=MXZpaHVtcm05bjUyeQ%3D%3D&utm_source=qr", color: "hover:bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF]" },
+                  { icon: <FaTiktok />, link: "https://www.tiktok.com/@stokecity58113?_r=1&_t=ZS-95FzIbdfEkm", color: "hover:bg-black" }
                 ].map((social, i) => (
                   <a key={i} href={social.link} target="_blank" rel="noreferrer" className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all ${darkMode ? "border-white/10 bg-white/5" : "border-black bg-white"} ${social.color} hover:text-white hover:-translate-y-2`}>
                     {social.icon}

@@ -241,13 +241,14 @@ const ThankYou = () => {
             {/* Quick Actions */}
             <div className="grid grid-cols-1 gap-3">
                <a 
-                href="https://wa.me/201157035111" 
+                href="https://wa.me/201060850472" 
                 target="_blank" 
                 rel="noreferrer"
                 className={`flex items-center justify-center gap-3 py-5 rounded-[25px] text-[11px] font-black uppercase tracking-[0.2em] transition-all border ${darkMode ? 'bg-white/5 border-white/5 text-white hover:bg-[#86FE05] hover:text-black' : 'bg-gray-100 border-gray-200 text-black hover:bg-black hover:text-white'}`}
                >
                  <MessageCircle size={18}/> {isRTL ? "تحدث مع الدعم" : "Contact Support"}
                </a>
+
                {/* <button 
                 onClick={() => navigate("/orders")} 
                 className={`flex items-center justify-center gap-3 py-5 rounded-[25px] text-[11px] font-black uppercase tracking-[0.2em] transition-all ${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}
