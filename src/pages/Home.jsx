@@ -13,7 +13,6 @@ import api from "../../src/api/axiosInstance";
 import ProductCard from "../components/ProductCard";
 
 
-// --- مكون السكرولر المطور (النسخة الاحترافية) ---
 const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, setIsPaused }) => {
   const containerRef = useRef(null);
 
@@ -24,7 +23,12 @@ const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, s
 
   const scrollManual = (scrollOffset) => {
     setIsPaused(true);
-    if (containerRef.current) containerRef.current.scrollLeft += scrollOffset;
+    if (containerRef.current) {
+      containerRef.current.scrollBy({
+        left: scrollOffset,
+        behavior: "smooth",
+      });
+    }
   };
 
   if (scrollItems.length === 0) return null;
@@ -33,23 +37,22 @@ const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, s
     ${darkMode ? "bg-zinc-900/90 text-white border-zinc-800 hover:bg-[#86FE05] hover:text-black" : "bg-white/90 text-black border-gray-200 hover:bg-black hover:text-white"}`;
 
   return (
-    <div className="w-full relative py-8 group" dir="ltr">
+    <div
+      className="w-full relative py-8 group"
+      dir="ltr"
+      onMouseLeave={() => setIsPaused(false)}   // 👈 يرجع يشتغل بعد ما يشيل الماوس
+    >
+
       {/* الأسهم */}
-     <button
-  onClick={() => scrollManual(-300)}
-  className={`${arrowClass} left-4`}
->
-  <ChevronLeft size={24} />
-</button>
+      <button onClick={() => scrollManual(-300)} className={`${arrowClass} left-4`}>
+        <ChevronLeft size={24} />
+      </button>
 
-<button
-  onClick={() => scrollManual(300)}
-  className={`${arrowClass} right-4`}
->
-  <ChevronRight size={24} />
-</button>
+      <button onClick={() => scrollManual(300)} className={`${arrowClass} right-4`}>
+        <ChevronRight size={24} />
+      </button>
 
-      {/* زرار استئناف الحركة يظهر فقط عند الإيقاف */}
+      {/* تشغيل / إيقاف */}
       {isPaused && (
         <motion.button
           initial={{ opacity: 0, scale: 0.5 }}
@@ -57,45 +60,51 @@ const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, s
           onClick={() => setIsPaused(false)}
           className="absolute top-4 right-10 z-30 flex items-center gap-2 px-4 py-2 rounded-full bg-[#86FE05] text-black font-bold text-xs shadow-lg"
         >
-          <Play size={14} fill="black" /> {direction === "right" ? "تشغيل" : "Resume"}
+          <Play size={14} fill="black" />
+          {direction === "right" ? "تشغيل" : "Resume"}
         </motion.button>
       )}
 
-      <div ref={containerRef} className="w-full overflow-hidden whitespace-nowrap scroll-smooth">
+      {/* SCROLLER */}
+      <div
+        ref={containerRef}
+        className="w-full overflow-x-auto whitespace-nowrap scroll-smooth"
+        onMouseEnter={() => setIsPaused(true)}   // 👈 desktop hover يوقف
+        onMouseLeave={() => setIsPaused(false)}  // 👈 يرجع يشتغل
+        onTouchStart={() => setIsPaused(true)}   // 👈 موبايل touch يوقف
+        onTouchEnd={() => setTimeout(() => setIsPaused(false), 1200)} // 👈 يرجع بعد لحظة
+      >
+
         <motion.div
           className="inline-flex gap-6 px-4"
-       animate={{ 
-  x: isPaused 
-    ? undefined 
-    : (direction === "right" 
-        ? ["-50%", "0%"] 
-        : ["0%", "-50%"]) 
-}}
-
-transition={{ 
-  duration: 80, // أو 50 لو عايزها تقيلة جدًا
-  ease: "linear", 
-  repeat: Infinity 
-}}
-          style={{ animationPlayState: isPaused ? "paused" : "running" }}
-          whileHover={{ animationPlayState: isPaused ? "paused" : "paused" }}
+          animate={{
+            x: isPaused
+              ? undefined
+              : direction === "right"
+                ? ["0%", "-50%"]
+                : ["-50%", "0%"],
+          }}
+          transition={{
+            duration: 140,   // 🐢 بطّأناه جدًا (سلحفاة حقيقية)
+            ease: "linear",
+            repeat: Infinity,
+          }}
         >
           {scrollItems.map((product, index) => (
             <div
               key={`${product._id}-${index}`}
               className="w-64 md:w-72 flex-shrink-0 px-2 cursor-pointer"
-              // لو ضغط على أي مكان في الكارت (شراء أو غيره) السكرولر يقف
-              onClickCapture={() => setIsPaused(true)}
+              onClickCapture={() => setIsPaused(true)} // 👈 أي click يوقف
             >
               <ProductCard product={product} />
             </div>
           ))}
         </motion.div>
+
       </div>
     </div>
   );
 });
-
 export default function Home() {
   const { language } = useLanguage();
   const { darkMode } = useTheme();
@@ -148,27 +157,73 @@ export default function Home() {
     >
       <div className="container mx-auto px-4 py-10 space-y-20">
         
-        {/* Hero Section */}
-        <Suspense fallback={<div className="h-[400px] bg-zinc-900 animate-pulse rounded-[2.5rem]" />}>
-          {hero?.isActive && (
-            <div className={`w-full overflow-hidden rounded-[2.5rem] border transition-all duration-700 relative ${darkMode ? "border-[#86FE05]/20 bg-[#0a0a0a]" : "border-zinc-200 bg-white"}`} style={{ height: "500px" }}>
-              {hero.image?.url && (
-                <div className="absolute inset-0 z-0">
-                  <img src={hero.image.url} alt="Banner" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/40" />
-                </div>
-              )}
-              <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white">
-                <h1 className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter mb-4">
-                  {isRTL ? hero.titleAr : hero.titleEn}
-                </h1>
-                <p className="text-lg md:text-2xl font-medium max-w-2xl opacity-90 uppercase tracking-widest">
-                  {isRTL ? hero.subtitleAr : hero.subtitleEn}
-                </p>
-              </div>
-            </div>
-          )}
-        </Suspense>
+       
+    <Suspense
+  fallback={
+    <div className="h-[400px] bg-zinc-900 animate-pulse rounded-[2.5rem]" />
+  }
+>
+  {hero?.isActive && (
+    <div
+      onClick={() => navigate("/products")}
+      className={`w-full overflow-hidden rounded-[2.5rem] border transition-all duration-700 relative cursor-pointer group ${
+        darkMode
+          ? "border-[#86FE05]/20 bg-[#0a0a0a]"
+          : "border-zinc-200 bg-white"
+      }`}
+      style={{ height: "350px" }}
+    >
+
+      {/* IMAGE */}
+      {hero.image?.url && (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={hero.image.url}
+            alt="Banner"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+      )}
+
+      {/* TEXT */}
+<div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white -translate-y-8 md:-translate-y-12">
+        <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-3 ">
+          {isRTL ? hero.titleAr : hero.titleEn}
+        </h1>
+
+        <p className="text-lg md:text-xl font-medium max-w-2xl opacity-90 uppercase tracking-widest">
+          {isRTL ? hero.subtitleAr : hero.subtitleEn}
+        </p>
+
+      <button
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate("/products");
+  }}
+  className="
+    mt-6 px-7 py-3 
+    font-black rounded-xl shadow-lg
+    transition-all duration-300
+    hover:scale-110 active:scale-95
+    animate-bounce
+
+    bg-slate-300 text-black
+    dark:bg-white dark:text-black
+
+    hover:shadow-[0_0_25px_rgba(103,190,10,0.6)]
+  "
+>
+  <span className="inline-flex items-center gap-2">
+    {isRTL ? "🛍️ تسوق المنتجات الآن" : "🛍️ Shop All Products"}
+  </span>
+</button>
+
+      </div>
+
+    </div>
+  )}
+</Suspense>
 
         {/* --- Scroller Section --- */}
         {!loading && allProducts.length > 0 && (
@@ -198,11 +253,11 @@ export default function Home() {
       ? ["0px 0px 0px #86FE05", "0px 0px 20px #86FE05", "0px 0px 0px #86FE05"] // نبض ضوئي في الدارك مود
       : ["0px 0px 0px rgba(0,0,0,0)", "0px 10px 20px rgba(0,0,0,0.1)", "0px 0px 0px rgba(0,0,0,0)"]
   }}
-  transition={{
-    duration: 3,       // الحركة بتاخد 3 ثواني عشان تكون ناعمة وهادية
-    repeat: Infinity,  // بتفضل تعيد نفسها
-    ease: "easeInOut"  // سرعة متدرجة في الطلوع والنزول
-  }}
+ transition={{
+  duration: 6,   // ⬅️ بدل 3 = أبطأ وناعم
+  repeat: Infinity,
+  ease: "easeInOut"
+}}
   // ------------------------------------------
 
   onClick={() => navigate("/products")}
