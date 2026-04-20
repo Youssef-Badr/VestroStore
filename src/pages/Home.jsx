@@ -72,7 +72,7 @@ const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, s
         onMouseEnter={() => setIsPaused(true)}   // 👈 desktop hover يوقف
         onMouseLeave={() => setIsPaused(false)}  // 👈 يرجع يشتغل
         onTouchStart={() => setIsPaused(true)}   // 👈 موبايل touch يوقف
-        onTouchEnd={() => setTimeout(() => setIsPaused(false), 3500)} // 👈 يرجع بعد لحظة
+        onTouchEnd={() => setTimeout(() => setIsPaused(false), 4500)} // 👈 يرجع بعد لحظة
       >
 
         <motion.div
