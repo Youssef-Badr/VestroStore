@@ -54,13 +54,32 @@ const OrdersPage = () => {
 
   const getStatusStyle = (status) => {
     const styles = {
-      Delivered: "text-green-500 border-green-500/20 bg-green-500/5",
-      Processing: "text-yellow-500 border-yellow-500/20 bg-yellow-500/5",
-      Shipped: "text-[#86FE05] border-[#86FE05]/20 bg-[#86FE05]/5",
-      Cancelled: "text-red-500 border-red-500/20 bg-red-500/5",
-      Pending_Payment: "text-orange-500 border-orange-500/20 bg-orange-500/5",
-      Paid: "text-blue-500 border-blue-500/20 bg-blue-500/5",
-    };
+  Placed: "text-blue-400 border-blue-400/20 bg-blue-400/5",
+
+  Confirmed: "text-indigo-400 border-indigo-400/20 bg-indigo-400/5",
+
+  Processing: "text-yellow-500 border-yellow-500/20 bg-yellow-500/5",
+
+  Shipped: "text-[#65bc08] border-[#65bc08]/20 bg-[#65bc08]/5",
+
+  Out_for_Delivery: "text-cyan-400 border-cyan-400/20 bg-cyan-400/5",
+
+  Delivered: "text-green-500 border-green-500/20 bg-green-500/5",
+
+  Cancelled: "text-red-500 border-red-500/20 bg-red-500/5",
+
+  On_Hold: "text-gray-400 border-gray-400/20 bg-gray-400/5",
+
+  Returned: "text-purple-400 border-purple-400/20 bg-purple-400/5",
+
+  Exchange_Requested: "text-pink-400 border-pink-400/20 bg-pink-400/5",
+
+  Failed_Attempt: "text-red-400 border-red-400/20 bg-red-400/5",
+
+  Pending_Payment: "text-orange-500 border-orange-500/20 bg-orange-500/5",
+
+  Paid: "text-blue-500 border-blue-500/20 bg-blue-500/5",
+};
     return styles[status] || "text-gray-400 border-gray-400/20 bg-gray-400/5";
   };
 
@@ -71,7 +90,7 @@ const OrdersPage = () => {
           <div className={`w-12 h-12 md:w-16 md:h-16 border-2 rounded-full ${darkMode ? 'border-[#86FE05]/10' : 'border-gray-100'}`}></div>
           <div className="absolute top-0 w-12 h-12 md:w-16 md:h-16 border-t-2 border-[#86FE05] rounded-full animate-spin"></div>
         </div>
-        <p className="text-[#86FE05] font-black tracking-widest text-[10px] uppercase animate-pulse">Vestro Orders</p>
+        <p className="text-[#65bc08] font-black tracking-widest text-[10px] uppercase animate-pulse">Vestro Orders</p>
       </div>
     );
   }
@@ -83,14 +102,14 @@ const OrdersPage = () => {
         {/* --- Header --- */}
         <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10 border-b pb-8 ${darkMode ? 'border-white/5' : 'border-gray-200'}`}>
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-start">
-            <div className="w-14 h-14 md:w-16 md:h-16 bg-[#86FE05] flex items-center justify-center rounded-2xl md:rounded-[24px] rotate-2 shadow-lg">
+            <div className="w-14 h-14 md:w-16 md:h-16 bg-[#63b808] flex items-center justify-center rounded-2xl md:rounded-[24px] rotate-2 shadow-lg">
               <ShoppingBag size={28} className="text-black -rotate-2" />
             </div>
             <div>
               <h1 className="text-3xl md:text-5xl font-black italic tracking-tighter uppercase leading-none">
                 {isRTL ? "طلباتي" : "My Orders"}
               </h1>
-              <p className={`font-bold mt-2 text-[10px] uppercase tracking-[0.2em] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              <p className={`font-bold mt-2 text-[15px] uppercase tracking-[0.2em] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                 {isRTL ? "تتبع وإدارة مشترياتك" : "Track and manage your history"}
               </p>
             </div>
@@ -109,7 +128,7 @@ const OrdersPage = () => {
           <div className={`text-center py-24 border-2 border-dashed rounded-[40px] px-4 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-gray-200 bg-white shadow-sm'}`}>
             <Package size={50} className={`mx-auto mb-6 ${darkMode ? 'text-gray-800' : 'text-gray-200'}`} />
             <h2 className="text-xl md:text-2xl font-black mb-2 uppercase italic">{isRTL ? "السجل فارغ" : "Empty Vault"}</h2>
-            <Link to="/products" className="mt-6 inline-flex items-center gap-3 bg-[#86FE05] text-black px-8 py-4 rounded-2xl font-black uppercase text-[10px] hover:scale-105 transition-all shadow-xl shadow-[#86FE05]/20">
+            <Link to="/products" className="mt-6 inline-flex items-center gap-3 bg-[#65bc08] text-black px-8 py-4 rounded-2xl font-black uppercase text-[10px] hover:scale-105 transition-all shadow-xl shadow-[#86FE05]/20">
               {isRTL ? "تسوق الآن" : "Go Shopping"} <ArrowUpRight size={16}/>
             </Link>
           </div>
@@ -127,16 +146,16 @@ const OrdersPage = () => {
                         <span className={`block w-fit text-[9px] font-black uppercase px-4 py-1.5 rounded-full border ${getStatusStyle(order.status)}`}>
                           {order.status}
                         </span>
-                        <h3 className={`font-mono font-bold text-xs tracking-widest ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {/* <h3 className={`font-mono font-bold text-xs tracking-widest ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                           #{order._id.slice(-8).toUpperCase()}
-                        </h3>
+                        </h3> */}
                       </div>
                       <div className={`text-end lg:text-start lg:mt-4 space-y-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                         <p className="text-[10px] font-bold flex items-center lg:justify-start justify-end gap-2 uppercase tracking-tighter">
-                          <Calendar size={12} className="text-[#86FE05]"/> {day}
+                          <Calendar size={12} className="text-black dar:text-white"/> {day}
                         </p>
                         <p className="text-[10px] font-bold flex items-center lg:justify-start justify-end gap-2 uppercase tracking-tighter">
-                          <Clock size={12} className="text-[#86FE05]"/> {time}
+                          <Clock size={12} className="text-black dar:text-white"/> {time}
                         </p>
                       </div>
                     </div>
@@ -163,7 +182,7 @@ const OrdersPage = () => {
                     <div className={`lg:ml-auto rtl:lg:mr-auto flex flex-row items-center justify-between lg:justify-end w-full lg:w-auto gap-8 pt-6 lg:pt-0 border-t lg:border-0 ${darkMode ? 'border-white/5' : 'border-gray-100'}`}>
                       <div className="text-left rtl:text-right">
                         <p className={`text-[8px] font-black uppercase tracking-widest italic mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Final Invoice</p>
-                        <p className="text-2xl md:text-3xl font-black text-[#86FE05] tracking-tighter">
+                        <p className="text-2xl md:text-3xl font-black text-black dark:text-white tracking-tighter">
                           {order.totalPrice} <span className={`text-xs ${darkMode ? 'text-white' : 'text-black'}`}>EGP</span>
                         </p>
                       </div>

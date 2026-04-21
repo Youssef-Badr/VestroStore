@@ -79,7 +79,7 @@ const ThankYou = () => {
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#86FE05]/10 blur-[100px] -z-10 rounded-full"></div>
           
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-start">
-            <div className="w-20 h-20 bg-[#86FE05] rounded-3xl flex items-center justify-center rotate-3 shadow-[0_10px_40px_rgba(134,254,5,0.3)] shrink-0">
+            <div className="w-20 h-20 bg-[#6cca08] rounded-3xl flex items-center justify-center rotate-3 shadow-[0_10px_40px_rgba(134,254,5,0.3)] shrink-0">
               <CheckCircle size={40} className="text-black stroke-[3px]" />
             </div>
             <div>
@@ -87,8 +87,8 @@ const ThankYou = () => {
                 {isRTL ? "تم بنجاح!" : "Order Placed!"}
               </h1>
               <p className="text-[11px] font-bold opacity-60 uppercase tracking-[0.3em]">
-                {isRTL ? "رقم الطلب الخاص بك:" : "Your tracking ID:"} 
-                <span className="text-[#86FE05] ml-2">#{order._id.slice(-8).toUpperCase()}</span>
+                {/* {isRTL ? "رقم الطلب الخاص بك:" : "Your tracking ID:"}  */}
+                {/* <span className="text-[#86FE05] ml-2">#{order._id.slice(-8).toUpperCase()}</span> */}
               </p>
             </div>
           </div>
@@ -101,7 +101,7 @@ const ThankYou = () => {
             
            {/* Products List */}
 <div className={`rounded-[35px] border p-6 md:p-8 ${darkMode ? 'bg-[#0A0A0A] border-white/5' : 'bg-white border-gray-100 shadow-sm'}`}>
-  <h2 className="text-[15px] font-black italic uppercase mb-6 flex items-center gap-3 tracking-[0.2em] text-[#5fb008]">
+  <h2 className="text-[18px] font-black italic uppercase mb-6 flex items-center gap-3 tracking-[0.2em] text-black dark:text-white">
     <Package size={18} /> {isRTL ? "محتويات الحقيبة" : "Bag Contents"}
   </h2>
   <div className="space-y-8">
@@ -116,21 +116,21 @@ const ThankYou = () => {
           
           <div className="flex-1 min-w-0">
             <div className="flex justify-between items-start mb-1">
-              <h3 className="font-black text-[14px] uppercase truncate tracking-tight">
+              <h3 className="font-black text-[15px] uppercase truncate tracking-tight">
                 {item.isBundle ? (isRTL ? "عرض خاص: " + item.name : "Bundle: " + item.name) : item.name}
               </h3>
-              <span className="text-[15px] font-black text-[#6dcd06] whitespace-nowrap">
+              <span className="text-[15px] font-black text-black dark:text-white whitespace-nowrap">
                 {item.price} <span className="text-[9px]">EGP</span>
               </span>
             </div>
             
             <div className="flex justify-between items-center">
               {item.isBundle ? (
-                <span className="text-[13px] bg-[#86FE05]/10 text-[#6dcd07] px-2 py-1 rounded-md font-black uppercase tracking-widest">
+                <span className="text-[13px] bg-[#86FE05]/10 text-[#5dac08] px-2 py-1 rounded-md font-black uppercase tracking-widest">
                   {isRTL ? "عرض توفيري" : "SAVE BUNDLE"}
                 </span>
               ) : (
-                <p className="text-[9px] opacity-40 font-bold uppercase tracking-widest">
+                <p className="text-[10px] opacity-40 font-bold uppercase tracking-widest">
                   {item.size} — {item.color}
                 </p>
               )}
@@ -195,30 +195,30 @@ const ThankYou = () => {
 
             {/* Delivery Details */}
             <div className={`rounded-[35px] border p-6 ${darkMode ? 'bg-[#0A0A0A] border-white/5' : 'bg-white border-gray-100 shadow-sm'}`}>
-               <h2 className="text-[10px] font-black italic uppercase mb-4 flex items-center gap-3 tracking-[0.2em] text-[#86FE05]">
+               <h2 className="text-[13px] font-black italic uppercase mb-4 flex items-center gap-3 tracking-[0.2em] text-black dark:text-white">
                  <MapPin size={18}/> {isRTL ? "وجهة التوصيل" : "Delivery Destination"}
                </h2>
                <div className="flex flex-col gap-1 text-[12px] font-bold uppercase leading-relaxed">
-                 <span className="text-[#86FE05]">{order.guestInfo?.name}</span>
-                 <span className="opacity-60">{order.guestInfo?.phone}</span>
-                 <span className="opacity-40">{order.shippingAddress?.cityName}, {order.shippingAddress?.districtName}</span>
+                 <span className="text-black dark:text-white">{order.guestInfo?.name}</span>
+                 <span className="opacity-70">{order.guestInfo?.phone}</span>
+                 <span className="opacity-70">{order.shippingAddress?.cityName}, {order.shippingAddress?.districtName}</span>
                </div>
             </div>
           </div>
 
           {/* Checkout Summary Sidebar */}
           <div className="lg:col-span-5 space-y-6">
-            <div className={`rounded-[40px] p-8 border sticky top-24 transition-all overflow-hidden ${darkMode ? 'bg-[#86FE05] text-black border-transparent shadow-2xl shadow-[#86FE05]/20' : 'bg-black text-white border-white/10 shadow-xl'}`}>
+            <div className={`rounded-[40px] p-8 border sticky top-24 transition-all overflow-hidden ${darkMode ? 'bg-white text-black border-transparent shadow-2xl shadow-[#86FE05]/20' : 'bg-black text-white border-white/10 shadow-xl'}`}>
               
-              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] mb-8 opacity-60">{isRTL ? "ملخص الدفع" : "Payment Summary"}</h3>
+              <h3 className="text-[15px] font-black uppercase tracking-[0.3em] mb-8">{isRTL ? "ملخص الدفع" : "Payment Summary"}</h3>
               
               <div className="space-y-4 font-bold text-[13px]">
-                <div className="flex justify-between items-center opacity-70">
-                  <span className="uppercase tracking-widest text-[9px]">{isRTL ? "المجموع الفرعي" : "Subtotal"}</span>
+                <div className="flex justify-between items-center opacity">
+                  <span className="uppercase tracking-widest text-[15px]">{isRTL ? "المجموع الفرعي" : "Subtotal"}</span>
                   <span className="font-black italic">{subtotal} EGP</span>
                 </div>
-                <div className="flex justify-between items-center opacity-70">
-                  <span className="uppercase tracking-widest text-[9px]">{isRTL ? "رسوم الشحن" : "Shipping"}</span>
+                <div className="flex justify-between items-center ">
+                  <span className="uppercase tracking-widest text-[15px]">{isRTL ? "رسوم الشحن" : "Shipping"}</span>
                   <span className="font-black italic">+{shipping} EGP</span>
                 </div>
                 {discount > 0 && (
@@ -230,8 +230,8 @@ const ThankYou = () => {
                 
                 <div className={`border-t-2 pt-6 mt-6 flex justify-between items-end font-black ${darkMode ? 'border-black/10' : 'border-white/10'}`}>
                   <div>
-                      <p className="text-[9px] uppercase tracking-[0.3em] opacity-60 mb-1">{isRTL ? "الإجمالي النهائي" : "Total Amount"}</p>
-                      <p className="text-[9px] uppercase font-black px-2 py-1 bg-black/5 rounded-md inline-block">{order.paymentMethod}</p>
+                      <p className="text-[15px] uppercase tracking-[0.3em] opacity mb-1">{isRTL ? "الإجمالي النهائي" : "Total Amount"}</p>
+                      <p className="text-[11px] uppercase font-black px-2 py-1 bg-black/5 rounded-md inline-block">{order.paymentMethod}</p>
                   </div>
                   <span className="text-4xl tracking-tighter leading-none font-black italic">{total}<span className="text-sm ml-1">EGP</span></span>
                 </div>
@@ -244,9 +244,9 @@ const ThankYou = () => {
                 href="https://wa.me/201060850472" 
                 target="_blank" 
                 rel="noreferrer"
-                className={`flex items-center justify-center gap-3 py-5 rounded-[25px] text-[11px] font-black uppercase tracking-[0.2em] transition-all border ${darkMode ? 'bg-white/5 border-white/5 text-white hover:bg-[#86FE05] hover:text-black' : 'bg-gray-100 border-gray-200 text-black hover:bg-black hover:text-white'}`}
+                className={`flex items-center justify-center gap-3 py-5 rounded-[25px] text-[15px] font-black uppercase tracking-[0.2em] transition-all border ${darkMode ? 'bg-white border-white/5 text-black hover:bg-[#57a107] hover:text-black' : 'bg-black border-gray-200 text-white hover:bg-[#57a107] hover:text-white'}`}
                >
-                 <MessageCircle size={18}/> {isRTL ? "تحدث مع الدعم" : "Contact Support"}
+                 <MessageCircle size={18}/> {isRTL ? "  يمكنك التحدث إلي الدعم متي شئت" : "Contact Support"}
                </a>
 
                {/* <button 
