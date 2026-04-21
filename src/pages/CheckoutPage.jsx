@@ -22,6 +22,7 @@ const { darkMode } = useTheme();
   const [selectedCityObj, setSelectedCityObj] = useState(null);
   const [availableDiscounts, setAvailableDiscounts] = useState([]);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const [discountError, setDiscountError] = useState(""); // لمسح رسائل الخطأ
 const [nameError, setNameError] = useState("");
   const [formData, setFormData] = useState({
@@ -176,7 +177,7 @@ const normalizePhone = (value) => {
   };
 
   // 🎫 التحقق من الكود (متوافق مع منطق validateDiscount الجديد)
-  const validateDiscount = async (codeToValidate) => {
+  const validateDiscount = async (codeToValidate, isCheckout = true) => {
     const code = codeToValidate || formData.discountCode;
     setDiscountError("");
 
@@ -190,22 +191,44 @@ const normalizePhone = (value) => {
         code: code.trim(),
         orderItems: cart.map((item) => ({
           product: item.product || item._id, // تأكد من إرسال ID المنتج فقط
-          quantity: item.qty,
+          quantity: item.qty|| item.quantity,
         })),
         shippingPrice: shippingCost // مهم جداً لحساب الشحن المجاني في الباك إند
       });
 
       if (res.data.valid) {
-        setDiscountInfo(res.data);
-        toast.success(isRTL ? "✅ تم تطبيق الخصم!" : "✅ Discount applied!");
-      }
-    } catch (err) {
-      const msg = err.response?.data?.message || (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
-      setDiscountInfo(null); 
-      setDiscountError(msg);
-      toast.error(msg);
+      setDiscountInfo(res.data);
+      
+      // ✅ إظهار التوست (الرسالة)
+      toast.success(isRTL ? "تم تطبيق الخصم بنجاح! 🔥" : "Discount applied! 🔥", {
+        style: {
+          borderRadius: '20px',
+          background: '#000',
+          color: '#6cc908',
+          fontWeight: 'bold',
+          border: '1px solid #6cc908'
+        }
+      });
+
+      // لو الكود جاي من المودال، اقفله بعد النجاح
+      if (showDiscountModal) setShowDiscountModal(false);
     }
-  };
+  } catch (err) {
+    const msg = err.response?.data?.message || (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
+    setDiscountInfo(null); 
+    setDiscountError(msg);
+    
+    // ❌ توست الخطأ
+    toast.error(msg, {
+      style: {
+        borderRadius: '20px',
+        background: '#fff',
+        color: '#ff0000',
+        fontWeight: 'bold'
+      }
+    });
+  }
+};
 
 
 const scrollToError = () => {
@@ -410,7 +433,7 @@ return (
 
           {/* 📍 Section 1: Personal Info */}
           <section className="space-y-4">
-            <h2 className="text-[10px] font-black text-slate-400 dark:text-[#86FE05]/50 uppercase tracking-[0.3em] px-1">
+            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
               {isRTL ? "المعلومات الشخصية" : "Personal Information"}
             </h2>
             <div className="grid grid-cols-1 gap-4">
@@ -499,7 +522,7 @@ return (
 
           {/* 🚚 Section 2: Shipping */}
           <section className="space-y-4">
-            <h2 className="text-[10px] font-black text-slate-400 dark:text-[#86FE05]/50 uppercase tracking-[0.3em] px-1">
+            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
               {isRTL ? "عنوان الشحن" : "Shipping Address"}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -544,15 +567,15 @@ return (
           {/* 🏷️ Discount Section */}
           <section className="space-y-3">
             <div className="flex justify-between items-center px-1">
-              <h2 className="text-[10px] font-black text-slate-400 dark:text-[#86FE05]/50 uppercase tracking-[0.3em]">
+              <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em]">
                 {isRTL ? "كود الخصم" : "Discount Code"}
               </h2>
               <button
                 type="button"
                 onClick={() => setShowDiscountModal(true)}
-                className="text-[11px] font-black text-[#71d407] uppercase italic hover:underline"
+                className="text-[1(px] font-black text-black dark:text-white uppercase italic hover:underline"
               >
-                ✨ {isRTL ? "استعرض العروض" : "View Offers"}
+                ✨ {isRTL ? "استكشف العروض" : "View Offers"}
               </button>
             </div>
             
@@ -577,149 +600,165 @@ return (
             {discountError && <p className="text-[10px] font-bold text-red-500 px-4">{discountError}</p>}
           </section>
 
-        {/* 🎫 Offers Modal */}
+      {/* 🎫 Offers Modal */}
 {showDiscountModal && (
   <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-    <div className="bg-white dark:bg-[#0A0A0A] w-full max-w-md rounded-[3rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden relative">
-      
+
+    <div className="bg-white dark:bg-[#0A0A0A] w-full max-w-md rounded-[3rem] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden relative">
+
       {/* Modal Header */}
-      <div className="p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center">
+      <div className="p-6 border-b border-black/10 dark:border-white/10 flex justify-between items-center">
+
         <div>
-          <h3 className="text-xl font-black italic uppercase text-slate-900 dark:text-white">
+          <h3 className="text-xl font-black italic uppercase text-black dark:text-white">
             {isRTL ? "فيسترو أوفيرز" : "Vestro Offers"}
           </h3>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+
+          <p className="text-[10px] font-bold text-black/40 dark:text-white/40 uppercase tracking-[0.2em]">
             {isRTL ? "وفر أكتر مع طلبك النهاردة" : "Save more on your order"}
           </p>
         </div>
-        <button onClick={() => setShowDiscountModal(false)} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-red-500 transition-colors">✕</button>
+
+        {/* ❌ Close button (clean + red hover only) */}
+        <button
+          onClick={() => setShowDiscountModal(false)}
+          className="w-10 h-10 rounded-full 
+          bg-black/5 dark:bg-white/5 
+          flex items-center justify-center 
+          hover:bg-red-500 hover:text-white 
+          dark:hover:bg-red-500 dark:hover:text-white
+          transition-all"
+        >
+          ✕
+        </button>
+
       </div>
 
+      {/* Content */}
       <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+
         {availableDiscounts.length > 0 ? (
           availableDiscounts.map((disc) => {
+
             const isFreeShipping = disc.discountType === 'free_shipping';
             const isPercentage = disc.discountType === 'percentage';
             const isBOGO = ['bogo', 'bogo_discount'].includes(disc.discountType);
 
             return (
-              <div 
-                key={disc._id} 
-                className="relative group overflow-hidden rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-[#86FE05]/20 p-5 hover:border-[#6cc908] transition-all bg-slate-50/50 dark:bg-white/5"
+              <div
+                key={disc._id}
+                className="relative group overflow-hidden rounded-[2rem] border border-dashed border-black/10 dark:border-white/10 p-5 bg-black/[0.02] dark:bg-white/[0.03] hover:border-black dark:hover:border-white transition-all"
               >
-                {/* الجزء العلوي: الكود والزر */}
+
+                {/* CODE + ACTION */}
                 <div className="flex justify-between items-start mb-4">
-                  <div className="flex flex-col">
-                    <span className="text-2xl font-black italic text-slate-900 dark:text-[#6cc908] tracking-tighter uppercase">
+
+                  <div>
+                    <span className="text-2xl font-black italic text-black dark:text-white uppercase tracking-tighter">
                       {disc.code}
                     </span>
+
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#6cc908] animate-pulse"></span>
-                      <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
-                        {isFreeShipping 
-                          ? (isRTL ? "شحن مجاني" : "FREE SHIPPING") 
-                          : isPercentage 
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+
+                      <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 tracking-widest">
+                        {isFreeShipping
+                          ? (isRTL ? "شحن مجاني" : "FREE SHIPPING")
+                          : isPercentage
                             ? (isRTL ? `خصم ${disc.percentage}%` : `${disc.percentage}% OFF`)
                             : "BOGO OFFER"}
                       </span>
                     </div>
                   </div>
-                  
-                  <button 
-                    type="button"
+
+                  {/* Copy Button */}
+                  <button
+                  type="button"
                     onClick={() => {
                       navigator.clipboard.writeText(disc.code);
                       setFormData(prev => ({ ...prev, discountCode: disc.code }));
-                      validateDiscount(disc.code);
-                      setShowDiscountModal(false);
+                      validateDiscount(disc.code, false);
+                      
                     }}
-                    className="bg-black dark:bg-[#6cc908] text-[#6cc908] dark:text-black px-5 py-2 rounded-full text-[10px] font-black uppercase italic shadow-lg active:scale-95 transition-all"
+                    className="px-4 py-2 rounded-full text-[10px] font-black uppercase italic
+                    bg-black text-white dark:bg-white dark:text-black
+                    hover:bg-red-500 hover:text-white dark:hover:bg-red-500 dark:hover:text-white
+                    transition-all active:scale-95"
                   >
                     {isRTL ? "نسخ وتفعيل" : "Copy & Apply"}
                   </button>
+
                 </div>
 
-                {/* وصف العرض */}
-                <div className="bg-white dark:bg-black/40 rounded-xl p-3 border border-slate-100 dark:border-white/5 mb-4">
-                  <p className="text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2">
-                    <span className="opacity-70">{isFreeShipping ? "🚚" : "🏷️"}</span>
-                    {isFreeShipping ? (
-                      isRTL 
-                        ? `شحن مجاني للطلبات أكثر من ${disc.minOrderAmount} ج.م` 
-                        : `Free Shipping on orders above ${disc.minOrderAmount} EGP`
-                    ) : isPercentage ? (
-                      isRTL 
-                        ? `خصم ${disc.percentage}% على مشترياتك` 
-                        : `${disc.percentage}% Discount on your order`
-                    ) : (
-                      isRTL 
-                        ? `اشتري ${disc.buyQuantity} وخد ${disc.getQuantity} بخصم ${disc.getDiscount || 100}%` 
-                        : `Buy ${disc.buyQuantity} Get ${disc.getQuantity} (${disc.getDiscount || 100}% OFF)`
-                    )}
+                {/* Description */}
+                <div className="p-3 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-black/40 mb-4">
+
+                  <p className="text-xs font-bold text-black/70 dark:text-white/70 flex items-center gap-2">
+
+                    <span className="text-red-500">
+                      {isFreeShipping ? "🚚" : "🏷️"}
+                    </span>
+
+                    {isFreeShipping
+                      ? (isRTL
+                        ? `شحن مجاني للطلبات أكثر من ${disc.minOrderAmount} ج.م`
+                        : `Free Shipping on orders above ${disc.minOrderAmount} EGP`)
+                      : isPercentage
+                        ? (isRTL
+                          ? `خصم ${disc.percentage}% على مشترياتك`
+                          : `${disc.percentage}% Discount on your order`)
+                        : (isRTL
+                          ? `اشتري ${disc.buyQuantity} وخد ${disc.getQuantity}`
+                          : `Buy ${disc.buyQuantity} Get ${disc.getQuantity}`)}
                   </p>
+
                 </div>
 
-                {/* --- قسم المنتجات "الرايق" --- */}
-                <div className="mt-2 pt-3 border-t border-slate-100 dark:border-white/5">
+                {/* Products */}
+                <div className="pt-3 border-t border-black/10 dark:border-white/10">
+
                   {disc.appliesToAll ? (
-                    /* حالة: العرض يشمل كل شيء */
-                    <div className="flex items-center gap-2 py-1">
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#86FE05]/20 text-[#6cc908]">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="text-[10px] font-black uppercase italic text-[#6cc908] dark:text-[#6cc908]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-red-500 text-sm">●</span>
+                      <span className="text-[10px] font-black uppercase italic text-black dark:text-white">
                         {isRTL ? "يشمل جميع منتجات المتجر" : "Applied to all products"}
                       </span>
                     </div>
                   ) : (
-                    /* حالة: منتجات محددة */
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[9px] font-black text-slate-400 uppercase italic tracking-widest">
-                          {isRTL ? "المنتجات المشمولة بالعرض:" : "Applicable Products:"}
-                        </span>
-                        <span className="text-[8px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500">
-                          {disc.applicableProducts?.length} {isRTL ? "منتج" : "items"}
-                        </span>
-                      </div>
-                      
-                      {/* Scrollable Products List */}
-                      <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar-hide rtl:flex-row-reverse">
-                        {disc.applicableProducts?.map((p) => (
-                          <a 
-                            key={p._id}
-                            href={`/product/${p._id}`} // لينك لصفحة المنتج
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-shrink-0 flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 hover:border-[#6cc908] transition-all group/item"
-                          >
-                            <img 
-                              src={p.images?.[0]?.url || p.image} 
-                              className="w-8 h-8 rounded-xl object-cover grayscale group-hover/item:grayscale-0 transition-all shadow-sm"
-                              alt={p.name}
-                            />
-                            <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 max-w-[80px] truncate group-hover/item:text-[#6cc908]">
-                              {p.name}
-                            </span>
-                          </a>
-                        ))}
-                      </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+
+                      {disc.applicableProducts?.map((p) => (
+                        <a
+                          key={p._id}
+                          href={`/product/${p._id}`}
+                          className="flex items-center gap-2 p-2 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-white/5 hover:border-black dark:hover:border-white transition-all"
+                        >
+                          <img
+                            src={p.images?.[0]?.url || p.image}
+                            className="w-8 h-8 rounded-lg object-cover"
+                          />
+                          <span className="text-[10px] font-bold max-w-[80px] truncate text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white">
+                            {p.name}
+                          </span>
+                        </a>
+                      ))}
+
                     </div>
                   )}
+
                 </div>
+
               </div>
             );
           })
         ) : (
           <div className="text-center py-10">
-            <div className="text-4xl mb-4 opacity-20 text-slate-400 italic">VESTRO</div>
-            <p className="text-sm font-black text-slate-400 uppercase italic">
-              {isRTL ? "لا توجد عروض متاحة حالياً" : "No Offers Available Now"}
+            <p className="text-sm font-black uppercase text-black/40 dark:text-white/40">
+              {isRTL ? "لا توجد عروض حالياً" : "No Offers Available"}
             </p>
           </div>
         )}
+
       </div>
     </div>
   </div>
@@ -727,7 +766,7 @@ return (
 
           {/* 💳 Payment Method */}
           <section className="space-y-4">
-            <h2 className="text-[10px] font-black text-slate-400 dark:text-[#86FE05]/50 uppercase tracking-[0.3em] px-1">
+            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
               {isRTL ? "طريقة الدفع" : "Payment Method"}
             </h2>
             <div className="grid grid-cols-2 gap-4">
@@ -754,84 +793,115 @@ return (
 
          {/* 💎 Vestro Dynamic Discount Summary */}
 {discountInfo && (
-  <div className="rounded-[2.5rem] bg-white dark:bg-[#0A0A0A] p-6 border-[3px] border-black dark:border-[#6cc908] relative overflow-hidden shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(134,254,5,0.2)]">
+  <div className="rounded-[2.5rem] bg-white dark:bg-[#0A0A0A] p-6 border-[3px] border-black dark:border-[#519707] relative overflow-hidden shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(134,254,5,0.2)]">
     
     {/* Header: Title and Type */}
     <div className="flex justify-between items-center mb-6">
-      <div className="bg-black text-[#6cc908] px-4 py-1 rounded-full text-xs font-black italic uppercase">
+      <div className="bg-black text-white px-4 py-1 rounded-full text-xs font-black italic uppercase">
         {discountInfo.discountType === 'free_shipping' ? '🚚 FREE SHIPPING MODE' : '🔥 OFFER ACTIVE'}
       </div>
       <span className="text-black dark:text-white font-black text-xl italic">{discountInfo.discountCode}</span>
     </div>
 
     {/* Items List */}
-    <div className="space-y-3">
-      {cart.map((item, idx) => {
-        const isApp = discountInfo.appliesToAll || discountInfo.applicableProducts?.some(p => (p._id || p) === (item.product || item._id));
-        
-        // منطق تمييز السعر
-        let priceDisplay = (
-          <span className="text-sm font-black">{item.price} EGP</span>
-        );
+<div className="space-y-3">
+  {cart.map((item, idx) => {
+    const isApp =
+      discountInfo?.appliesToAll ||
+      discountInfo?.applicableProducts?.some(
+        p => (p._id || p) === (item.product || item._id)
+      );
 
-        if (isApp) {
-          if (discountInfo.discountType === 'percentage') {
-            priceDisplay = (
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] text-slate-400 line-through font-bold">{item.price} EGP</span>
-                <span className="text-sm font-black text-black dark:text-[#6cc908]">
-                  {Math.round(item.price * (1 - discountInfo.percentage / 100))} EGP
-                </span>
-              </div>
-            );
-          } else if (['bogo', 'bogo_discount'].includes(discountInfo.discountType)) {
-             // تمييز منتجات الـ BOGO (لو المنتج ده هو اللي عليه الخصم)
-             // ملاحظة: هنا بنفترض إن العميل بيشوف تمييز على المنتجات المشمولة بالعرض
-            priceDisplay = (
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] text-red-500 font-black uppercase italic">Get Unit</span>
-                <span className="text-sm font-black bg-[#6cc908] text-black px-2 rounded-md tracking-tighter">FREE / DISCOUNTED</span>
-              </div>
-            );
-          }
-        }
+    let priceDisplay = (
+      <span className="text-sm font-black text-slate-900 dark:text-white">
+        {item.price} EGP
+      </span>
+    );
 
-        return (
-          <div 
-            key={idx} 
-            className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
-              isApp 
-                ? 'bg-white border-2 border-black dark:border-[#6cc908] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' 
-                : 'bg-slate-50 opacity-40'
-            }`}
-          >
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <img src={item.image} className="w-14 h-14 rounded-xl object-cover border-2 border-black" alt="" />
-                {isApp && (
-                  <div className="absolute -top-2 -left-2 bg-black text-[#6cc908] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#6cc908]">
-                    {isRTL ? "مشمول" : "INCL."}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-black text-black dark:text-white uppercase leading-tight">{item.name}</span>
-                <span className="text-[10px] font-bold text-slate-500 italic">QTY: {item.quantity}</span>
-              </div>
-            </div>
-
-            <div className="text-right">
-              {priceDisplay}
-            </div>
+    if (isApp) {
+      if (discountInfo.discountType === "percentage") {
+        priceDisplay = (
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] text-slate-400 line-through font-bold">
+              {item.price} EGP
+            </span>
+            <span className="text-sm font-black text-emerald-600 dark:text-[#6cc908]">
+              {Math.round(
+                item.price * (1 - discountInfo.percentage / 100)
+              )}{" "}
+              EGP
+            </span>
           </div>
         );
-      })}
-    </div>
+      } else if (
+        ["bogo", "bogo_discount"].includes(discountInfo.discountType)
+      ) {
+        priceDisplay = (
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] text-red-500 font-black uppercase italic">
+              Get Unit
+            </span>
+            <span className="text-sm font-black bg-emerald-500 dark:bg-[#6cc908] text-white dark:text-black px-2 rounded-md tracking-tighter">
+              FREE / DISCOUNTED
+            </span>
+          </div>
+        );
+      }
+    }
+
+    return (
+      <div
+        key={idx}
+        className={`flex items-center justify-between p-4 rounded-2xl transition-all border
+          ${
+            isApp
+              ? "bg-white dark:bg-[#111111] border-emerald-500 dark:border-[#6cc908] shadow-sm"
+              : "bg-slate-50 dark:bg-[#0A0A0A] border-transparent opacity-60"
+          }`}
+      >
+        {/* Left Side */}
+        <div className="flex items-center gap-4">
+          
+          {/* Image */}
+          <div className="relative">
+            <img
+              src={item.image}
+              className="w-14 h-14 rounded-xl object-cover border border-slate-200 dark:border-white/10"
+              alt=""
+            />
+
+            {isApp && (
+              <div className="absolute -top-2 -left-2 bg-slate-900 dark:bg-black text-emerald-400 text-[8px] font-black px-2 py-0.5 rounded-full border border-emerald-500">
+                {isRTL ? "مشمول" : "INCL"}
+              </div>
+            )}
+          </div>
+
+          {/* Info */}
+          <div className="flex flex-col">
+            <span className="text-xs font-black text-slate-900 dark:text-white uppercase leading-tight">
+              {item.name}
+            </span>
+
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 italic">
+              QTY: {item.quantity}
+            </span>
+          </div>
+        </div>
+
+        {/* Right Side */}
+        <div className="text-right">
+          {priceDisplay}
+        </div>
+      </div>
+    );
+  })}
+</div>
 
     {/* Total Savings: الواجهة القوية */}
-    <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 border-[#6cc908]">
+    <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 border-[#549a08]">
       <div>
-        <p className="text-[#6cc908] text-[10px] font-black uppercase tracking-widest mb-1">
+        <p className="text-white text-[15px] font-black uppercase tracking-widest mb-1">
           {isRTL ? "إجمالي التوفير" : "TOTAL SAVINGS"}
         </p>
         <h3 className="text-white text-3xl font-black italic tracking-tighter">
@@ -841,7 +911,7 @@ return (
       <div className="text-right">
          {discountInfo.freeShippingApplied && (
             <div className="flex flex-col items-end">
-                <span className="bg-[#6cc908] text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic mb-1">
+                <span className="bg-[#519707] text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic mb-1">
                    Free Delivery
                 </span>
                 <span className="text-white/50 text-[8px] font-bold uppercase">Applied to Order</span>
@@ -852,47 +922,79 @@ return (
   </div>
 )}
 
-          {/* 💰 Order Summary Card */}
-          <div className="bg-slate-900 dark:bg-[#0A0A0A] rounded-[2.5rem] p-8 text-white space-y-5 shadow-2xl relative border border-white/5">
-            <div className="flex justify-between items-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-              <span>{isRTL ? "قيمة المشتريات" : "Subtotal"}</span>
-              <span className="text-white">{Math.round(cartTotal)} EGP</span>
-            </div>
+         {/* 💰 Order Summary Card */}
+<div className="bg-white dark:bg-black rounded-[2.5rem] p-8 text-slate-900 dark:text-white space-y-5 shadow-2xl relative border border-slate-100 dark:border-white/10 transition-all">
 
-            <div className="flex justify-between items-center text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-              <span>{isRTL ? "تكلفة الشحن" : "Shipping"}</span>
-              <span className={shippingCost === 0 && selectedCityObj ? "text-[#6cc908] font-black italic" : "text-white"}>
-                {!selectedCityObj ? (isRTL ? "بانتظار العنوان" : "Waiting for address") : (shippingCost === 0 ? (isRTL ? "شحن مجاني 🎁" : "FREE SHIPPING 🎁") : `+${shippingCost} EGP`)}
-              </span>
-            </div>
+  {/* Subtotal */}
+  <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
+    <span>{isRTL ? "قيمة المشتريات" : "Subtotal"}</span>
+    <span className="text-slate-900 dark:text-white">
+      {Math.round(cartTotal)} EGP
+    </span>
+  </div>
 
-            {discountInfo && (
-              <div className="flex justify-between items-center text-[#6cc908] text-[10px] font-black uppercase tracking-[0.2em]">
-                <span>{isRTL ? "الخصم" : "Discount"}</span>
-                <span className="italic">-{discountInfo.discountAmount} EGP</span>
-              </div>
-            )}
+  {/* Shipping */}
+  <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
+    <span>{isRTL ? "تكلفة الشحن" : "Shipping"}</span>
 
-            <div className="pt-6 border-t border-white/10 flex justify-between items-end">
-              <div>
-                <span className="text-[10px] font-black text-[#6cc908] uppercase tracking-[0.3em] mb-1 block">
-                  {isRTL ? "المبلغ الإجمالي" : "Grand Total"}
-                </span>
-                <div className="text-4xl font-black italic leading-none tracking-tighter">
-                  {totalWithDiscount} <small className="text-xs not-italic opacity-40 font-bold">EGP</small>
-                </div>
-              </div>
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
-                 <Home size={20} className="text-[#6cc908] opacity-50" />
-              </div>
-            </div>
-          </div>
+    <span
+      className={
+        shippingCost === 0 && selectedCityObj
+          ? "text-emerald-600 dark:text-[#6cc908] font-black italic"
+          : "text-slate-900 dark:text-white"
+      }
+    >
+      {!selectedCityObj
+        ? isRTL
+          ? "بانتظار العنوان"
+          : "Waiting for address"
+        : shippingCost === 0
+        ? isRTL
+          ? "شحن مجاني 🎁"
+          : "FREE SHIPPING 🎁"
+        : `+${shippingCost} EGP`}
+    </span>
+  </div>
+
+  {/* Discount */}
+  {discountInfo && (
+    <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
+      <span>{isRTL ? "الخصم" : "Discount"}</span>
+      <span className="text-[#559d08] italic">
+        -{discountInfo.discountAmount} EGP
+      </span>
+    </div>
+  )}
+
+  {/* Total */}
+  <div className="pt-6 border-t border-slate-200 dark:border-white/10 flex justify-between items-end">
+    
+    <div>
+      <span className="text-[12px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] mb-1 block">
+        {isRTL ? "المبلغ الإجمالي" : "Grand Total"}
+      </span>
+
+      <div className="text-4xl font-black italic leading-none tracking-tighter text-slate-900 dark:text-white">
+        {totalWithDiscount}
+        <small className="text-xs not-italic opacity-40 font-bold ml-1">
+          EGP
+        </small>
+      </div>
+    </div>
+
+    {/* Icon */}
+    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center">
+      <Home size={20} className="text-slate-900 dark:text-white opacity-60" />
+    </div>
+
+  </div>
+</div>
 
           {/* 🚀 Submit Button */}
           <button
             type="submit" disabled={loading}
             className={`w-full py-6 rounded-[2rem] font-black uppercase italic tracking-[0.2em] transition-all shadow-2xl relative overflow-hidden group
-              ${loading ? 'bg-slate-800 cursor-wait' : 'bg-[#6cc908] text-black hover:scale-[1.02] active:scale-95 shadow-[#86FE05]/20 hover:shadow-[#86FE05]/40'}
+              ${loading ? 'bg-slate-800 cursor-wait' : 'bg-[#519707] text-black hover:scale-[1.02] active:scale-95 shadow-[#86FE05]/20 hover:shadow-[#86FE05]/40'}
             `}
           >
             {loading ? (

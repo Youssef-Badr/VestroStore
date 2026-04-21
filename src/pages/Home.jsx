@@ -16,94 +16,107 @@ import ProductCard from "../components/ProductCard";
 const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, setIsPaused }) => {
   const containerRef = useRef(null);
 
-  const scrollItems = useMemo(() => {
-    if (!products || products.length === 0) return [];
-    return [...products, ...products, ...products];
-  }, [products]);
+ const scrollItems = useMemo(() => {
+  if (!products || products.length === 0) return [];
+  return [...products, ...products];
+}, [products]);
 
-  const scrollManual = (scrollOffset) => {
-    setIsPaused(true);
-    if (containerRef.current) {
-      containerRef.current.scrollBy({
-        left: scrollOffset,
-        behavior: "smooth",
-      });
+const scrollManual = (scrollOffset) => {
+  setIsPaused(true);
+
+  const el = containerRef.current;
+  if (!el) return;
+
+  el.scrollTo({
+    left: el.scrollLeft + scrollOffset,
+    behavior: "smooth",
+  });
+};
+
+useEffect(() => {
+  const el = containerRef.current;
+  if (!el || isPaused) return;
+
+  // 🐢 سرعة سلحفاة
+  const speed = direction === "right" ? 4 : -4;
+
+  const interval = setInterval(() => {
+    el.scrollLeft += speed;
+
+    // 🔁 loop smooth بدون تقطيع
+    const halfWidth = el.scrollWidth / 2;
+
+    if (el.scrollLeft >= halfWidth) {
+      el.scrollLeft = 0;
     }
-  };
 
-  if (scrollItems.length === 0) return null;
+    if (el.scrollLeft <= 0) {
+      el.scrollLeft = halfWidth;
+    }
+  }, 16); // ~60fps
 
-  const arrowClass = `absolute top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow-2xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-md
-    ${darkMode ? "bg-zinc-900/90 text-white border-zinc-800 hover:bg-[#86FE05] hover:text-black" : "bg-white/90 text-black border-gray-200 hover:bg-black hover:text-white"}`;
+  return () => clearInterval(interval);
+}, [isPaused, direction]);
 
-  return (
+if (scrollItems.length === 0) return null;
+
+const arrowClass = `absolute top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow-2xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-md
+  ${darkMode ? "bg-zinc-900/90 text-white border-zinc-800 hover:bg-[#86FE05] hover:text-black" : "bg-white/90 text-black border-gray-200 hover:bg-black hover:text-white"}`;
+
+return (
+  <div
+    className="w-full relative py-8 group"
+    dir="ltr"
+    onMouseLeave={() => setIsPaused(false)}
+  >
+    
+    {/* الأسهم */}
+    <button onClick={() => scrollManual(-300)} className={`${arrowClass} left-4`}>
+      <ChevronLeft size={24} />
+    </button>
+
+    <button onClick={() => scrollManual(300)} className={`${arrowClass} right-4`}>
+      <ChevronRight size={24} />
+    </button>
+
+    {/* تشغيل / إيقاف */}
+    {isPaused && (
+      <motion.button
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        onClick={() => setIsPaused(false)}
+        className="absolute top-4 right-10 z-30 flex items-center gap-2 px-4 py-2 rounded-full bg-[#86FE05] text-black font-bold text-xs shadow-lg"
+      >
+        <Play size={14} fill="black" />
+        {direction === "right" ? "تشغيل" : "Resume"}
+      </motion.button>
+    )}
+
+    {/* SCROLLER */}
     <div
-      className="w-full relative py-8 group"
-      dir="ltr"
-      onMouseLeave={() => setIsPaused(false)}   // 👈 يرجع يشتغل بعد ما يشيل الماوس
+      ref={containerRef}
+      className="w-full overflow-x-auto whitespace-nowrap scroll-smooth"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setTimeout(() => setIsPaused(false), 3500)}
     >
 
-      {/* الأسهم */}
-      <button onClick={() => scrollManual(-300)} className={`${arrowClass} left-4`}>
-        <ChevronLeft size={24} />
-      </button>
-
-      <button onClick={() => scrollManual(300)} className={`${arrowClass} right-4`}>
-        <ChevronRight size={24} />
-      </button>
-
-      {/* تشغيل / إيقاف */}
-      {isPaused && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          onClick={() => setIsPaused(false)}
-          className="absolute top-4 right-10 z-30 flex items-center gap-2 px-4 py-2 rounded-full bg-[#86FE05] text-black font-bold text-xs shadow-lg"
-        >
-          <Play size={14} fill="black" />
-          {direction === "right" ? "تشغيل" : "Resume"}
-        </motion.button>
-      )}
-
-      {/* SCROLLER */}
-      <div
-        ref={containerRef}
-        className="w-full overflow-x-auto whitespace-nowrap scroll-smooth"
-        onMouseEnter={() => setIsPaused(true)}   // 👈 desktop hover يوقف
-        onMouseLeave={() => setIsPaused(false)}  // 👈 يرجع يشتغل
-        onTouchStart={() => setIsPaused(true)}   // 👈 موبايل touch يوقف
-        onTouchEnd={() => setTimeout(() => setIsPaused(false), 4500)} // 👈 يرجع بعد لحظة
-      >
-
-        <motion.div
-          className="inline-flex gap-6 px-4"
-          animate={{
-            x: isPaused
-              ? undefined
-              : direction === "right"
-                ? ["0%", "-50%"]
-                : ["-50%", "0%"],
-          }}
-          transition={{
-            duration: 140,   // 🐢 بطّأناه جدًا (سلحفاة حقيقية)
-            ease: "linear",
-            repeat: Infinity,
-          }}
-        >
-          {scrollItems.map((product, index) => (
-            <div
-              key={`${product._id}-${index}`}
-              className="w-64 md:w-72 flex-shrink-0 px-2 cursor-pointer"
-              onClickCapture={() => setIsPaused(true)} // 👈 أي click يوقف
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </motion.div>
-
+      <div className="inline-flex gap-6 px-4">
+        {scrollItems.map((product, index) => (
+          <div
+            key={`${product._id}-${index}`}
+            className="w-64 md:w-72 flex-shrink-0 px-2 cursor-pointer"
+            onClickCapture={() => setIsPaused(true)}
+          >
+            <ProductCard product={product} />
+          </div>
+        ))}
       </div>
+
     </div>
-  );
+  </div>
+);
 });
 export default function Home() {
   const { language } = useLanguage();
@@ -262,7 +275,7 @@ export default function Home() {
 
   onClick={() => navigate("/products")}
   className={`mt-6 px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-sm border-2 transition-all duration-300
-    ${darkMode ? "border-[#86FE05] text-[#86FE05] hover:bg-[#86FE05] hover:text-black" : "bg-black border-black text-white hover:bg-zinc-800"}`}
+    ${darkMode ? "border-white text-black bg-white " : "bg-black border-black text-white hover:bg-zinc-800"}`}
 >
   {isRTL ? " تسوق كل المنتجات " : " Shop All Products"}
 </motion.button>

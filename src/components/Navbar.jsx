@@ -176,7 +176,7 @@ const [showSocial, setShowSocial] = useState(false);
             className="font-black text-xl md:text-2xl flex items-center gap-1 tracking-tighter"
           >
             <span className={darkMode ? "text-white" : "text-black"}>VESTRO</span>
-            <span className="text-[#86FE05]">STORE</span>
+            <span className="text-[#5ca909]">STORE</span>
           </Link>
 
           <div className="hidden lg:flex items-center gap-8">
@@ -184,7 +184,7 @@ const [showSocial, setShowSocial] = useState(false);
               <Link 
                 key={link.name} 
                 to={link.path} 
-                className={`text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#86FE05] ${
+                className={`text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#64bb07] ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -196,7 +196,7 @@ const [showSocial, setShowSocial] = useState(false);
             <div className="relative" ref={catRef}>
               <button 
                 onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-                className={`flex items-center gap-1 text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#86FE05] ${
+                className={`flex items-center gap-1 text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#61b30a] ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -348,23 +348,23 @@ const [showSocial, setShowSocial] = useState(false);
             </AnimatePresence>
           </div>
 
-          {/* Cart */}
-          <Link
-            to="/cart"
-            className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl border flex items-center justify-center"
-            onClick={() => setMenuOpen(false)}
-          >
-            <ShoppingCart size={18} />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#86FE05] text-black text-[9px] font-black flex items-center justify-center rounded-lg">
-                {cartCount}
-              </span>
-            )}
-          </Link>
+        <Link
+  to="/cart"
+  onClick={() => setMenuOpen(false)}
+  className="relative z-[9999] w-9 h-9 sm:w-10 sm:h-10 rounded-xl border flex items-center justify-center"
+>
+  <ShoppingCart size={18} />
+
+  {cartCount > 0 && (
+    <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#69c408] text-black text-[9px] font-black flex items-center justify-center rounded-lg">
+      {cartCount}
+    </span>
+  )}
+</Link>
 
           {/* Mobile menu */}
           <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden ml-1">
-            {menuOpen ? <X size={26} className="text-[#86FE05]" /> : <Menu size={26} />}
+            {menuOpen ? <X size={26} className="text-black dark:text-white" /> : <Menu size={26} />}
           </button>
         </div>
       </div>

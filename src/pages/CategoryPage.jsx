@@ -80,7 +80,7 @@ const CategoryPage = () => {
           <motion.span 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
-            className="text-[#70d108] font-black text-3xl tracking-[0.3em] uppercase mb-2 block"
+            className="text-black dark:text-white font-black text-3xl tracking-[0.3em] uppercase mb-2 block"
           >
             {isRTL ? "قسم" : "Collection"}
           </motion.span>

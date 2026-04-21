@@ -86,7 +86,7 @@ function App() {
     scale: [1, 1.1, 1], // تكبير وتصغير (نبض)
     rotate: [0, -5, 5, 0], // اهتزاز خفيف
     boxShadow: darkMode 
-      ? ["0 0 10px #86FE05", "0 0 30px #86FE05", "0 0 10px #86FE05"] 
+      ? ["0 5px 15px rgba(0,0,0,0.2)", "0 10px 25px rgba(0,0,0,0.3)", "0 5px 15px rgba(0,0,0,0.2)"] 
       : ["0 5px 15px rgba(0,0,0,0.2)", "0 10px 25px rgba(0,0,0,0.3)", "0 5px 15px rgba(0,0,0,0.2)"]
   }}
   transition={{
@@ -97,7 +97,7 @@ function App() {
   whileHover={{ scale: 1.2, rotate: 0 }}
   whileTap={{ scale: 0.9 }}
   // التموضع على اليسار
-  className="fixed bottom-10 left-10 z-[60] bg-[#86FE05] text-black p-5 rounded-full shadow-2xl border-2 border-black/10 flex items-center justify-center cursor-pointer"
+  className="fixed bottom-10 left-10 z-[60] bg-[#559e08] text-black p-5 rounded-full  border-2 border-black/10 flex items-center justify-center cursor-pointer"
 >
   <div className="relative">
     <FiGift size={28} />
@@ -115,6 +115,7 @@ function App() {
           onClose={() => setIsOffersOpen(false)} 
           darkMode={darkMode} 
           language={language} 
+           className="z-[80989]"
         />
 
         <ToastContainer

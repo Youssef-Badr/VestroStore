@@ -43,7 +43,7 @@ export default function SideCart() {
             {/* Header */}
             <div className="p-6 border-b border-zinc-800/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ShoppingBag size={24} className="text-[#86FE05]" />
+                <ShoppingBag size={24} className="text-black dark:text-white" />
                 <h2 className="text-xl font-black uppercase italic">
                   {isRTL ? "سلة التسوق" : "Your Cart"}
                 </h2>
@@ -67,7 +67,7 @@ export default function SideCart() {
                     <Link
                       to="/products"
                       onClick={() => setIsCartOpen(false)}
-                      className="flex items-center gap-2 text-[#86FE05] font-black uppercase italic text-xs border-b-2 border-[#86FE05] pb-1 hover:opacity-70 transition-all mx-auto w-fit"
+                      className="flex items-center gap-2 text-black dark:text-white font-black uppercase italic text-xs border-b-2 border-[#86FE05] pb-1 hover:opacity-70 transition-all mx-auto w-fit"
                     >
                       {isRTL ? "اذهب للتسوق" : "Go Shopping"}
                       {isRTL ? <ArrowRight size={14} className="rotate-180" /> : <ArrowRight size={14} />}
@@ -92,7 +92,7 @@ export default function SideCart() {
                               />
                             ))}
                             {item.bundleItems.length > 4 && (
-                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-[10px] font-black text-[#86FE05]">
+                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-[10px] font-black text-black dark:text-white">
                                 +{item.bundleItems.length - 4}
                               </div>
                             )}
@@ -101,7 +101,7 @@ export default function SideCart() {
                           <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                         )}
                         {item.isBundle && (
-                          <div className="absolute top-1 left-1 bg-[#86FE05] text-black text-[6px] font-black px-1 rounded-sm uppercase z-10">
+                          <div className="absolute top-1 left-1 bg-white text-black text-[6px] font-black px-1 rounded-sm uppercase z-10">
                             Bundle
                           </div>
                         )}
@@ -142,14 +142,14 @@ export default function SideCart() {
                               <Plus size={12}/>
                             </button>
                           </div>
-                          <p className="font-black text-[#86FE05] text-sm">{item.price.toLocaleString()} EGP</p>
+                          <p className="font-black text-black dark:text-white  text-sm">{item.price.toLocaleString()} EGP</p>
                         </div>
                       </div>
 
                       {/* زر الحذف */}
                       <button 
                         onClick={() => removeFromCart(itemId)} 
-                        className="opacity-0 group-hover:opacity-100 text-red-500 transition-all self-start pt-1"
+                        className=" group-hover:opacity-100 text-red-500 transition-all self-start pt-1"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -169,7 +169,7 @@ export default function SideCart() {
                 <Link 
                   to="/checkout" 
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full bg-[#86FE05] text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_#86FE0533] uppercase text-sm tracking-widest"
+                  className="w-full bg-black text-white dark:text-black dark:bg-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_#86FE0533] uppercase text-sm tracking-widest"
                 >
                   {isRTL ? "إتمام الطلب" : "Checkout Now"}
                   <ArrowRight size={18} className={isRTL ? "rotate-180" : ""} />
@@ -177,7 +177,7 @@ export default function SideCart() {
                 <Link 
                   to="/cart" 
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full text-center text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-[#86FE05] transition-colors"
+                  className="w-full text-center text-[13px]  font-black uppercase tracking-widest text-zinc-500 hover:text-[#86FE05] transition-colors"
                 >
                   {isRTL ? "عرض السلة بالكامل" : "View Full Cart"}
                 </Link>

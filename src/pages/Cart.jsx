@@ -34,17 +34,8 @@ const CartPage = () => {
 
   const cartTotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  // تم التعديل لاستخدام variantId بدلاً من sizeId
-//  const handleUpdateQty = (variantId, newQty) => {
-//   if (newQty < 1) return;
-//   updateQty(variantId, newQty); // 👈 شلنا productId
-//   toast.info(translations.quantityUpdated, {
-//     position: "bottom-right",
-//     autoClose: 1000,
-//   });
-// };
+  
 
-  // ✅ التعديل: نمرر فقط الـ variantId
 // const// تحديث الكمية
   const handleUpdateQty = (item, newQty) => {
     if (newQty < 1) return;
@@ -74,7 +65,7 @@ const CartPage = () => {
     ? "bg-[#0A0A0A] border-white/5"
     : "bg-white border-gray-200";
   const neonButton =
-    "bg-[#86FE05] text-black hover:shadow-[0_0_30px_#86FE05] hover:scale-[1.02]";
+    "bg-black text-white dark:bg-white dark:text-black hover:shadow-[0_0_30px_#86FE05] hover:scale-[1.02]";
 
  return (
     <div
@@ -85,17 +76,17 @@ const CartPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 border-b border-white/5 pb-10">
           <div className="space-y-2">
-            <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none">
+            <h1 className="text-5xl md:text-7xl text-center font-black italic tracking-tighter uppercase leading-none">
               {translations.cartTitle}
-              <span className="text-[#86FE05]">.</span>
+              <span className="text-black dark:text-white">.</span>
             </h1>
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40">
+            <p className="text-[15px] font-bold uppercase tracking-[0.4em] opacity-40">
               {cart.length} {isRTL ? "منتجات في سلتك" : "Items in your bag"}
             </p>
           </div>
           <Link
             to="/products"
-            className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-all group"
+            className="flex items-center gap-2 text-[15px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-all group"
           >
             {isRTL ? (
               <ArrowRight size={16} className="group-hover:translate-x-1" />
@@ -166,7 +157,7 @@ const CartPage = () => {
 
                       {/* شارة الباندل */}
                       {item.isBundle && (
-                        <div className="absolute top-2 left-2 z-10 bg-[#86FE05] text-black text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-xl">
+                        <div className="absolute top-2 left-2 z-10 bg-white text-black  text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-xl">
                           Bundle
                         </div>
                       )}
@@ -188,7 +179,7 @@ const CartPage = () => {
                                 <div key={i} className="flex items-center gap-2 group/item">
                                   <span className="w-1 h-1 rounded-full bg-[#86FE05] group-hover/item:scale-150 transition-transform"></span>
                                   <p className="text-[10px] font-bold uppercase tracking-tight text-gray-500 dark:text-gray-400">
-                                    {bItem.name}: <span className="text-gray-900 dark:text-white">{bItem.color}</span> / <span className="text-[#86FE05]">{bItem.size}</span>
+                                    {bItem.name}: <span className="text-gray-900 dark:text-white">{bItem.color}</span> / <span className="text-black dark:text-white">{bItem.size}</span>
                                   </p>
                                 </div>
                               ))}
@@ -207,7 +198,7 @@ const CartPage = () => {
                       </div>
 
                       {/* السعر */}
-                      <p className="text-2xl font-black text-[#86FE05] italic mt-4">
+                      <p className="text-2xl font-black text-black dark:text-white italic mt-4">
                         {item.price.toLocaleString()} 
                         <span className="text-[10px] not-italic font-bold opacity-40 uppercase ml-1">EGP</span>
                       </p>
@@ -228,7 +219,7 @@ const CartPage = () => {
                         </span>
                         <button
                           onClick={() => handleUpdateQty(item, item.qty + 1)}
-                          className="p-2 hover:bg-[#86FE05] hover:text-black rounded-xl transition-all active:scale-90"
+                          className="p-2 hover:bg-[#6bca06] hover:text-black rounded-xl transition-all active:scale-90"
                         >
                           <Plus size={16} />
                         </button>
@@ -256,7 +247,7 @@ const CartPage = () => {
                 </h2>
 
                 <div className="space-y-6 mb-10">
-                  <div className="flex justify-between text-[11px] font-bold uppercase tracking-widest opacity-40">
+                  <div className="flex justify-between text-[15px] font-bold uppercase tracking-widest opacity-40">
                     <span>{isRTL ? "القطع" : "Items"}</span>
                     <span>{cart.reduce((a, b) => a + b.qty, 0)}</span>
                   </div>
@@ -265,10 +256,10 @@ const CartPage = () => {
                       {translations.total}
                     </span>
                     <div className="text-right">
-                      <span className="text-3xl font-black text-[#86FE05] italic leading-none">
+                      <span className="text-3xl font-black text-black dark:text-white italic leading-none">
                         {cartTotal.toLocaleString()}
                       </span>
-                      <span className="block text-[10px] font-bold uppercase opacity-50">
+                      <span className="block text-[13px] font-bold uppercase opacity-50">
                         EGP (Incl. Tax)
                       </span>
                     </div>
@@ -286,7 +277,7 @@ const CartPage = () => {
 
                   <button
                     onClick={handleClearCart}
-                    className="w-full py-4 text-[10px] font-black uppercase tracking-[0.2em] opacity-30 hover:opacity-100 hover:text-red-500 transition-all"
+                    className="w-full py-4 text-[15px] font-black uppercase tracking-[0.2em]  hover:opacity-100 hover:text-red-500 transition-all"
                   >
                     {translations.clearCart}
                   </button>

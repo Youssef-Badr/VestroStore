@@ -87,10 +87,10 @@ export default function Products() {
                font-black mt-4 italic tracking-tighter uppercase leading-[0.9] 
                mb-4 sm:mb-6 text-black dark:text-white">
   {t.title}
-  <span className="text-[#86FE05]">.</span>
+  <span className="text-black dark:text-white">.</span>
 </h1>
 
-          <div className="h-[2px] w-8 sm:w-16 bg-[#86FE05] mb-4 sm:mb-6"></div>
+          <div className="h-[2px] w-8 sm:w-16 bg-black dark:bg-white mb-4 sm:mb-6"></div>
 
           <p className="text-[13px] sm:text-[20px] md:text-xl font-bold uppercase tracking-[0.3em] opacity-40 max-w-[250px] sm:max-w-none leading-relaxed">
             {t.subtitle}
@@ -106,9 +106,9 @@ export default function Products() {
                 
                 {product.discount > 0 && (
                   <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-20">
-                    <span className="bg-[#86FE05] text-black text-[8px] sm:text-[10px] font-black px-2 py-1 rounded-full italic uppercase">
+                    {/* <span className="bg-[#86FE05] text-black text-[8px] sm:text-[10px] font-black px-2 py-1 rounded-full italic uppercase">
                       -{product.discount}%
-                    </span>
+                    </span> */}
                   </div>
                 )}
 

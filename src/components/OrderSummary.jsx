@@ -42,7 +42,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 sm:px-6 mb-6 mt-28 transition-all duration-500">
+    <div className="w-full max-w-2xl mx-auto px-4 sm:px-6 mb-6 mt-24 transition-all duration-500">
       <div className={`overflow-hidden rounded-[2.5rem] border-2 transition-all duration-500 ${
         darkMode ? "bg-[#0A0A0A] border-white/5 shadow-2xl shadow-black" : "bg-white border-slate-100 shadow-xl shadow-slate-200/50"
       }`}>
@@ -56,7 +56,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
         >
           <div className="flex items-center gap-4">
             <div className={`p-3 rounded-2xl flex items-center justify-center transition-colors ${
-              darkMode ? "bg-[#86FE05] text-black" : "bg-black text-white"
+              darkMode ? "bg-white text-black" : "bg-black text-white"
             }`}>
               <Package size={20} />
             </div>
@@ -71,7 +71,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
           </div>
           
           <div className="flex items-center gap-4">
-             <span className="text-sm font-black text-[#86FE05] italic">
+             <span className="text-lg font-black text-black dark:text-white italic">
                 {cartTotal?.toLocaleString()} <span className="text-[10px] ms-1">{isRTL ? "ج.م" : "EGP"}</span>
              </span>
              <ChevronDown className={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""} ${darkMode ? "text-white/20" : "text-slate-300"}`} />
@@ -108,7 +108,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                       <img src={item.image} className="w-full h-full object-cover" alt="" />
                     )}
                     {item.isBundle && (
-                      <div className="absolute top-0 inset-x-0 bg-[#86FE05] text-black text-[8px] font-black py-0.5 text-center uppercase italic shadow-sm">
+                      <div className="absolute top-0 inset-x-0 bg-white dark:bg-black dark:text-white text-black text-[10px] font-black py-0.5 text-center uppercase italic shadow-sm">
                         Bundle
                       </div>
                     )}
@@ -138,7 +138,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                               {bi.name} :
                             </span>
                             <div className="flex gap-1 shrink-0">
-                              <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded uppercase ${darkMode ? "bg-white/5 text-[#86FE05] border border-white/5" : "bg-slate-100 text-black border border-slate-200"}`}>
+                              <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded uppercase ${darkMode ? "bg-white/5 text-white border border-white/5" : "bg-slate-100 text-black border border-slate-200"}`}>
                                 {bi.color}
                               </span>
                               <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded uppercase ${darkMode ? "bg-white/5 text-white border border-white/5" : "bg-black text-white"}`}>
@@ -149,7 +149,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                         ))
                       ) : (
                         <div className="flex gap-2 mt-1">
-                           <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${darkMode ? "bg-white/5 text-[#86FE05]" : "bg-slate-100 text-slate-600"}`}>
+                           <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${darkMode ? "bg-white/5 text-white" : "bg-slate-100 text-slate-600"}`}>
                             {item.color}
                           </span>
                           <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${darkMode ? "bg-white/5 text-white" : "bg-black text-white"}`}>
@@ -161,7 +161,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
 
                     {/* السعر والتحكم */}
                     <div className="mt-auto pt-3 flex items-center justify-between">
-                      <span className="text-sm font-black text-[#86FE05] italic">
+                      <span className="text-sm font-black text-black dark:text-white italic">
                         {(item.price * item.qty).toLocaleString()} <span className="text-[9px] ms-1">{isRTL ? "ج.م" : "EGP"}</span>
                       </span>
 

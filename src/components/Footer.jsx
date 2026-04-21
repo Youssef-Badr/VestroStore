@@ -79,7 +79,7 @@ const [position, setPosition] = useState({
           <div className="max-w-[1440px] mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
             {t.features.map((f, i) => (
               <div key={i} className="flex items-center gap-5 group">
-                <div className="w-14 h-14 rounded-2xl bg-[#86FE05]/10 text-[#86FE05] flex items-center justify-center group-hover:bg-[#86FE05] group-hover:text-black transition-all duration-500">
+                <div className="w-14 h-14 rounded-2xl  text-black dark:text-white flex items-center justify-center group-hover:bg-[#59a607] group-hover:text-black transition-all duration-500">
                   {f.icon}
                 </div>
                 <div>
@@ -97,13 +97,13 @@ const [position, setPosition] = useState({
             {/* Brand Info */}
             <div className="md:col-span-5 space-y-8">
               <Link to="/" className="text-5xl font-black tracking-tighter italic uppercase">
-                VESTRO<span className="text-[#86FE05]">STORE</span>
+                VESTRO<span className="text-[#59a409]">STORE</span>
               </Link>
               <p className={`text-base leading-relaxed max-w-md ${darkMode ? "text-gray-300" : "text-black font-semibold"}`}>
                 {t.aboutDesc}
               </p>
               
-              <button onClick={() => setShowPolicyModal(true)} className="flex items-center gap-2 text-[#5bae02] text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform bg-[#86FE05]/10 px-4 py-2 rounded-full">
+              <button onClick={() => setShowPolicyModal(true)} className="flex items-center gap-2 text-black dark:text-white text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform bg-slate-600 px-4 py-2 rounded-full">
                 <FiInfo size={18} /> {isRTL ? "سياسات المتجر" : "Store Policies"}
               </button>
 
@@ -122,7 +122,7 @@ const [position, setPosition] = useState({
 
             {/* Quick Links */}
             <div className="md:col-span-3 space-y-8">
-              <h3 className="text-xs font-black uppercase tracking-[0.4em] text-[#86FE05] italic">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black dark:text-white italic">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
           <ul className="space-y-5">
   {[
     {
@@ -147,11 +147,11 @@ const [position, setPosition] = useState({
         to={item.path}
         className={`group flex items-center gap-4 text-base font-black transition-all ${
           darkMode
-            ? "text-gray-400 hover:text-[#86FE05]"
-            : "text-black hover:text-[#86FE05]"
+            ? "text-gray-400 hover:text-[#68c308]"
+            : "text-black hover:text-[#68c308]"
         }`}
       >
-        <span className="p-2.5 rounded-xl bg-[#86FE05]/5 group-hover:bg-[#86FE05] group-hover:text-black transition-all">
+        <span className="p-2.5 rounded-xl bg-[#86FE05]/5 group-hover:bg-[#68c308] group-hover:text-black transition-all">
           {item.icon}
         </span>
         {item.name}
@@ -164,12 +164,12 @@ const [position, setPosition] = useState({
             {/* Payment */}
             <div className="md:col-span-4 space-y-10">
               <div className="space-y-5">
-                <h3 className="text-xs font-black uppercase tracking-[0.4em] text-[#86FE05] italic">{isRTL ? "طرق الدفع" : "Payments"}</h3>
+                <h3 className="text-lg font-black uppercase tracking-[0.4em] text-black dark:text-white italic">{isRTL ? "طرق الدفع" : "Payments"}</h3>
                 <div className="flex flex-wrap gap-5 items-center">
                   <FaCcVisa size={40} className="text-[#1A1F71] bg-white rounded-sm" />
                   <FaCcMastercard size={40} className="text-[#EB001B] bg-white rounded-sm" />
-                  <div className={`px-3 py-1.5 border-2 rounded-lg text-[10px] font-black ${darkMode ? "border-[#86FE05] text-[#86FE05]" : "border-black text-black"}`}>PAYMOB</div>
-                  <div className={`flex items-center gap-2 px-3 py-1.5 border-2 rounded-lg text-[10px] font-black ${darkMode ? "border-[#86FE05] text-[#86FE05] bg-[#86FE05]/5" : "border-black text-black bg-gray-50"}`}>
+                  <div className={`px-3 py-1.5 border-2 rounded-lg text-[10px] font-black ${darkMode ? "border-white text-white" : "border-black text-black"}`}>PAYMOB</div>
+                  <div className={`flex items-center gap-2 px-3 py-1.5 border-2 rounded-lg text-[10px] font-black ${darkMode ? "border-white text-white bg-[#86FE05]/5" : "border-black text-black bg-gray-50"}`}>
                     <MdOutlinePayments size={16} /> {isRTL ? "الدفع عند الاستلام" : "CASH ON DELIVERY"}
                   </div>
                 </div>
@@ -180,16 +180,12 @@ const [position, setPosition] = useState({
           <div className={`mt-24 pt-10 border-t-2 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-black uppercase tracking-widest ${darkMode ? "border-white/5 text-gray-500" : "border-gray-200 text-black"}`}>
             <p>{t.rights}</p>
             <div className="flex gap-8">
-              <Link to="/privacy" className="hover:text-[#86FE05] transition-colors">{isRTL ? "الخصوصية" : "Privacy"}</Link>
-              <Link to="/terms" className="hover:text-[#86FE05] transition-colors">{isRTL ? "الشروط" : "Terms"}</Link>
+              <Link to="/privacy" className="hover:text-[#68c308] transition-colors">{isRTL ? "الخصوصية" : "Privacy"}</Link>
+              <Link to="/terms" className="hover:text-[#68c308] transition-colors">{isRTL ? "الشروط" : "Terms"}</Link>
             </div>
           </div>
         </div>
       </footer>
-
-      {/* --- MAGNETIC SOCIAL HUB (الزرار الجديد بحدود الشاشة) --- */}
-      
-
       {/* Policy Modal */}
       {showPolicyModal && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
