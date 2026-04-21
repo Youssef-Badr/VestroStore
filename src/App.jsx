@@ -97,7 +97,7 @@ function App() {
   whileHover={{ scale: 1.2, rotate: 0 }}
   whileTap={{ scale: 0.9 }}
   // التموضع على اليسار
-  className="fixed bottom-10 left-10 z-[60] bg-[#559e08] text-black p-5 rounded-full  border-2 border-black/10 flex items-center justify-center cursor-pointer"
+  className="fixed bottom-10 left-10 z-[60] bg-black text-white dark:bg-white dark:text-black p-5 rounded-full  border-2 border-black/10 flex items-center justify-center cursor-pointer"
 >
   <div className="relative">
     <FiGift size={28} />
