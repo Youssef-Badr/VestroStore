@@ -99,7 +99,7 @@ return (
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setTimeout(() => setIsPaused(false), 3500)}
+      onTouchEnd={() => setTimeout(() => setIsPaused(false), 800)}
     >
 
       <div className="inline-flex gap-6 px-4">
