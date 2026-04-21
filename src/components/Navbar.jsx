@@ -558,7 +558,7 @@ const [showSocial, setShowSocial] = useState(false);
 
       {!client ? (
         <div className="grid grid-cols-2 gap-3">
-          <Link to="/login" className="py-4 bg-[#86FE05] text-black font-black text-[12px] rounded-2xl text-center" onClick={() => setMenuOpen(false)}>
+          <Link to="/login" className="py-4 bg-[#64b70b] text-black font-black text-[12px] rounded-2xl text-center" onClick={() => setMenuOpen(false)}>
             {isRTL ? "تسجيل دخول" : "Login"}
           </Link>
 

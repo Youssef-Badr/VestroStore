@@ -70,11 +70,11 @@ export default function RegisterPage() {
       <div className={`max-w-lg w-full p-8 rounded-[2.5rem] border ${darkMode ? 'bg-[#0a0a0a] border-white/5' : 'bg-white border-black/5 shadow-2xl'}`}>
         
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#86FE05] rounded-2xl flex items-center justify-center mx-auto mb-4 -rotate-3 shadow-[0_0_20px_#86FE0566]">
+          <div className="w-16 h-16 bg-[#69c20a] rounded-2xl flex items-center justify-center mx-auto mb-4 -rotate-3 shadow-[0_0_20px_#86FE0566]">
             <UserPlus size={30} className="text-black" />
           </div>
           <h1 className="text-3xl font-black uppercase italic tracking-tighter">
-            {isRTL ? "إنشاء" : "Create"} <span className="text-[#86FE05]">{isRTL ? "حساب" : "Account"}</span>
+            {isRTL ? "إنشاء" : "Create"} <span className="text-[#69c20a]">{isRTL ? "حساب" : "Account"}</span>
           </h1>
         </div>
 
@@ -105,7 +105,7 @@ export default function RegisterPage() {
             <input type="password" placeholder={isRTL ? "تأكيد كلمة المرور" : "Confirm Password"} className={inputStyle} required value={formData.confirmPassword} onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} />
           </div>
 
-          <button disabled={loading} className="w-full bg-[#86FE05] text-black font-black py-5 rounded-2xl uppercase hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_#86FE0533]">
+          <button disabled={loading} className="w-full bg-[#69c20a] text-black font-black py-5 rounded-2xl uppercase hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_#86FE0533]">
             {loading ? <Loader2 className="animate-spin" /> : (
               <> {isRTL ? "انضم إلينا" : "Join VESTRO"} <ArrowRight size={20} className={isRTL ? "rotate-180" : ""} /> </>
             )}
@@ -114,7 +114,7 @@ export default function RegisterPage() {
 
         <p className="mt-6 text-center text-gray-500 font-bold text-sm">
           {isRTL ? "لديك حساب بالفعل؟" : "Already have an account?"} {" "}
-          <Link to="/login" className="text-[#86FE05] hover:underline">{isRTL ? "سجل دخول" : "Login"}</Link>
+          <Link to="/login" className="text-[#5ba60b] hover:underline">{isRTL ? "سجل دخول" : "Login"}</Link>
         </p>
       </div>
     </div>

@@ -249,86 +249,134 @@ useEffect(() => {
           </button>
         )}
 
-        {/* ✅ المودال المطور (الشبكة المنظمة) */}
-        {showVariantSelector && (
-          <div className="absolute inset-0 bg-white/98 dark:bg-black/95 backdrop-blur-2xl z-40 flex flex-col p-5 animate-in fade-in zoom-in duration-300">
-            <div className="flex items-center justify-between mb-4">
-              {currentStep > 0 ? (
-                <button onClick={() => setCurrentStep(currentStep - 1)} className="p-1 text-[#86FE05] hover:scale-110">
-                  <ChevronLeft size={20} />
-                </button>
-              ) : <div className="w-6" />}
-              <div className="flex flex-col items-center">
-                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{currentStep + 1} / {optionKeys.length}</span>
-                <h4 className="text-[10px] font-black text-black dark:text-[#86FE05] uppercase italic tracking-widest">
-                  {isRTL ? (optionKeys[currentStep] === "Color" || optionKeys[currentStep] === "اللون" ? "اختر اللون" : "اختر المقاس") : `Select ${optionKeys[currentStep]}`}
-                </h4>
-              </div>
-              <button onClick={resetSelector} className="p-1 text-slate-300 hover:text-red-500">✕</button>
-            </div>
+        {/* ✅ Gorilla Style Variant Selector Modal */}
+{showVariantSelector && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+    
+    {/* Backdrop */}
+    <div 
+      className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
+      onClick={resetSelector} 
+    />
+    
+    {/* Modal Content */}
+    <div className="relative w-full max-w-md max-h-[90vh] overflow-hidden bg-white dark:bg-[#0A0A0A] rounded-[1.8rem] shadow-2xl flex flex-col animate-in zoom-in duration-300">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-white/5">
+        <div className="flex flex-col">
+          <h4 className="text-lg md:text-xl font-[900] text-black dark:text-white uppercase italic tracking-tighter">
+            {isRTL ? "تخصيص الطلب" : "Customize"}
+          </h4>
+          <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate max-w-[180px]">
+            {product.name}
+          </p>
+        </div>
 
-            <div className="flex-1 overflow-y-auto pr-1">
-              <div className={`grid gap-2 ${optionKeys[currentStep] === "Color" || optionKeys[currentStep] === "اللون" ? "grid-cols-4" : "grid-cols-3"}`}>
-             {availableOptionsForStep.map((val, idx) => {
-  const isColor = optionKeys[currentStep] === "Color" || optionKeys[currentStep] === "اللون";
-  const isOptionAvailable = product.variants.some(v => {
-    const matchesCurrent = v.options[optionKeys[currentStep]] === val;
-    const matchesPrev = Object.entries(selectedFilters).every(([k, fv]) => v.options[k] === fv);
-    return matchesCurrent && matchesPrev && v.stock > 0;
-  });
-
-  return (
-    <button
-      key={idx}
-      disabled={!isOptionAvailable}
-      onClick={() => handleStepClick(val)}
-      className={`relative flex flex-col items-center justify-center min-h-[55px] sm:min-h-[64px] p-1.5 rounded-xl border-2 transition-all overflow-hidden ${
-        isOptionAvailable 
-          ? "border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5 hover:border-[#86FE05]" 
-          : "border-slate-200/50 dark:border-white/5 bg-slate-100/50 dark:bg-white/5 cursor-not-allowed opacity-60"
-      }`}
-    >
-      {/* محتوى الزر */}
-      <div className="w-full flex flex-col items-center justify-center">
-        {isColor ? (
-          <>
-            <span 
-              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full shadow-inner border border-black/10 flex-shrink-0 ${!isOptionAvailable ? "grayscale" : ""}`} 
-              style={{ backgroundColor: getColorCode(val) }} 
-            />
-            <span className="text-[7px] sm:text-[8px] mt-1 font-bold text-slate-500 truncate w-full px-0.5 text-center">
-              {val}
-            </span>
-          </>
-        ) : (
-          <span className={`
-            font-black uppercase italic text-center leading-[1.1] break-words w-full px-0.5
-            ${val.length > 8 ? "text-[8px] sm:text-[9px]" : "text-[10px] sm:text-[11px]"}
-            ${isOptionAvailable ? "text-black dark:text-white" : "text-slate-400"}
-          `}>
-            {val}
-          </span>
-        )}
+        <button 
+          onClick={resetSelector} 
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/5 text-black dark:text-white hover:rotate-90 transition-transform"
+        >
+          ✕
+        </button>
       </div>
 
-      {/* بادج OUT لو الكمية خلصت */}
-      {!isOptionAvailable && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/5 dark:bg-black/20 backdrop-blur-[1px]">
-          <span className="bg-red-600 text-white text-[7px] sm:text-[8px] font-black px-1 py-0.5 rounded-sm rotate-[-15deg] uppercase shadow-md">
-            {isRTL ? "نفذ" : "OUT"}
-          </span>
+      {/* BODY */}
+      <div className="p-5 overflow-y-auto">
+        
+        {/* Progress Bar */}
+        <div className="flex gap-1 mb-5">
+          {optionKeys.map((_, index) => (
+            <div 
+              key={index} 
+              className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                index <= currentStep 
+                  ? "bg-[#86FE05]" 
+                  : "bg-gray-100 dark:bg-white/10"
+              }`}
+            />
+          ))}
         </div>
-      )}
-    </button>
-  );
-})}
-              </div>
-            </div>
-            <button onClick={resetSelector} className="mt-4 text-[9px] font-black text-slate-400 uppercase tracking-tighter italic">
-              {isRTL ? "إلغاء" : "Cancel"}
+
+        {/* Option Title */}
+        <div className="mb-4 flex justify-between items-center">
+          <span className="text-[11px] font-black uppercase text-gray-400">
+            {isRTL ? "اختر" : "Select"} {optionKeys[currentStep]}
+          </span>
+
+          {currentStep > 0 && (
+            <button 
+              onClick={() => setCurrentStep(currentStep - 1)}
+              className="text-[10px] font-bold text-black dark:text-[#86FE05] underline"
+            >
+              {isRTL ? "الرجوع" : "Go Back"}
             </button>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Options */}
+        <div className={`grid gap-3 ${
+          optionKeys[currentStep] === "Color" || optionKeys[currentStep] === "اللون" 
+            ? "grid-cols-2 sm:grid-cols-3" 
+            : "grid-cols-3"
+        }`}>
+          {availableOptionsForStep.map((val, idx) => {
+            const isColor = optionKeys[currentStep] === "Color" || optionKeys[currentStep] === "اللون";
+
+            const isOptionAvailable = product.variants.some(v => {
+              const matchesCurrent = v.options[optionKeys[currentStep]] === val;
+              const matchesPrev = Object.entries(selectedFilters).every(([k, fv]) => v.options[k] === fv);
+              return matchesCurrent && matchesPrev && v.stock > 0;
+            });
+
+            return (
+              <button
+                key={idx}
+                disabled={!isOptionAvailable}
+                onClick={() => handleStepClick(val)}
+                className={`group relative flex items-center justify-center p-3 rounded-xl border-2 transition-all duration-300 ${
+                  isOptionAvailable 
+                    ? "border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 hover:border-black dark:hover:border-[#86FE05]" 
+                    : "opacity-40 cursor-not-allowed grayscale"
+                }`}
+              >
+                {isColor ? (
+                  <div className="flex items-center gap-2 w-full justify-center">
+                    <span 
+                      className="w-5 h-5 rounded-full border border-black/10 shadow-sm" 
+                      style={{ backgroundColor: getColorCode(val) }} 
+                    />
+                    <span className="text-[10px] font-black uppercase italic truncate">{val}</span>
+                  </div>
+                ) : (
+                  <span className="text-[11px] font-black uppercase italic text-center">{val}</span>
+                )}
+
+                {!isOptionAvailable && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-black/60">
+                    <span className="text-[15px] font-black bg-red-600 text-white px-1 ml-20 rounded-sm">
+                      {isRTL ? "نفذ" : "OUT"}
+                    </span>
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 bg-gray-50 dark:bg-white/5">
+        <button 
+          onClick={resetSelector}
+          className="w-full py-3 text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+        >
+          {isRTL ? "إلغاء العملية" : "Cancel Process"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
         {isSoldOut && (
           <div className="absolute inset-0 bg-white/60 dark:bg-black/40 backdrop-blur-[2px] flex items-center justify-center z-20 pointer-events-none">
@@ -345,7 +393,7 @@ useEffect(() => {
         
         <div className={`flex items-center gap-4 ${isRTL ? "flex-row-reverse" : "flex-row"} justify-center`}>
           <div className="flex items-baseline gap-1">
-            <span className="text-black dark:text-white font-black text-3xl sm:text-4xl italic tracking-tighter leading-none">{product.price}</span>
+            <span className="text-black dark:text- font-black text-3xl sm:text-4xl italic tracking-tighter leading-none">{product.price}</span>
             <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 italic">{isRTL ? "ج.م" : "EGP"}</span>
           </div>
 
