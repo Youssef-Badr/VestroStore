@@ -33,6 +33,7 @@ const ThankYou = lazy(() => import("./pages/ThankYou"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
+const Policy = lazy(() => import("./pages/Policy"));
 function App() {
   // حالة فتح موديل العروض (أصبحت Global هنا)
   const [isOffersOpen, setIsOffersOpen] = useState(false);
@@ -69,6 +70,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/policy" element={<Policy />} />
             <Route path="/privacy" element={<Privacy />} />
 <Route path="/terms" element={<Terms />} />
             <Route path="/payment-result" element={<PaymentResultPage />} />

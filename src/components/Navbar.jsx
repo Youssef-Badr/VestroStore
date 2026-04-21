@@ -23,13 +23,14 @@ import {
   ArrowLeft,
   ChevronRight,
   ChevronDown,
-  UserPlus
+  UserPlus,
 } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { toast } from "react-hot-toast";
 import api from "../api/axiosInstance";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
 
 export default function Navbar() {
   const { darkMode, setDarkMode } = useTheme();
@@ -46,6 +47,7 @@ export default function Navbar() {
   const [client, setClient] = useState(null);
   const [categories, setCategories] = useState([]);
 const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
+const [showSocial, setShowSocial] = useState(false);
   // --- Search States ---
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -182,7 +184,7 @@ const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
               <Link 
                 key={link.name} 
                 to={link.path} 
-                className={`text-[15px] font-black font-bold uppercase tracking-[0.2em] transition-all hover:text-[#86FE05] ${
+                className={`text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#86FE05] ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -194,7 +196,7 @@ const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
             <div className="relative" ref={catRef}>
               <button 
                 onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-                className={`flex items-center gap-1 text-[15px] font-black font-bold uppercase tracking-[0.2em] transition-all hover:text-[#86FE05] ${
+                className={`flex items-center gap-1 text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#86FE05] ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -231,6 +233,8 @@ const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
                 )}
               </AnimatePresence>
             </div>
+
+            
           </div>
         </div>
 
@@ -373,72 +377,185 @@ const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
   initial={{ opacity: 0, y: -20 }}
   animate={{ opacity: 1, y: 0 }}
   exit={{ opacity: 0, y: -20 }}
-  className={`lg:hidden fixed inset-0 top-[64px] md:top-[80px] z-[90] flex flex-col overflow-y-auto ${
+  className={`lg:hidden fixed inset-0 top-[64px] md:top-[80px] z-[99] flex flex-col overflow-y-auto ${
     darkMode ? "bg-black text-white" : "bg-white text-black"
   }`}
 >
   
   {/* TOP CONTENT */}
-  <div className="flex-1 p-6 space-y-4 mt-8">
+<div className="flex-1 p-6 space-y-3 mt-4">
 
-    {/* LINKS */}
-    {links.map(l => (
-      <Link
-        key={l.name}
-        to={l.path}
-        onClick={() => setMenuOpen(false)}
-        className="block text-3xl font-black italic uppercase"
-      >
-        {l.name}
-      </Link>
-    ))}
+  {links.map((l, index) => (
+  <div key={l.name}>
+    
+    <Link
+      to={l.path}
+      onClick={() => setMenuOpen(false)}
+      className="block text-2xl font-black italic uppercase leading-tight py-3"
+    >
+      {l.name}
+    </Link>
 
-    {/* CATEGORIES */}
-    <div className=" px-1">
-      <button
-        onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
-        className="flex items-center justify-between w-full text-3xl font-black italic uppercase mb-4"
-      >
-        <span>{isRTL ? "الأقسام" : "Categories"}</span>
-        <ChevronDown
-          size={22}
-          className={`transition-transform ${mobileCategoriesOpen ? "rotate-180" : ""}`}
-        />
-      </button>
+    {/* 🔥 Divider بين العناصر */}
+    {index !== links.length - 1 && (
+      <div className="h-[2px] w-full bg-black/10 dark:bg-white/10" />
+    )}
 
-      {mobileCategoriesOpen && (
-        <div className="grid grid-cols-3 gap-2">
-          {categories.map((cat) => (
-            <motion.div key={cat.id}>
-              <Link
-                to={`/products/category/${cat.id}`}
-                onClick={() => setMenuOpen(false)}
-                className="relative block rounded-xl overflow-hidden aspect-square"
-              >
-                <img
-                  src={cat.image?.url}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white text-xl font-black uppercase text-center">
-                    {cat.name}
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      )}
-    </div>
+    {/* 🔥 Bottom border بعد آخر عنصر */}
+    {index === links.length - 1 && (
+      <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 mt-2" />
+    )}
 
   </div>
+))}
+
+ 
+
+  {/* CATEGORIES */}
+  <div className="mt-4 px-1">
+    <button
+      onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
+      className="flex items-center justify-between w-full text-2xl font-black italic uppercase mb-3"
+    >
+      <span>{isRTL ? "الأقسام" : "Categories"}</span>
+      <ChevronDown
+        size={20}
+        className={`transition-transform ${mobileCategoriesOpen ? "rotate-180" : ""}`}
+      />
+    </button>
+
+    {mobileCategoriesOpen && (
+      <div className="grid grid-cols-3 gap-2">
+        {categories.map((cat) => (
+          <motion.div key={cat.id}>
+            <Link
+              to={`/products/category/${cat.id}`}
+              onClick={() => setMenuOpen(false)}
+              className="relative block rounded-xl overflow-hidden aspect-square"
+            >
+              <img
+                src={cat.image?.url}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-white text-sm font-black uppercase text-center">
+                  {cat.name}
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    )}
+  </div>
+   {/* 🔥 SOCIAL BUTTON */}
+  <button
+    onClick={() => setShowSocial(!showSocial)}
+    className="mt-4 w-full py-3 rounded-2xl border text-[12px] font-black uppercase flex items-center justify-center gap-2"
+  >
+    🌐 {isRTL ? "Follow Us On Social Media" : "Follow Us On Social Media"}
+  </button>
+
+<AnimatePresence>
+  {showSocial && (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className="grid grid-cols-3 gap-3 mt-3"
+    >
+
+      {/* WhatsApp Sales */}
+      <a
+        href="https://wa.me/201120587886"
+        target="_blank"
+        className="flex flex-col items-center justify-center gap-1 p-3 rounded-2xl bg-[#25D366] text-white shadow-md hover:scale-105 transition"
+      >
+        <FaWhatsapp size={22} />
+        <span className="text-[10px] font-bold">
+          {isRTL ? "المبيعات" : "Sales"}
+        </span>
+      </a>
+
+      {/* WhatsApp Support */}
+      <a
+        href="https://wa.me/201060850472"
+        target="_blank"
+        className="flex flex-col items-center justify-center gap-1 p-3 rounded-2xl bg-green-600 text-white shadow-md hover:scale-105 transition"
+      >
+        <FaWhatsapp size={22} />
+        <span className="text-[10px] font-bold">
+          {isRTL ? "الدعم" : "Support"}
+        </span>
+      </a>
+
+      {/* Instagram */}
+      <a
+        href="https://www.instagram.com/vestroeg"
+        target="_blank"
+        className="flex flex-col items-center justify-center gap-1 p-3 rounded-2xl bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white shadow-md hover:scale-105 transition"
+      >
+        <FaInstagram size={22} />
+        <span className="text-[10px] font-bold">
+          Instagram
+        </span>
+      </a>
+
+      {/* TikTok */}
+      <a
+        href="https://www.tiktok.com/"
+        target="_blank"
+        className="flex flex-col items-center justify-center gap-1 p-3 rounded-2xl bg-black text-white shadow-md hover:scale-105 transition"
+      >
+        <FaTiktok size={22} />
+        <span className="text-[10px] font-bold">
+          TikTok
+        </span>
+      </a>
+
+      {/* Facebook */}
+      <a
+        href="https://www.facebook.com/share/1E4b9xJXs2/"
+        target="_blank"
+        className="flex flex-col items-center justify-center gap-1 p-3 rounded-2xl bg-[#1877F2] text-white shadow-md hover:scale-105 transition"
+      >
+        <FaFacebookF size={22} />
+        <span className="text-[10px] font-bold">
+          Facebook
+        </span>
+      </a>
+
+    </motion.div>
+  )}
+</AnimatePresence>
+
+ 
+</div>
 
   {/* 🔥 BOTTOM FIXED SECTION */}
   <div className="p-6 border-t border-white/10 space-y-4">
+   <div className="grid grid-cols-3 gap-3 mt-4 text-[13px] font-bold uppercase opacity-80 text-center">
+
+  <Link to="/terms" onClick={() => setMenuOpen(false)}>
+    {isRTL ? "الشروط" : "Terms"}
+  </Link>
+
+  <Link to="/privacy" onClick={() => setMenuOpen(false)}>
+    {isRTL ? "الخصوصية" : "Privacy"}
+  </Link>
+
+  <Link to="/policy" onClick={() => setMenuOpen(false)}>
+    {isRTL ? "سياسات الإسترجاع" : " "}
+  </Link>
+
+</div>
+  
 
     {/* ACCOUNT */}
     <div>
+  
+
       {!client ? (
         <div className="grid grid-cols-2 gap-3">
           <Link to="/login" className="py-4 bg-[#86FE05] text-black font-black text-[12px] rounded-2xl text-center" onClick={() => setMenuOpen(false)}>

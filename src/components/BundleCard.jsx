@@ -52,7 +52,7 @@ const handleClaimFromDetails = () => {
         
         {/* Badge الخصم - رجعناه لوحده فوق الصورة بشكل كلاسيك */}
         <div className={`absolute top-5 ${isAr ? "right-5" : "left-5"} z-20`}>
-          <div className="bg-[#86FE05] text-black text-[15px] font-black px-3 py-1.5 rounded-xl shadow-lg uppercase italic">
+          <div className="bg-black  text-white dark:bg-white dark:text-black text-[15px] font-black px-3 py-1.5 rounded-xl shadow-lg uppercase italic">
             {isAr ? `وفر ${discount}%` : `Save ${discount}%`}
           </div>
         </div>
@@ -96,7 +96,7 @@ const handleClaimFromDetails = () => {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-black text-[#77e205] italic">
+              <span className="text-2xl font-black text-black dark:text-white italic">
                 {bundle.bundlePrice.toLocaleString()} <span className="text-[10px] uppercase">{isAr ? 'ج.م' : 'EGP'}</span>
               </span>
               <span className="text-[14px] font-bold text-red-500 line-through opacity-60">
@@ -120,7 +120,7 @@ const handleClaimFromDetails = () => {
 
             <button
               onClick={() => handleAction('buy_now')}
-              className="w-full py-4 rounded-2xl font-black text-[18px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all bg-[#79e507] text-black shadow-[0_10px_20px_-5px_rgba(134,254,5,0.4)] hover:scale-[1.02] active:scale-95"
+              className="w-full py-4 rounded-2xl font-black text-[18px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all bg-black text-white dark:text-black dark:bg-white hover:scale-[1.02] active:scale-95"
             >
               <CreditCard size={16} />
               {isAr ? 'اشتري الآن (دفع مباشر)' : 'Buy Now (Checkout)'}

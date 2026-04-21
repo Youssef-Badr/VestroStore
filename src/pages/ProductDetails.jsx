@@ -576,21 +576,27 @@ const scrollToThumbnail = (imgUrl) => {
   
 
  const handleThumbnailClick = (img) => {
-  // 1. تحديث الصورة الكبيرة فوراً
+  // 👇 1. هات index بتاع الصورة
+  const index = allProductImages.findIndex(i => i.url === img.url);
+
+  if (index !== -1) {
+    setGalleryIndex(index); // 🔥 ده المهم
+  }
+
+  // 👇 2. خلي selectedImage sync برضه (اختياري بس حلو)
   setSelectedImage(img.url);
 
-  // 2. البحث عن اللون المرتبط بالصورة دي في الـ variants
+  // 👇 3. نفس logic اللون
   const colorMatch = product.variants?.find(v => 
     v.images?.some(variantImg => variantImg.url === img.url)
   );
 
-  // 3. لو لقينا لون مرتبط، بنختاره أوتوماتيك ونصفر المقاس
   if (colorMatch && colorMatch.options?.Color) {
-    setSelectedColorId(colorMatch._id || null); // عشان الـ Backend لو محتاجه
+    setSelectedColorId(colorMatch._id || null);
     setSelectedOptions(prev => ({
       ...prev,
       Color: colorMatch.options.Color,
-      Size: "" // بنسيبه فاضي عشان العميل يختار مقاسه
+      Size: ""
     }));
     setSelectedQty(1);
   }
@@ -622,20 +628,33 @@ const scrollToThumbnail = (imgUrl) => {
   };
 
 
-  const galleryImages = product.images || [];
+ const galleryImages = allProductImages || []; // مهم تستخدم نفس المصدر
 
 const nextImage = () => {
   if (!galleryImages.length) return;
-  setGalleryIndex((prev) => (prev + 1) % galleryImages.length);
+
+  const nextIndex = (galleryIndex + 1) % galleryImages.length;
+  setGalleryIndex(nextIndex);
+
+  const nextImg = galleryImages[nextIndex];
+
+  // 👇 نفس اللي بيحصل لما تدوس thumbnail
+  handleThumbnailClick(nextImg);
 };
 
 const prevImage = () => {
   if (!galleryImages.length) return;
-  setGalleryIndex((prev) =>
-    prev === 0 ? galleryImages.length - 1 : prev - 1
-  );
-};
 
+  const prevIndex =
+    galleryIndex === 0 ? galleryImages.length - 1 : galleryIndex - 1;
+
+  setGalleryIndex(prevIndex);
+
+  const prevImg = galleryImages[prevIndex];
+
+  // 👇 نفس behavior
+  handleThumbnailClick(prevImg);
+};
 
 
 const currentVariant = product.variants?.find(
@@ -730,7 +749,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     <button
       aria-labelledby="back-button"
       onClick={() => navigate(-1)}
-      className="absolute top-0 left-4 md:left-8 p-3 rounded-full bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-[#86FE05] hover:scale-110 transition-all z-20 shadow-sm border border-transparent dark:border-white/10"
+      className="absolute top-0 left-4 md:left-8 p-3 rounded-full bg-slate-100 dark:bg-white/30 text-slate-900 dark:text-white  hover:scale-110 transition-all z-20 shadow-sm border border-transparent dark:border-white/10"
       aria-label="Go back"
     >
       <ArrowLeft size={20} className={isRTL ? "rotate-180" : ""} />
@@ -769,7 +788,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   {product.salePercentage > 0 && (
     <div className="absolute 
       top-4 right-4 md:top-6 md:right-6 
-      bg-[#e1ffad] text-black 
+      bg-white text-black 
       text-[10px] md:text-xs 
       font-black px-3 py-1.5 md:px-4 md:py-2 
       rounded-full uppercase italic tracking-widest shadow-xl ring-2 ring-white/10">
@@ -784,7 +803,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     w-12 h-12 rounded-full 
     bg-black/80 text-white 
     flex items-center justify-center 
-    shadow-2xl z-[9999]"
+    shadow-2xl z-[88]"
   >
     <ChevronLeft size={22} />
   </button>
@@ -798,7 +817,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     w-12 h-12 rounded-full 
     bg-black/80 text-white 
     flex items-center justify-center 
-    shadow-2xl z-[9999] rotate-180"
+    shadow-2xl z-[88] rotate-180"
   >
     <ChevronLeft size={22} />
   </button>
@@ -908,13 +927,13 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           )}
         </button>)}
           {/* Pricing Section */}
-          <div className="py-6 border-y border-slate-100 dark:border-white/5 flex flex-wrap items-baseline gap-4">
+          <div translate="no" className="py-6 border-y  border-slate-100 dark:border-white/5 flex flex-wrap items-baseline gap-4">
             {product.salePrice ? (
               <>
-                <span className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-white">
+                <span translate="no" className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-white">
                   {product.salePrice} <span className="text-sm not-italic opacity-60 uppercase">{translations.currency}</span>
                 </span>
-                <span className="text-xl font-bold line-through text-slate-300 dark:text-slate-600">
+                <span translate="no" className="text-xl font-bold line-through text-slate-300 dark:text-slate-600">
                   {product.originalPrice}
                 </span>
               </>
@@ -1023,7 +1042,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 {product.options?.find(opt => opt.name === "Size")?.values.length > 0 && (
   <div ref={sizeSectionRef} className="space-y-4 scroll-mt-32 pt-4">
     <div className="flex justify-between items-center">
-      <h3 className={`text-lg sm:text-base font-black uppercase tracking-[0.2em] mb-4 
+      <h3 className={`text-lg sm:text-base font-black uppercase tracking-[0.2em] mb-4  
   ${isRTL ? "text-right" : "text-left"} 
   text-black dark:text-white`}>
     {translations.sizes}
@@ -1061,25 +1080,26 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     const isOutOfStock = !currentVariant || currentVariant.stock === 0;
 
     return (
-      <button
-        key={index}
-        disabled={isOutOfStock}
-        onClick={() => setSelectedOptions(prev => ({ ...prev, Size: sizeValue }))}
-        className={`min-w-[60px] h-12 px-4 rounded-2xl border-2 font-black italic transition-all relative ${
-          isSelected
-            ? "bg-[#86FE05] text-black border-[#86FE05] shadow-lg shadow-[#86FE05]/20"
-            : isOutOfStock
-            ? "bg-slate-50 dark:bg-white/5 border-transparent text-slate-300 dark:text-slate-700 cursor-not-allowed opacity-50"
-            : "bg-slate-50 dark:bg-[#111111] border-transparent text-slate-900 dark:text-white hover:border-slate-200 dark:hover:border-white/10"
-        }`}
-      >
-        {sizeValue}
-        {isOutOfStock && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-full h-[2px] bg-slate-300 dark:bg-slate-700 rotate-[-15deg]"></div>
-          </div>
-        )}
-      </button>
+     <button
+  key={index}
+  disabled={isOutOfStock}
+  onClick={() => setSelectedOptions(prev => ({ ...prev, Size: sizeValue }))}
+  className={`min-w-[60px] h-12 px-4 rounded-2xl border-2 font-black italic transition-all relative ${
+    isSelected
+      ? "bg-[#64b608] text-black border-black shadow-lg shadow-[#86FE05]/20"
+      : isOutOfStock
+      ? "bg-slate-50 dark:bg-white/5 border-black dark:border-white text-slate-300 dark:text-slate-700 cursor-not-allowed opacity-50"
+      : "bg-slate-50 dark:bg-[#111111] border-black dark:border-white text-slate-900 dark:text-white hover:border-slate-400 dark:hover:border-white"
+  }`}
+>
+  {sizeValue}
+
+  {isOutOfStock && (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="w-full h-[2px] bg-slate-300 dark:bg-slate-700 rotate-[-15deg]"></div>
+    </div>
+  )}
+</button>
     );
   })}
 </div>

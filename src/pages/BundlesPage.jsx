@@ -74,7 +74,7 @@ const BundlesPage = () => {
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 bg-black/5 dark:bg-[#86FE05]/10 text-black dark:text-[#86FE05] px-6 py-2.5 rounded-full mb-6 text-[17px] font-black uppercase tracking-[0.2em] border border-black/5 dark:border-[#86FE05]/20 shadow-sm"
+            className="inline-flex items-center gap-2 bg-black/5 dark:bg-white text-black dark:text-black px-6 py-2.5 rounded-full mb-6 text-[17px] font-black uppercase tracking-[0.2em] border border-black/5 dark:border-[#86FE05]/20 shadow-sm"
           >
             <LayoutGrid size={14} />
             {isRTL ? 'عروض فيسترو الحصرية' : 'Vestro Limited Offers'}
@@ -99,7 +99,7 @@ const BundlesPage = () => {
           </motion.p>
 
           {/* Decorative Neon Line */}
-          <div className="w-24 h-1.5 bg-black dark:bg-[#86FE05] mt-10 rounded-full shadow-[0_0_15px_rgba(134,254,5,0.3)]" />
+          <div className="w-24 h-1.5 bg-black dark:bg-slate-200 mt-10 rounded-full shadow-[0_0_15px_rgba(134,254,5,0.3)]" />
         </div>
 
         {/* Bundles Grid */}
