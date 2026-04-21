@@ -111,6 +111,20 @@ useEffect(() => {
   }
 }, [cart]);
 
+
+const normalizePhone = (value) => {
+  if (!value) return value;
+
+  return value
+    // عربي
+    .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    // فارسي
+    .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+    // حذف أي حاجة مش رقم
+    .replace(/\s+/g, "")
+    .replace(/[^0-9]/g, "");
+};
+
   // 🔄 معالجة التغييرات في الحقول
   const handleChange = async (e) => {
     const { name, value } = e.target;
@@ -149,9 +163,16 @@ useEffect(() => {
         setFormData(prev => ({ ...prev, district: "", bostaDistrictId: "" }));
       }
       return;
-    }
+    }  
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+   if (name === "phone" || name === "secondaryPhone") {
+  setFormData((prev) => ({
+    ...prev,
+    [name]: normalizePhone(value).slice(0, 11), // 🔥 تحويل + limit
+  }));
+} else {
+  setFormData((prev) => ({ ...prev, [name]: value }));
+}
   };
 
   // 🎫 التحقق من الكود (متوافق مع منطق validateDiscount الجديد)
@@ -226,6 +247,8 @@ const handleSubmit = async (e) => {
       scrollToError(); // <--- سكرول لمكان اسم العميل
       return;
     }
+
+
 
     // 3. فحص رقم الهاتف
     const phoneRegex = /^(010|011|012|015)\d{8}$/;
