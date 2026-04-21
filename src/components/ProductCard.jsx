@@ -167,12 +167,23 @@ function ProductCard({ product }) {
   };
 
   useEffect(() => {
-    let interval;
-    if (isHovering && allImages.length > 1) {
-      interval = setInterval(() => setCurrentImageIndex(prev => (prev + 1) % allImages.length), 1200);
-    } else setCurrentImageIndex(0);
-    return () => clearInterval(interval);
-  }, [isHovering, allImages.length]);
+  if (!isHovering || allImages.length <= 1) return;
+
+  const interval = setInterval(() => {
+    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+  }, 1500); // خليها أبطأ شوية
+
+  return () => clearInterval(interval);
+}, [isHovering, allImages.length]);
+
+useEffect(() => {
+  if (!allImages || allImages.length === 0) return;
+
+  allImages.forEach((img) => {
+    const image = new Image();
+    image.src = img.url;
+  });
+}, [allImages]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -191,12 +202,26 @@ function ProductCard({ product }) {
     <div ref={cardRef} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} className="group relative flex flex-col w-full bg-transparent transition-all duration-500">
       <div className="relative w-full aspect-[3/4] rounded-[2.2rem] sm:rounded-[2.8rem] overflow-hidden bg-gray-100 dark:bg-[#0F0F0F] border border-slate-200/60 dark:border-white/5 group-hover:border-[#86FE05]/50 transition-all duration-500 shadow-sm group-hover:shadow-xl text-center">
         
-        <img
-          onClick={handleNavigate}
-          src={allImages.length > 0 ? allImages[currentImageIndex]?.url : defaultImageUrl}
-          alt={product.name}
-          className="w-full h-full object-cover cursor-pointer transition-opacity duration-500 group-hover:scale-105"
-        />
+      <div onClick={handleNavigate} className="relative w-full h-full cursor-pointer overflow-hidden">
+  
+  {/* الصورة الحالية */}
+  <img
+    src={allImages[currentImageIndex]?.url || defaultImageUrl}
+    alt={product.name}
+    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100"
+  />
+
+  {/* الصورة اللي بعدها */}
+  {allImages.length > 1 && (
+    <img
+      src={allImages[(currentImageIndex + 1) % allImages.length]?.url}
+      alt="next"
+      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+        isHovering ? "opacity-100" : "opacity-0"
+      }`}
+    />
+  )}
+</div>
 
         {/* ✅ بادجات الـ Sale */}
         {product.salePercentage > 0 && (

@@ -78,6 +78,7 @@ const colorMap = {
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { darkMode } = useTheme();
   const { search } = useLocation();
   const [product, setProduct] = useState(null);
   const [selectedColorId, setSelectedColorId] = useState(null);
@@ -109,13 +110,15 @@ const [isExpanded, setIsExpanded] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [touchStart, setTouchStart] = useState(null);
 const [touchEnd, setTouchEnd] = useState(null);
+const [galleryIndex, setGalleryIndex] = useState(0);
+const [hideArrows, setHideArrows] = useState(false);
 const sizeSectionRef = useRef(null);
  const actionsRef = useRef(null);
 const [isSticky, setIsSticky] = useState(false);
 // 1. عداد المشاهدين (بيتغير كل كام ثانية)
 const [viewers, setViewers] = useState(Math.floor(Math.random() * (45 - 12 + 1)) + 12);
 // 2. عداد المبيعات (ثابت خلال الـ 24 ساعة بناءً على اليوم)
-const [salesCount, setSalesCount] = useState(0);
+const [salesCount, setSalesCount] = useState(2);
 
 useEffect(() => {
   const handleScroll = () => {
@@ -605,6 +608,7 @@ const scrollToThumbnail = (imgUrl) => {
 
   setLightboxIndex(index >= 0 ? index : 0);
   setIsLightboxOpen(true);
+  setHideArrows(true)
 };
 
   const nextLightbox = () => {
@@ -616,6 +620,23 @@ const scrollToThumbnail = (imgUrl) => {
       prev === 0 ? lightboxImages.length - 1 : prev - 1
     );
   };
+
+
+  const galleryImages = product.images || [];
+
+const nextImage = () => {
+  if (!galleryImages.length) return;
+  setGalleryIndex((prev) => (prev + 1) % galleryImages.length);
+};
+
+const prevImage = () => {
+  if (!galleryImages.length) return;
+  setGalleryIndex((prev) =>
+    prev === 0 ? galleryImages.length - 1 : prev - 1
+  );
+};
+
+
 
 const currentVariant = product.variants?.find(
   v => v.options.Color === selectedOptions.Color && v.options.Size === selectedOptions.Size
@@ -720,9 +741,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 <div className="md:w-1/2 flex flex-col items-center space-y-6">
   {/* الصورة الكبيرة المين */}
  <div className="relative w-full 
-  /* التعديل هنا: Ratio متغير حسب الشاشة */
   aspect-[3/4] sm:aspect-[4/5] md:aspect-[4/5] 
-  /* حواف دائرية أقل شوية في الموبايل عشان متاكلش الصورة */
   rounded-[1.5rem] md:rounded-[2rem] 
   overflow-hidden shadow-2xl bg-white dark:bg-[#0a0a0a] 
   border border-black/5 dark:border-white/5 group">
@@ -735,7 +754,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           product.images
         )
       }
-      src={selectedImage}
+     src={galleryImages[galleryIndex]?.url || selectedImage}
       alt={product.name}
       /* object-top بتخلي التركيز على التيشرت أو الموديل من فوق في الشاشات الصغيرة */
       className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110 cursor-zoom-in"
@@ -757,6 +776,34 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       -{product.salePercentage}%
     </div>
   )}
+  {/* Left Arrow */}
+{!hideArrows && (
+  <button
+    onClick={prevImage}
+    className="absolute left-2 top-1/2 -translate-y-1/2 
+    w-12 h-12 rounded-full 
+    bg-black/80 text-white 
+    flex items-center justify-center 
+    shadow-2xl z-[9999]"
+  >
+    <ChevronLeft size={22} />
+  </button>
+)}
+
+{/* Right Arrow */}
+{!hideArrows && (
+  <button
+    onClick={nextImage}
+    className="absolute right-2 top-1/2 -translate-y-1/2 
+    w-12 h-12 rounded-full 
+    bg-black/80 text-white 
+    flex items-center justify-center 
+    shadow-2xl z-[9999] rotate-180"
+  >
+    <ChevronLeft size={22} />
+  </button>
+)}
+
 </div>
 
   {/* 🎞️ معرض الصور المصغرة (Thumbnails) */}
@@ -864,7 +911,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           <div className="py-6 border-y border-slate-100 dark:border-white/5 flex flex-wrap items-baseline gap-4">
             {product.salePrice ? (
               <>
-                <span className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-[#86FE05]">
+                <span className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-white">
                   {product.salePrice} <span className="text-sm not-italic opacity-60 uppercase">{translations.currency}</span>
                 </span>
                 <span className="text-xl font-bold line-through text-slate-300 dark:text-slate-600">
@@ -872,7 +919,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
                 </span>
               </>
             ) : (
-              <span className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-[#86FE05]">
+              <span className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-white">
                 {product.originalPrice || product.price} <span className="text-sm not-italic opacity-60 uppercase">{translations.currency}</span>
               </span>
             )}
@@ -912,9 +959,9 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
    <div className="space-y-4">
   {/* العنوان المظبوط بنفس ستايل فيسترو */}
-  <h3 className={`text-[15px] sm:text-xs font-black uppercase tracking-[0.2em] mb-4 
+  <h3 className={`text-[20px] sm:text-xs font-black uppercase tracking-[0.2em] mb-4 
     ${isRTL ? "text-right" : "text-left"} 
-    text-black dark:text-[#e1ffad]/80`}>
+    text-black dark:text-white`}>
     {isRTL ? "اختر اللون" : "Select Color"}
   </h3>
 
@@ -976,9 +1023,9 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 {product.options?.find(opt => opt.name === "Size")?.values.length > 0 && (
   <div ref={sizeSectionRef} className="space-y-4 scroll-mt-32 pt-4">
     <div className="flex justify-between items-center">
-      <h3 className={`text-sm sm:text-base font-black uppercase tracking-[0.2em] mb-4 
+      <h3 className={`text-lg sm:text-base font-black uppercase tracking-[0.2em] mb-4 
   ${isRTL ? "text-right" : "text-left"} 
-  text-black dark:text-[#e1ffad]/70`}>
+  text-black dark:text-white`}>
     {translations.sizes}
 </h3>
       {product.sizeChart?.url && (
@@ -992,7 +1039,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   </div>
 
   <div className="flex flex-col items-start">
-    <span className={`text-sm sm:text-base font-black leading-none text-black dark:text-[#e1ffad] ${!isRTL ? "uppercase italic tracking-wider" : "font-bold"}`}>
+    <span className={`text-sm sm:text-base font-black leading-none text-black dark:text-white ${!isRTL ? "uppercase italic tracking-wider" : "font-bold"}`}>
       {isRTL ? "جدول المقاسات" : "Size Guide"}
     </span>
     
@@ -1076,7 +1123,6 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
   <div ref={actionsRef} className="flex flex-col sm:flex-row gap-4 pt-6 pb-10">
   
-  {/* Add To Cart - نبض سريع وواضح */}
 <motion.button
   disabled={isSoldOut}
   onClick={handleAddToCart}
@@ -1094,10 +1140,10 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     ease: "easeInOut"
   }}
   whileTap={{ scale: 0.92 }}
-  className={`flex-1 py-5 rounded-[2rem] font-black uppercase italic transition-all flex items-center justify-center gap-3 ${
+  className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase italic transition-all flex items-center justify-center gap-3 dark:bg-slate-50 dark:text-black ${
     isSoldOut
       ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-      : "bg-black text-white"
+      : "bg-black text-white "
   }`}
 >
   {isSoldOut ? (
@@ -1111,23 +1157,31 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 </motion.button>
 
   {/* Checkout - وميض سريع (Strobe effect) */}
-  <motion.button
+<motion.button
   disabled={!cartHasItems}
   onClick={() => navigate("/checkout")}
-  animate={cartHasItems ? {
-    backgroundColor: ["#22c55e", "#86efac", "#22c55e"],
-    scale: [1, 1.04, 1],
-  } : {}}
+  animate={
+    cartHasItems
+      ? {
+          backgroundColor: darkMode
+            ? ["#ffffff", "#eaeaea", "#ffffff"] // 🌙 دارك = أبيض
+            : ["#000000", "#111111", "#000000"], // ☀️ لايت = أسود
+          scale: [1, 1.04, 1],
+        }
+      : {}
+  }
   transition={{
     duration: 0.6,
     repeat: Infinity,
-    ease: "linear"
+    ease: "linear",
   }}
   whileTap={{ scale: 0.92 }}
-  className={`flex-1 py-5 rounded-[2rem] font-black uppercase transition-all ${
+  className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase transition-all ${
     cartHasItems
-      ? "text-black shadow-xl shadow-green-800"
-      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+      ? darkMode
+        ? "bg-white text-black border border-black/10" // 👈 دارك
+        : "bg-black text-white" // 👈 لايت
+      : "bg-slate-600 text-black cursor-not-allowed"
   }`}
 >
   {isRTL ? "إتمام الشراء" : "Checkout"}
@@ -1189,7 +1243,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       <div className={`flex items-center justify-between p-6 sm:p-8 border-b border-black/5 dark:border-white/5 ${isRTL ? "flex-row-reverse" : "flex-row"}`}>
         <div className={isRTL ? "text-right" : "text-left"}>
           {/* تم تكبير العنوان وإلغاء الـ italic في العربي لضمان الظهور */}
-          <h2 className={`text-2xl sm:text-3xl font-black text-black dark:text-[#e1ffad] ${!isRTL ? "uppercase italic tracking-tighter" : ""}`}>
+          <h2 className={`text-2xl sm:text-3xl font-black text-black dark:text-white ${!isRTL ? "uppercase italic tracking-tighter" : ""}`}>
             {isRTL ? "جدول المقاسات" : "Size Guide"}
           </h2>
           <p className={`text-xs sm:text-sm font-bold mt-2 ${isRTL ? "text-slate-500" : "uppercase tracking-[0.1em] text-slate-400"}`}>
@@ -1242,18 +1296,35 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
             setTouchStart(null); setTouchEnd(null);
           }}
         />
-        <button onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(false); }} className="absolute top-10 right-10 text-white/50 hover:text-[#86FE05] z-[110]">
+        <button onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(false); setHideArrows(false); // 👈 هنا الإضافة
+ }} className="absolute top-10 right-10 text-white/50 hover:text-[#86FE05] z-[110]">
           <X size={40} />
         </button>
-        <button onClick={(e) => { e.stopPropagation(); prevLightbox(); }} className="absolute left-6 text-white/20 hover:text-[#86FE05] text-6xl font-thin z-[110]">‹</button>
-        <img
+<button
+  onClick={(e) => { e.stopPropagation(); prevLightbox(); }}
+  className="absolute left-6 top-1/2 -translate-y-1/2 
+  w-14 h-14 rounded-full 
+  bg-black/70 hover:bg-black 
+  text-white flex items-center justify-center 
+  shadow-2xl z-[110] transition-all"
+>
+  <span className="text-3xl font-bold">‹</span>
+</button>        <img
           src={lightboxImages[lightboxIndex]?.url}
           alt="Preview"
           className="max-h-[85vh] max-w-[90vw] object-contain rounded-xl z-[105]"
           onClick={(e) => e.stopPropagation()}
         />
-        <button onClick={(e) => { e.stopPropagation(); nextLightbox(); }} className="absolute right-6 text-white/20 hover:text-[#86FE05] text-6xl font-thin z-[110]">›</button>
-      </div>
+<button
+  onClick={(e) => { e.stopPropagation(); nextLightbox(); }}
+  className="absolute right-6 top-1/2 -translate-y-1/2 
+  w-14 h-14 rounded-full 
+  bg-black/70 hover:bg-black 
+  text-white flex items-center justify-center 
+  shadow-2xl z-[110] transition-all"
+>
+  <span className="text-3xl font-bold">›</span>
+</button>      </div>
     )}
 
     {/* Related Products Section */}
