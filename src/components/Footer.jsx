@@ -83,7 +83,7 @@ const [position, setPosition] = useState({
                   {f.icon}
                 </div>
                 <div>
-                  <h4 className="font-black text-lg uppercase italic tracking-tight">{f.title}</h4>
+                  <h4 className="font-black text-lg uppercase tracking-tight">{f.title}</h4>
                   <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600 font-medium"}`}>{f.desc}</p>
                 </div>
               </div>
@@ -96,7 +96,7 @@ const [position, setPosition] = useState({
             
             {/* Brand Info */}
             <div className="md:col-span-5 space-y-8">
-              <Link to="/" className="text-5xl font-black tracking-tighter italic uppercase">
+              <Link to="/" className="text-5xl font-black tracking-tighter    uppercase">
                 VESTRO<span className="text-[#59a409]">STORE</span>
               </Link>
               <p className={`text-base leading-relaxed max-w-md ${darkMode ? "text-gray-300" : "text-black font-semibold"}`}>
@@ -122,7 +122,7 @@ const [position, setPosition] = useState({
 
             {/* Quick Links */}
             <div className="md:col-span-3 space-y-8">
-              <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black dark:text-white italic">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black dark:text-white   ">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
           <ul className="space-y-5">
   {[
     {
@@ -164,7 +164,7 @@ const [position, setPosition] = useState({
             {/* Payment */}
             <div className="md:col-span-4 space-y-10">
               <div className="space-y-5">
-                <h3 className="text-lg font-black uppercase tracking-[0.4em] text-black dark:text-white italic">{isRTL ? "طرق الدفع" : "Payments"}</h3>
+                <h3 className="text-lg font-black uppercase  text-black dark:text-white   ">{isRTL ? "طرق الدفع" : "Payments"}</h3>
                 <div className="flex flex-wrap gap-5 items-center">
                   <FaCcVisa size={40} className="text-[#1A1F71] bg-white rounded-sm" />
                   <FaCcMastercard size={40} className="text-[#EB001B] bg-white rounded-sm" />
@@ -191,7 +191,7 @@ const [position, setPosition] = useState({
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
           <div className={`relative max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 rounded-3xl border ${darkMode ? "bg-[#0a0a0a] border-white/10 text-white" : "bg-white border-black text-black"}`}>
             <button onClick={() => setShowPolicyModal(false)} className="absolute top-4 right-4 rtl:left-4 p-2 hover:bg-red-500 hover:text-white rounded-full transition-all"><FiX size={24}/></button>
-            <h2 className="text-2xl font-black italic mb-6 border-b-2 border-[#86FE05] pb-2 inline-block uppercase">{isRTL ? "سياسة الإرجاع والاستبدال" : "Return Policy"}</h2>
+            <h2 className="text-2xl font-black    mb-6 border-b-2 border-[#86FE05] pb-2 inline-block uppercase">{isRTL ? "سياسة الإرجاع والاستبدال" : "Return Policy"}</h2>
             <div className={`space-y-4 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"} ${!darkMode && "font-medium"}`}>
               <p>• يمكن إرجاع المنتجات في غضون 14 يومًا من استلام الشحنة.</p>
               <p>• يجب إثبات التلف أو النقص أثناء تواجد المندوب.</p>
