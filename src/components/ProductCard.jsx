@@ -199,11 +199,23 @@ useEffect(() => {
   const handleNavigate = () => navigate(`/product/${productId}`);
 
   return (
-    <div ref={cardRef} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}  // ✅ الموبايل
+    <div
+  onMouseEnter={() => setIsHovering(true)}
+  onMouseLeave={() => setIsHovering(false)}
+
+  // ✅ الموبايل الحقيقي
   onTouchStart={() => setIsHovering(true)}
   onTouchMove={() => setIsHovering(true)}
   onTouchEnd={() => setIsHovering(false)}
+  onTouchCancel={() => setIsHovering(false)}
+
+  onClick={(e) => {
+    e.stopPropagation();
+    if (showVariantSelector) return;
+    handleNavigate();
+  }}
 className="group relative flex flex-col w-full bg-transparent transition-all duration-500">
+
       <div className="relative w-full aspect-[3/4] rounded-[2.2rem] sm:rounded-[2.8rem] overflow-hidden bg-gray-100 dark:bg-[#0F0F0F] border border-slate-200/60 dark:border-white/5 group-hover:border-[#86FE05]/50 transition-all duration-500 shadow-sm group-hover:shadow-xl text-center">
         
       <div
@@ -422,8 +434,11 @@ className="group relative flex flex-col w-full bg-transparent transition-all dur
         </div>
 
         {!isSoldOut && (
-          <button onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => { e.stopPropagation();e.preventDefault(); setIsDirectBuy(true); setShowVariantSelector(true); }}
+          <button 
+            onClick={(e) => { e.stopPropagation();e.preventDefault(); setIsDirectBuy(true); // 🔥 مهم جدًا: نخلي الفتح في tick منفصل
+    setTimeout(() => {
+      setShowVariantSelector(true);
+    }, 0); }}
             className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase italic tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white transition-all shadow-lg active:scale-95"
           >
             <Zap size={14} className="fill-current" />
