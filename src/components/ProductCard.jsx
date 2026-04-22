@@ -167,11 +167,7 @@ function ProductCard({ product }) {
   };
 
  useEffect(() => {
-  const isTouchDevice = window.matchMedia("(hover: none)").matches;
-
-  // ✅ لو موبايل → اشتغل دايماً
-  // ✅ لو ديسكتوب → اشتغل بس وقت الهوفر
-  if ((!isHovering && !isTouchDevice) || allImages.length <= 1) return;
+  if (!isHovering || allImages.length <= 1) return;
 
   const interval = setInterval(() => {
     setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
@@ -203,10 +199,23 @@ useEffect(() => {
   const handleNavigate = () => navigate(`/product/${productId}`);
 
   return (
-    <div ref={cardRef} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}  onTouchStart={() => setIsHovering(true)}className="group relative flex flex-col w-full bg-transparent transition-all duration-500">
+    <div ref={cardRef} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}  // ✅ الموبايل
+  onTouchStart={() => setIsHovering(true)}
+  onTouchMove={() => setIsHovering(true)}
+  onTouchEnd={() => setIsHovering(false)}
+className="group relative flex flex-col w-full bg-transparent transition-all duration-500">
       <div className="relative w-full aspect-[3/4] rounded-[2.2rem] sm:rounded-[2.8rem] overflow-hidden bg-gray-100 dark:bg-[#0F0F0F] border border-slate-200/60 dark:border-white/5 group-hover:border-[#86FE05]/50 transition-all duration-500 shadow-sm group-hover:shadow-xl text-center">
         
-      <div onClick={handleNavigate} className="relative w-full h-full cursor-pointer overflow-hidden">
+      <div
+  onClick={(e) => {
+    e.stopPropagation();
+
+    // ✅ لو في مودال مفتوح متعملش navigation
+    if (showVariantSelector) return;
+
+    handleNavigate();
+  }}
+ className="relative w-full h-full cursor-pointer overflow-hidden">
   
   {/* الصورة الحالية */}
   <img
@@ -413,7 +422,7 @@ useEffect(() => {
         </div>
 
         {!isSoldOut && (
-          <button
+          <button onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => { e.stopPropagation();e.preventDefault(); setIsDirectBuy(true); setShowVariantSelector(true); }}
             className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase italic tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white transition-all shadow-lg active:scale-95"
           >
