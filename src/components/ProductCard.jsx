@@ -206,7 +206,7 @@ useEffect(() => {
   // ✅ الموبايل الحقيقي
   onTouchStart={() => setIsHovering(true)}
   onTouchMove={() => setIsHovering(true)}
-  onTouchEnd={() => setIsHovering(false)}
+  // onTouchEnd={() => setIsHovering(false)}
   onTouchCancel={() => setIsHovering(false)}
 
   onClick={(e) => {
