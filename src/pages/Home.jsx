@@ -14,31 +14,52 @@ import ProductCard from "../components/ProductCard";
 
 
 const MarqueeScroller = React.memo(
-  ({ products, direction, darkMode, isPaused, setIsPaused }) => {
+  ({ products, direction = "right", darkMode }) => {
     const containerRef = useRef(null);
-    const resumeTimeout = useRef(null);
+
+    const [isPaused, setIsPaused] = useState(false);
+
     const rafRef = useRef(null);
+    const velocityRef = useRef(0);
+    const lastTouchX = useRef(0);
+    const lastTime = useRef(0);
+    const resumeTimeout = useRef(null);
 
     const scrollItems = useMemo(() => {
-      if (!products || products.length === 0) return [];
+      if (!products?.length) return [];
       return [...products, ...products];
     }, [products]);
 
-    // 🎯 Auto Scroll باستخدام requestAnimationFrame (أنعم بكتير)
+    // 🔁 Infinite Loop Fix
+    const handleInfiniteLoop = () => {
+      const el = containerRef.current;
+      if (!el) return;
+
+      const half = el.scrollWidth / 2;
+
+      if (el.scrollLeft >= half) {
+        el.scrollLeft -= half;
+      }
+
+      if (el.scrollLeft <= 0) {
+        el.scrollLeft += half;
+      }
+    };
+
+    // 🎯 Auto Scroll Engine
     useEffect(() => {
       const el = containerRef.current;
       if (!el) return;
 
-      let speed = direction === "right" ? 0.3 : -0.3;
+      const baseSpeed = direction === "right" ? 0.7 : -0.7;
 
       const animate = () => {
         if (!isPaused) {
-          el.scrollLeft += speed;
+          el.scrollLeft += baseSpeed + velocityRef.current;
 
-          const halfWidth = el.scrollWidth / 2;
+          velocityRef.current *= 0.96;
 
-          if (el.scrollLeft >= halfWidth) el.scrollLeft = 0;
-          if (el.scrollLeft <= 0) el.scrollLeft = halfWidth;
+          handleInfiniteLoop(); // 🔥 أهم سطر
         }
 
         rafRef.current = requestAnimationFrame(animate);
@@ -49,88 +70,113 @@ const MarqueeScroller = React.memo(
       return () => cancelAnimationFrame(rafRef.current);
     }, [isPaused, direction]);
 
-    // ⏸️ Pause + Resume بعد 3 ثواني
-    const handlePause = () => {
+    // ⏸️ Pause / Resume
+    const pause = () => {
       setIsPaused(true);
-      if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
+      clearTimeout(resumeTimeout.current);
     };
 
-    const handleResume = () => {
-      if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
-
+    const resume = () => {
+      clearTimeout(resumeTimeout.current);
       resumeTimeout.current = setTimeout(() => {
         setIsPaused(false);
-      }, 3000); // ⏱️ 3 ثواني
+      }, 3000);
+    };
+
+    // 👆 Touch (Mobile)
+    const onTouchStart = (e) => {
+      pause();
+      lastTouchX.current = e.touches[0].clientX;
+      lastTime.current = Date.now();
+    };
+
+    const onTouchMove = (e) => {
+      const x = e.touches[0].clientX;
+      const dx = lastTouchX.current - x;
+
+      const now = Date.now();
+      const dt = now - lastTime.current;
+
+      velocityRef.current = (dx / dt) * 1.8;
+
+      const el = containerRef.current;
+      el.scrollLeft += dx;
+
+      handleInfiniteLoop(); // 🔥 يخلي السحب لا نهائي
+
+      lastTouchX.current = x;
+      lastTime.current = now;
+    };
+
+    const onTouchEnd = () => {
+      resume();
     };
 
     // 👉 الأسهم
     const scrollManual = (offset) => {
-      handlePause();
+      pause();
 
       const el = containerRef.current;
-      if (!el) return;
 
       el.scrollBy({
         left: offset,
         behavior: "smooth",
       });
 
-      handleResume();
+      setTimeout(() => {
+        handleInfiniteLoop(); // 🔥 مهم
+      }, 300);
+
+      resume();
     };
 
-    if (scrollItems.length === 0) return null;
-
-    const arrowClass = `absolute top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-xl transition-all duration-300 backdrop-blur-md
-      ${darkMode
-        ? "bg-zinc-900/80 text-white hover:bg-[#86FE05] hover:text-black"
-        : "bg-white/80 text-black hover:bg-black hover:text-white"
-      }`;
+    if (!scrollItems.length) return null;
 
     return (
-      <div className="w-full relative py-6">
+      <div className="relative w-full py-6" dir="ltr">
 
-        {/* الأسهم */}
+        {/* ⬅️➡️ Arrows */}
         <button
-          onClick={() => scrollManual(-320)}
-          className={`${arrowClass} left-2`}
+          onClick={() => scrollManual(-300)}
+          className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-xl
+          ${darkMode
+              ? "bg-zinc-900/80 text-white"
+              : "bg-white/80 text-black"
+            }`}
         >
-          <ChevronLeft size={22} />
+          <ChevronLeft />
         </button>
 
         <button
-          onClick={() => scrollManual(320)}
-          className={`${arrowClass} right-2`}
+          onClick={() => scrollManual(300)}
+          className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-xl
+          ${darkMode
+              ? "bg-zinc-900/80 text-white"
+              : "bg-white/80 text-black"
+            }`}
         >
-          <ChevronRight size={22} />
+          <ChevronRight />
         </button>
 
-        {/* SCROLLER */}
+        {/* 🔥 SCROLLER */}
         <div
           ref={containerRef}
-          className="w-full overflow-x-auto whitespace-nowrap scroll-smooth no-scrollbar"
-          
-          // 💡 Mobile Touch محترم
-          onTouchStart={handlePause}
-          onTouchEnd={handleResume}
-
-          // 💻 Desktop
-          onMouseEnter={handlePause}
-          onMouseLeave={handleResume}
+          className="overflow-x-auto whitespace-nowrap scroll-smooth no-scrollbar"
+          onMouseEnter={pause}
+          onMouseLeave={resume}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
         >
           <div className="inline-flex gap-4 px-3">
             {scrollItems.map((product, index) => (
               <div
                 key={`${product._id}-${index}`}
                 className="w-56 sm:w-64 md:w-72 flex-shrink-0"
-                
-                // 🔥 يمنع double click
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
               >
                 <ProductCard
                   product={product}
-                  onClick={() => handlePause()} // أول ضغطة تشتغل
+                  onClick={(e) => e.stopPropagation()} // ✅ click من أول مرة
                 />
               </div>
             ))}
@@ -140,7 +186,6 @@ const MarqueeScroller = React.memo(
     );
   }
 );
-
 
 export default function Home() {
   const { language } = useLanguage();

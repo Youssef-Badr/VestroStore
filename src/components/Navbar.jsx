@@ -320,7 +320,7 @@ const [showSocial, setShowSocial] = useState(false);
   className="p-3 flex items-center gap-2 text-[10px] font-black uppercase"
 >
   <Settings size={14} />
-  {fullName || (isRTL ? "بروفايل" : "Profile")}
+  {fullName || (isRTL ? "الصفحة الشخصية" : "Profile")}
 </Link>
 
 {/* 🧾 ORDERS LINK */}
@@ -391,7 +391,7 @@ const [showSocial, setShowSocial] = useState(false);
     <Link
       to={l.path}
       onClick={() => setMenuOpen(false)}
-      className="block text-2xl font-black italic uppercase leading-tight py-3"
+      className="block text-2xl font-black   uppercase leading-tight py-3"
     >
       {l.name}
     </Link>
@@ -415,7 +415,7 @@ const [showSocial, setShowSocial] = useState(false);
   <div className="mt-4 px-1">
     <button
       onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
-      className="flex items-center justify-between w-full text-2xl font-black italic uppercase mb-3"
+      className="flex items-center justify-between w-full text-2xl font-black  uppercase mb-3"
     >
       <span>{isRTL ? "الأقسام" : "Categories"}</span>
       <ChevronDown
@@ -692,7 +692,7 @@ const [showSocial, setShowSocial] = useState(false);
       
       {/* رسالة في حال عدم وجود نتائج */}
       {searchQuery.length >= 2 && suggestions?.products?.length === 0 && !searchLoading && (
-        <p className="text-gray-500 text-xs italic">
+        <p className="text-gray-500 text-xs  ">
           {isRTL ? "لا توجد منتجات مطابقة" : "No products found"}
         </p>
       )}
