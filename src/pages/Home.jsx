@@ -46,33 +46,30 @@ const MarqueeScroller = React.memo(
       }
     };
 
-   useEffect(() => {
-  const el = containerRef.current;
-  if (!el) return;
+    // 🎯 Auto Scroll Engine
+    useEffect(() => {
+      const el = containerRef.current;
+      if (!el) return;
 
-  const isMobile = window.innerWidth < 768;
+      const baseSpeed = direction === "right" ? 0.7 : -0.7;
 
-  const baseSpeed = direction === "right"
-    ? (isMobile ? 1.2 : 0.7)
-    : (isMobile ? -1.2 : -0.7);
+      const animate = () => {
+        if (!isPaused) {
+          el.scrollLeft += baseSpeed + velocityRef.current;
 
-  const animate = () => {
-    if (!isPaused) {
-      el.scrollLeft += baseSpeed + velocityRef.current;
+          velocityRef.current *= 0.96;
 
-      // 🔥 inertia أقوى
-      velocityRef.current *= isMobile ? 0.98 : 0.96;
+          handleInfiniteLoop(); // 🔥 أهم سطر
+        }
 
-      handleInfiniteLoop();
-    }
+        rafRef.current = requestAnimationFrame(animate);
+      };
 
-    rafRef.current = requestAnimationFrame(animate);
-  };
+      rafRef.current = requestAnimationFrame(animate);
 
-  rafRef.current = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(rafRef.current);
+    }, [isPaused, direction]);
 
-  return () => cancelAnimationFrame(rafRef.current);
-}, [isPaused, direction]);
     // ⏸️ Pause / Resume
     const pause = () => {
       setIsPaused(true);
@@ -94,46 +91,44 @@ const MarqueeScroller = React.memo(
     };
 
     const onTouchMove = (e) => {
-  const x = e.touches[0].clientX;
-  const dx = lastTouchX.current - x;
+      const x = e.touches[0].clientX;
+      const dx = lastTouchX.current - x;
 
-  const now = Date.now();
-  const dt = now - lastTime.current;
+      const now = Date.now();
+      const dt = now - lastTime.current;
 
-  // 🔥 حساسية أعلى بكتير
-  velocityRef.current = (dx / dt) * 3;
+      velocityRef.current = (dx / dt) * 1.8;
 
-  const el = containerRef.current;
+      const el = containerRef.current;
+      el.scrollLeft += dx;
 
-  // 🔥 حركة أقوى
-  el.scrollLeft += dx * 1.3;
+      handleInfiniteLoop(); // 🔥 يخلي السحب لا نهائي
 
-  handleInfiniteLoop();
-
-  lastTouchX.current = x;
-  lastTime.current = now;
-};
+      lastTouchX.current = x;
+      lastTime.current = now;
+    };
 
     const onTouchEnd = () => {
       resume();
     };
 
-  const scrollManual = (offset) => {
-  pause();
+    // 👉 الأسهم
+    const scrollManual = (offset) => {
+      pause();
 
-  const el = containerRef.current;
+      const el = containerRef.current;
 
-  el.scrollBy({
-    left: offset * 1.5, // 🔥 أسرع
-    behavior: "smooth",
-  });
+      el.scrollBy({
+        left: offset,
+        behavior: "smooth",
+      });
 
-  setTimeout(() => {
-    handleInfiniteLoop();
-  }, 300);
+      setTimeout(() => {
+        handleInfiniteLoop(); // 🔥 مهم
+      }, 300);
 
-  resume();
-};
+      resume();
+    };
 
     if (!scrollItems.length) return null;
 
@@ -300,7 +295,7 @@ export default function Home() {
     bg-slate-300 text-black
     dark:bg-white dark:text-black
 
-    hover:shadow-red-700]
+    hover:shadow-red-700
   "
 >
   <span className="inline-flex items-center gap-2">
