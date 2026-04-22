@@ -13,111 +13,135 @@ import api from "../../src/api/axiosInstance";
 import ProductCard from "../components/ProductCard";
 
 
-const MarqueeScroller = React.memo(({ products, direction, darkMode, isPaused, setIsPaused }) => {
-  const containerRef = useRef(null);
+const MarqueeScroller = React.memo(
+  ({ products, direction, darkMode, isPaused, setIsPaused }) => {
+    const containerRef = useRef(null);
+    const resumeTimeout = useRef(null);
+    const rafRef = useRef(null);
 
- const scrollItems = useMemo(() => {
-  if (!products || products.length === 0) return [];
-  return [...products, ...products];
-}, [products]);
+    const scrollItems = useMemo(() => {
+      if (!products || products.length === 0) return [];
+      return [...products, ...products];
+    }, [products]);
 
-const scrollManual = (scrollOffset) => {
-  setIsPaused(true);
+    // 🎯 Auto Scroll باستخدام requestAnimationFrame (أنعم بكتير)
+    useEffect(() => {
+      const el = containerRef.current;
+      if (!el) return;
 
-  const el = containerRef.current;
-  if (!el) return;
+      let speed = direction === "right" ? 0.3 : -0.3;
 
-  el.scrollTo({
-    left: el.scrollLeft + scrollOffset,
-    behavior: "smooth",
-  });
-};
+      const animate = () => {
+        if (!isPaused) {
+          el.scrollLeft += speed;
 
-useEffect(() => {
-  const el = containerRef.current;
-  if (!el || isPaused) return;
+          const halfWidth = el.scrollWidth / 2;
 
-  // 🐢 سرعة سلحفاة
-  const speed = direction === "right" ? 4 : -4;
+          if (el.scrollLeft >= halfWidth) el.scrollLeft = 0;
+          if (el.scrollLeft <= 0) el.scrollLeft = halfWidth;
+        }
 
-  const interval = setInterval(() => {
-    el.scrollLeft += speed;
+        rafRef.current = requestAnimationFrame(animate);
+      };
 
-    // 🔁 loop smooth بدون تقطيع
-    const halfWidth = el.scrollWidth / 2;
+      rafRef.current = requestAnimationFrame(animate);
 
-    if (el.scrollLeft >= halfWidth) {
-      el.scrollLeft = 0;
-    }
+      return () => cancelAnimationFrame(rafRef.current);
+    }, [isPaused, direction]);
 
-    if (el.scrollLeft <= 0) {
-      el.scrollLeft = halfWidth;
-    }
-  }, 16); // ~60fps
+    // ⏸️ Pause + Resume بعد 3 ثواني
+    const handlePause = () => {
+      setIsPaused(true);
+      if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
+    };
 
-  return () => clearInterval(interval);
-}, [isPaused, direction]);
+    const handleResume = () => {
+      if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
 
-if (scrollItems.length === 0) return null;
+      resumeTimeout.current = setTimeout(() => {
+        setIsPaused(false);
+      }, 3000); // ⏱️ 3 ثواني
+    };
 
-const arrowClass = `absolute top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow-2xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-md
-  ${darkMode ? "bg-zinc-900/90 text-white border-zinc-800 hover:bg-[#86FE05] hover:text-black" : "bg-white/90 text-black border-gray-200 hover:bg-black hover:text-white"}`;
+    // 👉 الأسهم
+    const scrollManual = (offset) => {
+      handlePause();
 
-return (
-  <div
-    className="w-full relative py-8 group"
-    dir="ltr"
-    onMouseLeave={() => setIsPaused(false)}
-  >
-    
-    {/* الأسهم */}
-    <button onClick={() => scrollManual(-300)} className={`${arrowClass} left-4`}>
-      <ChevronLeft size={24} />
-    </button>
+      const el = containerRef.current;
+      if (!el) return;
 
-    <button onClick={() => scrollManual(300)} className={`${arrowClass} right-4`}>
-      <ChevronRight size={24} />
-    </button>
+      el.scrollBy({
+        left: offset,
+        behavior: "smooth",
+      });
 
-    {/* تشغيل / إيقاف */}
-    {isPaused && (
-      <motion.button
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        onClick={() => setIsPaused(false)}
-        className="absolute top-4 right-10 z-30 flex items-center gap-2 px-4 py-2 rounded-full bg-[#86FE05] text-black font-bold text-xs shadow-lg"
-      >
-        <Play size={14} fill="black" />
-        {direction === "right" ? "تشغيل" : "Resume"}
-      </motion.button>
-    )}
+      handleResume();
+    };
 
-    {/* SCROLLER */}
-    <div
-      ref={containerRef}
-      className="w-full overflow-x-auto whitespace-nowrap scroll-smooth"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setTimeout(() => setIsPaused(false), 800)}
-    >
+    if (scrollItems.length === 0) return null;
 
-      <div className="inline-flex gap-6 px-4">
-        {scrollItems.map((product, index) => (
-          <div
-            key={`${product._id}-${index}`}
-            className="w-64 md:w-72 flex-shrink-0 px-2 cursor-pointer"
-            onClickCapture={() => setIsPaused(true)}
-          >
-            <ProductCard product={product} />
+    const arrowClass = `absolute top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-xl transition-all duration-300 backdrop-blur-md
+      ${darkMode
+        ? "bg-zinc-900/80 text-white hover:bg-[#86FE05] hover:text-black"
+        : "bg-white/80 text-black hover:bg-black hover:text-white"
+      }`;
+
+    return (
+      <div className="w-full relative py-6">
+
+        {/* الأسهم */}
+        <button
+          onClick={() => scrollManual(-320)}
+          className={`${arrowClass} left-2`}
+        >
+          <ChevronLeft size={22} />
+        </button>
+
+        <button
+          onClick={() => scrollManual(320)}
+          className={`${arrowClass} right-2`}
+        >
+          <ChevronRight size={22} />
+        </button>
+
+        {/* SCROLLER */}
+        <div
+          ref={containerRef}
+          className="w-full overflow-x-auto whitespace-nowrap scroll-smooth no-scrollbar"
+          
+          // 💡 Mobile Touch محترم
+          onTouchStart={handlePause}
+          onTouchEnd={handleResume}
+
+          // 💻 Desktop
+          onMouseEnter={handlePause}
+          onMouseLeave={handleResume}
+        >
+          <div className="inline-flex gap-4 px-3">
+            {scrollItems.map((product, index) => (
+              <div
+                key={`${product._id}-${index}`}
+                className="w-56 sm:w-64 md:w-72 flex-shrink-0"
+                
+                // 🔥 يمنع double click
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <ProductCard
+                  product={product}
+                  onClick={() => handlePause()} // أول ضغطة تشتغل
+                />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-
-    </div>
-  </div>
+    );
+  }
 );
-});
+
+
 export default function Home() {
   const { language } = useLanguage();
   const { darkMode } = useTheme();
