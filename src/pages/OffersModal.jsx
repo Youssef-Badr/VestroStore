@@ -43,11 +43,11 @@ const [showInfo, setShowInfo] = useState(false);
             >
               <div className="flex justify-between items-center mb-2 border-b border-zinc-800 pb-2 pt-24">
                 <h2 className="text-3xl font-black italic uppercase tracking-tighter flex items-center gap-2">
-                  <FiGift className="text-[#86FE05]" /> {isRTL ? "عروض حصرية" : "Exclusive"}
+                  <FiGift className="text-red-800" /> {isRTL ? "عروض حصرية" : "Exclusive"}
                 </h2>
 <button
   onClick={onClose}
-  className="fixed top-25 left-10 z-[999] p-2 bg-black/60 dark:bg-white dark:text-black text-white hover:bg-slate-800 hover:text-black rounded-full transition-all backdrop-blur-md"
+  className="fixed top-25 left-10 z-[999] p-2 bg-black/60 dark:bg-white dark:text-black text-white  hover:text-black hover:bg-red-800 rounded-full transition-all backdrop-blur-md"
 >
   <FiX size={24} />
 </button>              </div>
@@ -61,14 +61,14 @@ const [showInfo, setShowInfo] = useState(false);
     px-5 py-4 rounded-2xl mb-4
     border transition-all duration-300 shadow-md
     ${darkMode 
-      ? "bg-[#86FE05]/5 border-[#86FE05]/20 hover:bg-[#6cc809] hover:text-black" 
-      : "bg-black text-white border-black hover:bg-[#6cc809] hover:text-black"}
+      ? "bg-[#86FE05]/5 border-white hover:bg-red-700 hover:text-black" 
+      : "bg-black text-white border-black hover:bg-red-700 hover:text-black"}
   `}
 >
   {/* النص */}
   <div className="flex items-center gap-3">
     <FiGift className="text-xl group-hover:scale-110 transition-transform" />
-    <span className="text-sm md:text-base font-black tracking-wide">
+    <span className="text-sm md:text-base font-black tracking-wide ">
       {isRTL ? "ازاي تستفيد من العروض وتوفر فلوسك؟" : "How to save more with offers?"}
     </span>
   </div>
@@ -82,7 +82,7 @@ const [showInfo, setShowInfo] = useState(false);
 
               <div className="space-y-8">
                 {loading ? (
-<div className="text-[#86FE05] font-bold animate-pulse text-center mt-20 uppercase tracking-widest">
+<div className="text-red-800 font-bold animate-pulse text-center mt-20 uppercase tracking-widest">
   {isRTL ? "جارٍ تحميل العروض..." : "Loading Deals..."}
 </div>                ) : discounts.map((d) => (
                   <CouponCard 
@@ -117,103 +117,86 @@ const [showInfo, setShowInfo] = useState(false);
         className="fixed inset-0 z-[80] bg-black/70 backdrop-blur-sm"
       />
 
-      {/* Modal */}
-      <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
-        <motion.div
-          initial={{ scale: 0.85, opacity: 0, y: 40 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.85, opacity: 0, y: 40 }}
-          transition={{ duration: 0.3 }}
-          className={`relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[2rem] p-5 md:p-6 shadow-2xl border ${
-            darkMode
-              ? "bg-[#0a0a0a] text-white border-white/10"
-              : "bg-white text-black border-black/10"
-          }`}
-        >
-          {/* Close */}
-          <button
-            onClick={() => setShowInfo(false)}
-            className="absolute top-3 right-3 md:top-4 md:right-4 opacity-60 hover:opacity-100 transition"
-          >
-            <FiX size={20} />
-          </button>
+   {/* Modal */}
+<div className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
 
-          {/* Title */}
-          <h3 className="text-xl md:text-2xl font-black mb-4 text-center">
-            {isRTL ? "ازاي تستفيد من العروض؟ 💸" : "How to Save More 💸"}
-          </h3>
+  <motion.div
+    initial={{ scale: 0.9, opacity: 0, y: 30 }}
+    animate={{ scale: 1, opacity: 1, y: 0 }}
+    exit={{ scale: 0.9, opacity: 0, y: 30 }}
+    transition={{ duration: 0.25 }}
+    className={`relative w-full max-w-xs max-h-[65vh] overflow-y-auto rounded-[1.4rem] p-4 shadow-xl border ${
+      darkMode
+        ? "bg-[#0a0a0a] text-white border-white/10"
+        : "bg-white text-black border-black/10"
+    }`}
+  >
 
-          <div className="space-y-4 text-sm md:text-base leading-7 text-center opacity-90">
+    {/* Close */}
+    <button
+      onClick={() => setShowInfo(false)}
+      className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full 
+                 bg-black/5 dark:bg-white/5 hover:scale-110 transition opacity-80"
+    >
+      <FiX size={16} />
+    </button>
 
-            <p className="font-bold text-base md:text-lg">
-              {isRTL
-                ? "🔥 فرصتك توفر فلوسك بدأت من هنا!"
-                : "🔥 Your chance to save starts here!"}
-            </p>
+    {/* Title */}
+    <h3 className="text-base font-black text-center mb-3">
+      {isRTL ? "وفر فلوسك 💸" : "Save Money 💸"}
+    </h3>
 
-            <p>
-              {isRTL
-                ? "في الصفحة دي هتلاقي كل العروض والخصومات المتاحة حالياً على منتجاتنا."
-                : "Here you’ll find all the active discounts available on our products."}
-            </p>
+    <div className="space-y-3 text-center text-xs md:text-sm opacity-90 leading-5">
 
-            <p>
-              {isRTL
-                ? "تقدر تختار المنتجات اللي تناسبك وتستغل أقوى عرض متاح ليك علشان تدفع أقل سعر ممكن."
-                : "Pick the products you like and take advantage of the best deal to pay less."}
-            </p>
+      <p className="font-bold text-sm">
+        {isRTL ? "🔥 عروض جامدة مستنياك" : "🔥 Hot deals waiting for you"}
+      </p>
 
-            {/* Highlight Box (فسفوري خفيف جداً) */}
-            <p className={`p-3 rounded-xl border ${
-              darkMode
-                ? "bg-white/5 border-white/10"
-                : "bg-black/5 border-black/10"
-            }`}>
-              {isRTL
-                ? "📍 استخدام كود الخصم بيكون في صفحة الدفع (Checkout) قبل ما تأكد الطلب."
-                : "📍 Discount codes are applied at checkout before confirming your order."}
-            </p>
+      <p>
+        {isRTL
+          ? "اختار منتجاتك واستغل أقوى خصم متاح دلوقتي"
+          : "Pick your items & grab the best discount now"}
+      </p>
 
-            <p className="font-bold">
-              {isRTL
-                ? "⚠️ تقدر تستخدم كود خصم واحد بس لكل طلب."
-                : "⚠️ Only ONE discount code can be used per order."}
-            </p>
-
-            <p>
-              {isRTL
-                ? "علشان كده اختار الكود الصح اللي يوفر لك أكبر خصم حسب مشترياتك."
-                : "So choose wisely — pick the code that gives you the maximum savings."}
-            </p>
-
-            <p className="italic opacity-70">
-              {isRTL
-                ? "💡 نصيحة: ممكن تغير المنتجات في السلة علشان تستفيد بأكبر عرض ممكن."
-                : "💡 Tip: Adjust your cart to unlock better discounts."}
-            </p>
-
-            {/* subtle accent */}
-            <p className="font-bold text-base md:text-lg tracking-wide">
-              {isRTL
-                ? "💰 كل ما تختار بذكاء… كل ما توفر أكتر!"
-                : "💰 The smarter you shop, the more you save!"}
-            </p>
-
-          </div>
-
-          {/* CTA */}
-          <button
-            onClick={() => setShowInfo(false)}
-            className={`mt-6 w-full py-3 rounded-xl font-bold transition-all ${
-              darkMode
-                ? "bg-white text-black hover:scale-[1.02] active:scale-95"
-                : "bg-black text-white hover:scale-[1.02] active:scale-95"
-            }`}
-          >
-            {isRTL ? "تمام فهمت" : "Got it"}
-          </button>
-        </motion.div>
+      {/* نفس النص بتاعك بدون تغيير */}
+      <div className={`p-2 rounded-lg text-[11px] border ${
+        darkMode
+          ? "bg-white/5 border-white/10"
+          : "bg-black/5 border-black/10"
+      }`}>
+       {isRTL
+  ? "📍 الخصم بيتطبق في صفحة الدفع (Checkout), تقدر تشوف المنتجات المطبق عليها العروض وتضيفها للسله وتنسخ الكود لتطبيقه في صفحة الدفع"
+  : "📍 The discount is applied at checkout, you can see the products that have offers, add them to the cart, and copy the code to apply it at checkout"}
       </div>
+
+      <p className="font-bold text-sm">
+        {isRTL
+          ? "⚠️ خصم واحد لكل طلب"
+          : "⚠️ One code per order"}
+      </p>
+
+      <p className="text-xs opacity-70">
+        {isRTL
+          ? "💡 تقدر تغير منتجاتك في السلة علشان توصل لأقوى عرض متاح"
+          : "💡 Adjust cart for max savings"}
+      </p>
+
+    </div>
+
+    {/* CTA */}
+    <button
+      onClick={() => setShowInfo(false)}
+      className={`mt-4 w-full py-2 rounded-lg font-bold text-xs transition-all hover:bg-red-800 ${
+        darkMode
+          ? "bg-white text-black"
+          : "bg-black text-white"
+      } hover:scale-[1.02] active:scale-95`}
+    >
+      {isRTL ? "تمام 👍" : "Got it 👍"}
+    </button>
+
+  </motion.div>
+</div>
     </>
   )}
 </AnimatePresence>

@@ -27,7 +27,7 @@ export default function SideCart() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsCartOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
+            className="fixed  inset-0 bg-black/60 backdrop-blur-sm z-[999]"
           />
 
           {/* جسم الكارت (Drawer) */}
@@ -36,7 +36,7 @@ export default function SideCart() {
             animate={{ x: 0 }}
             exit={{ x: isRTL ? "100%" : "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} h-full w-full max-w-md z-[1000] shadow-2xl flex flex-col
+            className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} h-full w-[85%] sm:w-full max-w-md z-[1000] shadow-2xl flex flex-col
               ${darkMode ? "bg-zinc-950 text-white" : "bg-white text-black"}`}
             dir={isRTL ? "rtl" : "ltr"}
           >
@@ -67,7 +67,7 @@ export default function SideCart() {
                     <Link
                       to="/products"
                       onClick={() => setIsCartOpen(false)}
-                      className="flex items-center gap-2 text-black dark:text-white font-black uppercase italic text-xs border-b-2 border-[#86FE05] pb-1 hover:opacity-70 transition-all mx-auto w-fit"
+                      className="flex items-center gap-2 text-black dark:text-white font-black uppercase italic text-xs border-b-2 border-red-800 pb-1 hover:opacity-70 transition-all mx-auto w-fit"
                     >
                       {isRTL ? "اذهب للتسوق" : "Go Shopping"}
                       {isRTL ? <ArrowRight size={14} className="rotate-180" /> : <ArrowRight size={14} />}
@@ -130,14 +130,14 @@ export default function SideCart() {
                             <button 
                               onClick={() => updateQty(itemId, item.qty - 1)} 
                               disabled={item.qty <= 1}
-                              className="p-1 px-2 hover:bg-[#86FE05] hover:text-black transition-colors disabled:opacity-20"
+                              className="p-1 px-2 hover:bg-red-700 hover:text-black transition-colors disabled:opacity-20"
                             >
                               <Minus size={12}/>
                             </button>
                             <span className="px-2 text-xs font-bold">{item.qty}</span>
                             <button 
                               onClick={() => updateQty(itemId, item.qty + 1)} 
-                              className="p-1 px-2 hover:bg-[#86FE05] hover:text-black transition-colors"
+                              className="p-1 px-2 hover:bg-red-700 hover:text-black transition-colors"
                             >
                               <Plus size={12}/>
                             </button>
@@ -169,7 +169,7 @@ export default function SideCart() {
                 <Link 
                   to="/checkout" 
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full bg-black text-white dark:text-black dark:bg-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_#86FE0533] uppercase text-sm tracking-widest"
+                  className="w-full bg-black text-white dark:text-black dark:bg-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-red-800 hover:scale-[1.02] active:scale-95 transition-all  uppercase text-sm tracking-widest"
                 >
                   {isRTL ? "إتمام الطلب" : "Checkout Now"}
                   <ArrowRight size={18} className={isRTL ? "rotate-180" : ""} />
@@ -177,7 +177,7 @@ export default function SideCart() {
                 <Link 
                   to="/cart" 
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full text-center text-[13px]  font-black uppercase tracking-widest text-zinc-500 hover:text-[#86FE05] transition-colors"
+                  className="w-full text-center text-[13px]  font-black uppercase tracking-widest text-zinc-500 hover:text-red-800 transition-colors"
                 >
                   {isRTL ? "عرض السلة بالكامل" : "View Full Cart"}
                 </Link>

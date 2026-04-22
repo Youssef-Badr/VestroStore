@@ -106,9 +106,9 @@ const BundleDetailsModal = ({ bundle, isOpen, onClose, onClaim, isAr, darkMode }
 
         <div className="flex justify-between items-center mb-4 font-black text-xl">
           <span className="italic uppercase tracking-tighter">
-            {isAr ? "سعر الباقة الآن" : "Bundle Price Now"}
+            {isAr ? "سعر العرض الآن" : "Bundle Price Now"}
           </span>
-          <span className="italic">{bundle.bundlePrice} EGP</span>
+          <span className=" text-red-600">{bundle.bundlePrice} EGP</span>
         </div>
 
         <div className="flex items-center gap-3 pt-4 border-t border-white/10 dark:border-white/10 text-sm font-black uppercase">
@@ -123,7 +123,7 @@ const BundleDetailsModal = ({ bundle, isOpen, onClose, onClaim, isAr, darkMode }
     <div className="p-6">
       <button 
         onClick={onClaim}
-        className={`w-full py-5 rounded-2xl font-black uppercase text-[18px] tracking-[0.2em] transition-all shadow-lg 
+        className={`w-full py-5 rounded-2xl font-black uppercase text-[18px] tracking-[0.2em] transition-all shadow-lg  bg-red-700
           ${darkMode 
             ? 'bg-white text-black hover:scale-[1.02] active:scale-95' 
             : 'bg-black text-white hover:scale-[1.02] active:scale-95'}`}

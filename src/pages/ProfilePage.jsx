@@ -91,7 +91,7 @@ export default function ProfilePage() {
     }
   };
 
-  const inputStyle = `w-full bg-transparent border ${darkMode ? 'border-white/10 text-white' : 'border-black/10 text-black'} p-4 rounded-xl focus:border-[#86FE05] outline-none transition-all font-bold`;
+  const inputStyle = `w-full bg-transparent border ${darkMode ? 'border-white/10 text-white' : 'border-black/10 text-black'} p-4 rounded-xl focus:border-[#B91C1C] outline-none transition-all font-bold`;
   const labelStyle = `block text-[10px] font-black uppercase mb-2 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`;
 
   return (
@@ -99,21 +99,21 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto">
         
         {/* Header Profile */}
-        <div className={`p-8 rounded-[2.5rem] mb-8 border border-[#86FE05]/20 flex flex-col md:flex-row items-center justify-between gap-6 ${darkMode ? 'bg-[#0a0a0a]' : 'bg-white shadow-xl'}`}>
+        <div className={`p-8 rounded-[2.5rem] mb-8 border border-red-700 flex flex-col md:flex-row items-center justify-between gap-6 ${darkMode ? 'bg-[#0a0a0a]' : 'bg-white shadow-xl'}`}>
           <div className="flex items-center gap-6">
-            <div className="w-24 h-24 bg-[#86FE05] rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(134,254,5,0.3)]">
+            <div className="w-24 h-24 bg-red-700 rounded-3xl flex items-center justify-center ">
               <User size={48} className="text-black" />
             </div>
             <div>
               <h1 className="text-4xl font-black uppercase italic tracking-tighter">
-                {profileData.firstName} <span className="text-[#86FE05]">{profileData.lastName}</span>
+                {profileData.firstName} <span className="text-red-700">{profileData.lastName}</span>
               </h1>
               <p className="text-gray-500 font-bold flex items-center gap-2 mt-1 italic tracking-tight"> {profileData.email}</p>
             </div>
           </div>
           <button 
             onClick={() => setIsEditing(!isEditing)}
-            className="flex items-center gap-2 bg-white/5 border border-white/10 px-6 py-3 rounded-2xl text-[#86FE05] font-black uppercase text-xs hover:bg-[#86FE05] hover:text-black transition-all"
+            className="flex items-center gap-2 bg-white/5 border border-white/10 px-6 py-3 rounded-2xl text-red-800 font-black uppercase text-xs hover:bg-red-800 hover:text-black transition-all"
           >
             <Edit3 size={16}/> {isEditing ? (isRTL ? "إلغاء" : "Cancel") : (isRTL ? "تعديل البيانات" : "Edit Profile")}
           </button>
@@ -122,7 +122,7 @@ export default function ProfilePage() {
         <div className="grid md:grid-cols-2 gap-8">
           {/* قسم تعديل البيانات الشخصية */}
           <form onSubmit={handleUpdateProfile} className={`p-8 rounded-[2.5rem] border ${darkMode ? 'bg-[#0a0a0a] border-white/5' : 'bg-white border-black/5 shadow-sm'}`}>
-            <h2 className="text-xl font-black uppercase mb-6 flex items-center gap-3"> <Save size={20} className="text-[#86FE05]"/> {isRTL ? "المعلومات الشخصية" : "Personal Info"} </h2>
+            <h2 className="text-xl font-black uppercase mb-6 flex items-center gap-3"> <Save size={20} className="text-red-700"/> {isRTL ? "المعلومات الشخصية" : "Personal Info"} </h2>
             <div className="space-y-4">
                <div>
                  <label className={labelStyle}>{isRTL ? "الاسم الأول" : "First Name"}</label>
@@ -133,7 +133,7 @@ export default function ProfilePage() {
                  <input type="text" className={inputStyle} value={profileData.lastName} disabled={!isEditing} onChange={(e) => setProfileData({...profileData, lastName: e.target.value})} required />
                </div>
                {isEditing && (
-                 <button disabled={loading} className="w-full bg-[#86FE05] text-black font-black py-4 rounded-xl mt-4 uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_#86FE0533] flex items-center justify-center">
+                 <button disabled={loading} className="w-full bg-red-700 text-black font-black py-4 rounded-xl mt-4 uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_#86FE0533] flex items-center justify-center">
                    {loading ? <Loader2 className="animate-spin" /> : (isRTL ? "حفظ التغييرات" : "Save Changes")}
                  </button>
                )}
@@ -142,9 +142,9 @@ export default function ProfilePage() {
 
           {/* قسم الأمان */}
           <div className={`p-8 rounded-[2.5rem] border ${darkMode ? 'bg-[#0a0a0a] border-white/5' : 'bg-white border-black/5 shadow-sm'}`}>
-             <h2 className="text-xl font-black uppercase mb-6 flex items-center gap-3"> <Lock size={20} className="text-[#86FE05]"/> {isRTL ? "إعدادات الأمان" : "Security"} </h2>
+             <h2 className="text-xl font-black uppercase mb-6 flex items-center gap-3"> <Lock size={20} className="text-red-700"/> {isRTL ? "إعدادات الأمان" : "Security"} </h2>
              <div className="bg-white/5 p-6 rounded-2xl border border-white/5 mb-6">
-                <div className="flex items-center gap-3 text-[#86FE05] mb-2 font-black text-xs uppercase">
+                <div className="flex items-center gap-3 text-red-700 mb-2 font-black text-xs uppercase">
                   <ShieldCheck size={18}/> {isRTL ? "حماية الحساب" : "Account Protection"}
                 </div>
                 <p className="text-gray-500 text-xs font-bold leading-relaxed">
@@ -153,7 +153,7 @@ export default function ProfilePage() {
              </div>
              <button 
                onClick={() => setShowPasswordModal(true)}
-               className="w-full border-2 border-[#86FE05] text-[#86FE05] font-black py-4 rounded-xl uppercase hover:bg-[#86FE05] hover:text-black transition-all"
+               className="w-full border-2 border-red-700 text-red-700 font-black py-4 rounded-xl uppercase hover:bg-red-700 hover:text-black transition-all"
              >
                {isRTL ? "تغيير كلمة السر" : "Change Password"}
              </button>
@@ -163,13 +163,13 @@ export default function ProfilePage() {
         {/* --- Password Change Modal --- */}
         {showPasswordModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className={`w-full max-w-md p-8 rounded-[2.5rem] border border-[#86FE05]/30 relative ${darkMode ? 'bg-[#0a0a0a]' : 'bg-white'}`}>
-              <button onClick={() => setShowPasswordModal(false)} className={`absolute top-6 ${isRTL ? 'left-6' : 'right-6'} text-gray-500 hover:text-[#86FE05] transition-all`}>
+            <div className={`w-full max-w-md p-8 rounded-[2.5rem] border border-red-800 relative ${darkMode ? 'bg-[#0a0a0a]' : 'bg-white'}`}>
+              <button onClick={() => setShowPasswordModal(false)} className={`absolute top-6 ${isRTL ? 'left-6' : 'right-6'} text-gray-500 hover:text-red-800 transition-all`}>
                 <X size={24}/>
               </button>
               
               <h2 className="text-2xl font-black uppercase italic mb-8 flex items-center gap-3">
-                <Lock className="text-[#86FE05]" /> {isRTL ? "تحديث الأمان" : "Update Security"}
+                <Lock className="text-red-700" /> {isRTL ? "تحديث الأمان" : "Update Security"}
               </h2>
 
               <form onSubmit={handleChangePassword} className="space-y-4">

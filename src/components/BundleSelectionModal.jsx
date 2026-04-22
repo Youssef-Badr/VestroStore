@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useCart } from '../../src/contexts/CartContext';
@@ -145,7 +146,7 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
                       alt="" 
                       className="w-20 h-24 rounded-2xl object-cover shadow-lg border dark:border-white/10" 
                     />
-                    <span className="absolute -top-2 -right-2 bg-[#86FE05] text-black w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shadow-md border-2 border-white dark:border-[#1A1A1A]">
+                    <span className="absolute -top-2 -right-2 bg-red-700 text-black w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shadow-md border-2 border-white dark:border-[#1A1A1A]">
                       {idx + 1}
                     </span>
                   </div>
@@ -166,22 +167,44 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
                     return (
                       <div key={colorName} className="space-y-4">
                         {/* Color Selector Header */}
-                        <div className="flex items-center gap-3">
-                          <div 
-                            className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 shadow-sm ${
-                              isWhite ? 'border-gray-300' : 'border-white/20'
-                            }`}
-                            style={{ 
-                              backgroundColor: finalColor,
-                              boxShadow: !isWhite ? `0 0 10px ${finalColor}44` : 'none'
-                            }} 
-                          />
-                          <span className={`text-[11px] font-black uppercase tracking-widest ${
-                            darkMode ? 'text-[#86FE05]' : 'text-black'
-                          }`}>
-                            {colorName}
-                          </span>
-                        </div>
+<div className="flex items-center gap-3 group">
+
+  {/* 🎯 صورة اللون بدل الدائرة */}
+  <div className="relative">
+    <div
+      className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all duration-300 hover:scale-110 shadow-md ${
+        darkMode ? "border-white/10" : "border-black/10"
+      }`}
+    >
+      <img
+        src={
+          variants?.find(v => v.images?.[0]?.url)?.images?.[0]?.url ||
+          item.product.images?.[0]?.url
+        }
+        alt={colorName}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  </div>
+
+  {/* 🟡 الاسم + 💰 السعر */}
+  <div className="flex flex-col leading-tight">
+
+    <span className={`text-[12px] font-black uppercase tracking-widest ${
+      darkMode ? "text-white" : "text-black"
+    }`}>
+      {colorName}
+    </span>
+
+    <span className={`text-[10px] font-bold ${
+      darkMode ? "text-gray-400" : "text-gray-500"
+    }`}>
+      From {Math.min(...variants.map(v => v.price))} EGP
+    </span>
+
+  </div>
+
+</div>
 
                         {/* Sizes Grid */}
                         <div className="flex flex-wrap gap-2">
@@ -192,13 +215,13 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
                               onClick={() => handleSelectVariant(idx, v, item.product)}
                               className={`group relative px-6 py-3 rounded-xl border-2 transition-all duration-300 font-bold text-sm ${
                                 selections[idx].variantId === v?._id
-                                  ? 'border-[#86FE05] bg-[#86FE05] text-black shadow-[0_0_15px_rgba(134,254,5,0.3)]'
+                                  ? 'border-red-700 bg-red-700 text-black ]'
                                   : 'border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500 hover:border-gray-300 dark:hover:border-gray-600'
                               } ${v.stock <= 0 ? 'opacity-20 cursor-not-allowed' : 'active:scale-90'}`}
                             >
                               {v.options.Size}
                               {v.stock <= 5 && v.stock > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-[8px] px-1.5 py-0.5 rounded-full animate-pulse font-black shadow-lg">
+                                <span className="absolute -top-2 -right-2 bg-slate-600 text-white text-[8px] px-1.5 py-0.5 rounded-full animate-pulse font-black shadow-lg">
                                   {v.stock}
                                 </span>
                               )}
@@ -232,8 +255,8 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
             onClick={handleConfirm}
             className={`px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-tighter hover:scale-105 transition-all active:scale-95 shadow-xl ${
               darkMode 
-                ? "bg-[#86FE05] text-black shadow-[#86FE05]/20" 
-                : "bg-black text-white shadow-black/20"
+                ? "bg-red-700 text-black " 
+                : "bg-red-700 text-white "
             }`}
           >
             {isAr ? 'تأكيد الطلب' : 'Confirm Bundle'}

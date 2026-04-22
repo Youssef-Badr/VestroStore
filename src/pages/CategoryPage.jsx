@@ -50,7 +50,7 @@ const CategoryPage = () => {
   if (loading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-black" : "bg-white"}`}>
-        <div className="w-12 h-12 border-4 border-[#86FE05]/20 border-t-[#86FE05] rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-red-700 border-t-red-700 rounded-full animate-spin" />
       </div>
     );
   }
@@ -66,7 +66,7 @@ const CategoryPage = () => {
         
         {/* Back Button */}
         <motion.button
-          whileHover={{ scale: 1.1, backgroundColor: "#86FE05", color: "#000" }}
+          whileHover={{ scale: 1.1, backgroundColor: "#DC2626", color: "#000" }}
           onClick={() => navigate(-1)}
           className={`absolute top-0 ${
             isRTL ? "right-4" : "left-4"
@@ -84,7 +84,7 @@ const CategoryPage = () => {
           >
             {isRTL ? "قسم" : "Collection"}
           </motion.span>
-          <h1 className="text-5xl md:text-6xl font-black italic uppercase tracking-tighter">
+          <h1 className="text-5xl md:text-6xl font-black  uppercase tracking-tighter">
             {categoryData?.name || (isRTL ? "القسم" : "Category")}
           </h1>
         </header>
@@ -121,7 +121,7 @@ const CategoryPage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/')}
-              className="bg-[#86FE05] text-black px-12 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg hover:shadow-[#86FE05]/40 transition-all"
+              className="bg-red-70 text-black px-12 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg hover:shadow-red-700 transition-all"
             >
               {isRTL ? "استكشف المجموعات الأخرى" : "Explore Other Drops"}
             </motion.button>

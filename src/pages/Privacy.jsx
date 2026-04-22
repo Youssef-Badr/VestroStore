@@ -78,7 +78,7 @@ export default function Privacy() {
           <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mt-8">
             {isRTL ? "سياسة الخصوصية" : "Privacy Policy"}
           </h1>
-          <div className="w-24 h-1 bg-[#86FE05] mx-auto mt-6 rounded-full" />
+          <div className="w-24 h-1 bg-red-700 mx-auto mt-6 rounded-full" />
         </motion.div>
 
         {/* CARD */}
@@ -102,11 +102,11 @@ export default function Privacy() {
                 transition={{ delay: i * 0.1 }}
                 className={`p-5 rounded-2xl border transition-all ${
                   darkMode
-                    ? "border-white/10 hover:border-[#86FE05]/50"
+                    ? "border-white/10 hover:border-red-700"
                     : "border-black/10 hover:border-black"
                 }`}
               >
-                <h3 className="font-black text-xl mb-2 text-[#86FE05]">
+                <h3 className="font-black text-xl mb-2 text-red-700">
                   {isRTL ? sec.ar : sec.en}
                 </h3>
                 <p className="opacity-80">

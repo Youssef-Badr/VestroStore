@@ -5,7 +5,9 @@ import BundleSelectionModal from '../components/BundleSelectionModal';
 import { LayoutGrid, RefreshCcw } from 'lucide-react';
 import api from '../api/axiosInstance'; 
 import { motion } from 'framer-motion';
+import { useNavigate } from "react-router-dom";
 
+import { ArrowLeft } from "lucide-react";
 // استيراد الـ Context الخاص بك
 import { useLanguage } from "../../src/contexts/LanguageContext"; 
 import { useTheme } from "../../src/contexts/ThemeContext";
@@ -14,7 +16,7 @@ const BundlesPage = () => {
   // استخدام الـ Hooks اللي انت بعتها بدل الـ Props
   const { language } = useLanguage();
   const { darkMode } = useTheme();
-  
+   const navigate = useNavigate();
   const isRTL = language === "ar";
   
   const [bundles, setBundles] = useState([]);
@@ -58,17 +60,38 @@ const BundlesPage = () => {
 
   if (loading) return (
     <div className="h-screen flex items-center justify-center bg-white dark:bg-[#050505]">
-      <RefreshCcw className="animate-spin text-black dark:text-[#86FE05]" size={40} />
+      <RefreshCcw className="animate-spin text-black dark:text-red-800" size={40} />
     </div>
   );
 
   return (
     <div 
-      className={`min-h-screen bg-[#FDFDFD] dark:bg-[#050505] pt-24 mt-10 pb-20 px-4 transition-colors duration-500 ${isRTL ? 'font-cairo' : ''}`} 
+      className={`min-h-screen bg-[#FDFDFD] dark:bg-[#050505] pt-20 mt-10 pb-20 px-4 transition-colors duration-500 ${isRTL ? 'font-cairo' : ''}`} 
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <div className="max-w-7xl mx-auto">
-        
+
+        <button
+  onClick={() => navigate(-1)}
+  className="group flex items-center gap-2 md:mt-7 px-4 py-2 rounded-full
+             bg-black/5 dark:bg-white/5
+             border border-black/10 dark:border-white/10
+             hover:bg-black/10 dark:hover:bg-white/10
+             hover:scale-[1.03]
+             active:scale-95
+             transition-all duration-300"
+>
+  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/60 dark:bg-black/40 group-hover:rotate-[-10deg] transition">
+    <ArrowLeft
+      size={16}
+      className={isRTL ? "rotate-180" : ""}
+    />
+  </span>
+
+  <span className="font-black uppercase tracking-wider text-sm">
+    {isRTL ? "رجوع" : "Back"}
+  </span>
+</button>
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-20">
           <motion.div 
@@ -99,7 +122,7 @@ const BundlesPage = () => {
           </motion.p>
 
           {/* Decorative Neon Line */}
-          <div className="w-24 h-1.5 bg-black dark:bg-slate-200 mt-10 rounded-full shadow-[0_0_15px_rgba(134,254,5,0.3)]" />
+          <div className="w-24 h-1.5 bg-black dark:bg-slate-200 mt-10 rounded-full " />
         </div>
 
         {/* Bundles Grid */}

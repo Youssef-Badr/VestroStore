@@ -51,9 +51,9 @@ export default function SearchPage() {
         
         {/* رأس الصفحة - عرض كلمة البحث */}
         <div className="mb-12 border-b border-zinc-100 dark:border-zinc-800 pb-8">
-          <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-2 mt-4">
+          <h1 className="text-xl md:text-5xl font-black uppercase tracking-tighter mb-2 mt-4">
             {isRTL ? "نتائج البحث عن:" : "Search Results for:"} 
-            <span className="text-[#86FE05] ml-4 italic">"{searchTerm}"</span>
+            <span className="text-red-700 ml-4 italic">"{searchTerm}"</span>
           </h1>
           <p className="text-gray-500 font-medium">
             {isRTL ? `تم العثور على ${totalResults} منتج` : `Found ${totalResults} products`}
@@ -63,7 +63,7 @@ export default function SearchPage() {
         {/* حالة التحميل */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="w-12 h-12 border-4 border-[#86FE05] border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : products.length > 0 ? (
           // عرض المنتجات
@@ -87,7 +87,7 @@ export default function SearchPage() {
             </h2>
             <button 
               onClick={() => navigate("/products")}
-              className="px-8 py-3 bg-[#86FE05] text-black font-black rounded-full hover:scale-105 transition-transform"
+              className="px-8 py-3 bg-red-700 text-black font-black rounded-full hover:scale-105 transition-transform"
             >
               {isRTL ? "تصفح كل المنتجات" : "Browse All Products"}
             </button>

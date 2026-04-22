@@ -250,7 +250,7 @@ export default function Home() {
       onClick={() => navigate("/products")}
       className={`w-full overflow-hidden rounded-[2.5rem] border transition-all duration-700 relative cursor-pointer group ${
         darkMode
-          ? "border-[#86FE05]/20 bg-[#0a0a0a]"
+          ? "border-red-700 bg-[#0a0a0a]"
           : "border-zinc-200 bg-white"
       }`}
       style={{ height: "350px" }}
@@ -332,7 +332,7 @@ export default function Home() {
   animate={{
     y: [0, -8, 0], // بيطلع 8 بيكسل وينزل مكانه
     boxShadow: darkMode 
-      ? ["0px 0px 0px #86FE05", "0px 0px 20px #86FE05", "0px 0px 0px #86FE05"] // نبض ضوئي في الدارك مود
+      ? ["0px 0px 0px #B91C1C", "0px 0px 20px #B91C1C", "0px 0px 0px #B91C1C"] // نبض ضوئي في الدارك مود
       : ["0px 0px 0px rgba(0,0,0,0)", "0px 10px 20px rgba(0,0,0,0.1)", "0px 0px 0px rgba(0,0,0,0)"]
   }}
  transition={{
@@ -343,52 +343,73 @@ export default function Home() {
   // ------------------------------------------
 
   onClick={() => navigate("/products")}
-  className={`mt-6 px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-sm border-2 transition-all duration-300
-    ${darkMode ? "border-white text-black bg-white " : "bg-black border-black text-white hover:bg-zinc-800"}`}
+  className={`mt-6 px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-sm  transition-all duration-300
+    ${darkMode ? " text-black bg-white hover:bg-red-600 " : "bg-black  text-white hover:bg-red-600 "}`}
 >
   {isRTL ? " تسوق كل المنتجات " : " Shop All Products"}
 </motion.button>
           </div>
         )}
 
-  {/* Categories Section */}
+{/* Categories Section */}
 <div className="py-10">
+
   <div className="text-center mb-12">
     <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
       {isRTL ? "الأقسام" : "Categories"}
     </h2>
   </div>
-  <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-    {categories.map((cat) => (
-      <div 
-        key={cat.id || cat._id} // دعم للـ id أو _id
-        onClick={() => navigate(`/products/category/${cat.id || cat._id}`)}
-        className="group relative h-64 md:h-80 rounded-[2.5rem] overflow-hidden cursor-pointer border border-transparent hover:border-[#86FE05] transition-all duration-500 shadow-lg"
-      >
-        {/* الصورة - اتأكدت إنها بتقرأ من cat.image.url */}
-        {cat.image?.url && (
-          <img 
-            src={cat.image.url} 
-            alt={cat.name} 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-          />
-        )}
-        
-        {/* الطبقة الشفافة واسم القسم */}
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center transition-colors duration-500 group-hover:bg-black/20">
-          <h3 className="text-white text-2xl md:text-4xl font-black uppercase italic tracking-tighter drop-shadow-2xl">
-            {/* التعديل هنا: بما إن الـ JSON فيه "name" فقط */}
-            {cat.name} 
-          </h3>
-        </div>
 
-        {/* خط ديكور سفلي */}
-        <div className="absolute bottom-0 left-0 w-0 h-2 bg-[#86FE05] group-hover:w-full transition-all duration-500" />
-      </div>
-    ))}
+  {/* 🔥 SMART 2-COLUMN GRID */}
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+
+    {categories.map((cat, index) => {
+      const isLastOdd = categories.length % 2 !== 0 && index === categories.length - 1;
+
+      return (
+        <div
+          key={cat.id || cat._id}
+          onClick={() =>
+            navigate(`/products/category/${cat.id || cat._id}`)
+          }
+          className={`
+            group relative h-44 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer 
+            border border-transparent hover:border-red-700
+            transition-all duration-500 shadow-lg
+
+            ${isLastOdd ? "col-span-2 md:col-span-1" : ""}
+          `}
+        >
+          
+          {/* Image */}
+          {cat.image?.url && (
+            <img
+              src={cat.image.url}
+              alt={cat.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+          )}
+
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center 
+                          transition-colors duration-500 group-hover:bg-black/20 text-center">
+
+            <h3 className="text-white text-2xl md:text-4xl font-black uppercase italic tracking-tighter drop-shadow-2xl text-center">
+              {cat.name}
+            </h3>
+
+          </div>
+
+          {/* Bottom line */}
+          <div className="absolute bottom-0 left-0 w-0 h-2 bg-red-700 
+                          group-hover:w-full transition-all duration-500" />
+
+        </div>
+      );
+    })}
+
   </div>
 </div>
-
         {/* Featured Section */}
         <div className="py-10">
            <h2 className="text-4xl md:text-7xl font-black uppercase mb-12 italic">

@@ -17,7 +17,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
           <div className={`w-24 h-24 mb-6 flex items-center justify-center rounded-full transition-colors ${
             darkMode ? "bg-white/5 shadow-inner" : "bg-white shadow-sm"
           }`}>
-            <ShoppingBag size={48} className={darkMode ? "text-[#86FE05]/50" : "text-slate-300"} />
+            <ShoppingBag size={48} className={darkMode ? "text-red-800" : "text-slate-300"} />
           </div>
           <h3 className="text-xl font-black uppercase italic mb-2 tracking-tight">
             {isRTL ? "سلتك فارغة تماماً" : "Your cart is empty"}
@@ -28,7 +28,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
           <button
             onClick={() => navigate("/products")}
             className={`group relative flex items-center gap-3 px-10 py-4 rounded-2xl font-black uppercase italic tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl ${
-              darkMode ? "bg-[#86FE05] text-black shadow-[#86FE05]/20" : "bg-black text-white shadow-black/20"
+              darkMode ? "bg-red-700 text-black " : "bg-black text-white shadow-black/20"
             }`}
           >
             <span>{isRTL ? "اذهب لصفحة التسوق" : "Go to Shopping"}</span>
@@ -64,14 +64,14 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
               <h3 className={`text-[13px] font-black uppercase italic tracking-tight ${darkMode ? "text-white" : "text-slate-900"}`}>
                 {isRTL ? "ملخص الطلب" : "Order Summary"}
               </h3>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+              <p className="text-[10px] font-bold text-red-600 uppercase tracking-widest mt-0.5">
                 {cart.length} {isRTL ? "منتجات" : "Items"}
               </p>
             </div>
           </div>
           
           <div className="flex items-center gap-4">
-             <span className="text-lg font-black text-black dark:text-white italic">
+             <span className="text-lg font-black text-red-600 dark:text-white ">
                 {cartTotal?.toLocaleString()} <span className="text-[10px] ms-1">{isRTL ? "ج.م" : "EGP"}</span>
              </span>
              <ChevronDown className={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""} ${darkMode ? "text-white/20" : "text-slate-300"}`} />
@@ -92,7 +92,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                 <div 
                   key={itemId} 
                   className={`flex gap-4 p-4 rounded-[1.8rem] border transition-all duration-300 ${
-                    darkMode ? "bg-[#111] border-white/5 hover:border-[#86FE05]/20" : "bg-white border-slate-100 shadow-sm hover:border-slate-200"
+                    darkMode ? "bg-[#111] border-white/5 hover:border-red-800" : "bg-white border-slate-100 shadow-sm hover:border-slate-200"
                   }`}
                   dir={isRTL ? "rtl" : "ltr"}
                 >
@@ -169,7 +169,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                         <button 
                           type="button"
                           onClick={() => updateQty(itemId, item.qty - 1)}
-                          className={`w-5 h-5 flex items-center justify-center rounded transition-all ${item.qty <= 1 ? "opacity-10" : "hover:bg-[#86FE05] hover:text-black dark:text-white"}`}
+                          className={`w-5 h-5 flex items-center justify-center rounded transition-all ${item.qty <= 1 ? "opacity-10" : "hover:bg-red-700 hover:text-black dark:text-white"}`}
                           disabled={item.qty <= 1}
                         >
                           <Minus size={10} strokeWidth={3} />
@@ -180,7 +180,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                         <button 
                           type="button"
                           onClick={() => updateQty(itemId, item.qty + 1)}
-                          className="w-5 h-5 flex items-center justify-center rounded transition-all hover:bg-[#86FE05] hover:text-black dark:text-white"
+                          className="w-5 h-5 flex items-center justify-center rounded transition-all hover:bg-red-700 hover:text-black dark:text-white"
                         >
                           <Plus size={10} strokeWidth={3} />
                         </button>

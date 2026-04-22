@@ -175,8 +175,8 @@ const [showSocial, setShowSocial] = useState(false);
             dir="ltr" 
             className="font-black text-xl md:text-2xl flex items-center gap-1 tracking-tighter"
           >
-            <span className={darkMode ? "text-white" : "text-black"}>VESTRO</span>
-            <span className="text-[#5ca909]">STORE</span>
+            <span className={darkMode ? "text-white" : "text-black"}>VESTRO STORE</span>
+            {/* <span className="text-red-800">STORE</span> */}
           </Link>
 
           <div className="hidden lg:flex items-center gap-8">
@@ -184,7 +184,7 @@ const [showSocial, setShowSocial] = useState(false);
               <Link 
                 key={link.name} 
                 to={link.path} 
-                className={`text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#64bb07] ${
+                className={`text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-red-700 ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -196,7 +196,7 @@ const [showSocial, setShowSocial] = useState(false);
             <div className="relative" ref={catRef}>
               <button 
                 onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-                className={`flex items-center gap-1 text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-[#61b30a] ${
+                className={`flex items-center gap-1 text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-red-800 ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -356,7 +356,7 @@ const [showSocial, setShowSocial] = useState(false);
   <ShoppingCart size={18} />
 
   {cartCount > 0 && (
-    <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#69c408] text-black text-[9px] font-black flex items-center justify-center rounded-lg">
+    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-black text-[9px] font-black flex items-center justify-center rounded-lg">
       {cartCount}
     </span>
   )}
@@ -558,7 +558,7 @@ const [showSocial, setShowSocial] = useState(false);
 
       {!client ? (
         <div className="grid grid-cols-2 gap-3">
-          <Link to="/login" className="py-4 bg-[#64b70b] text-black font-black text-[12px] rounded-2xl text-center" onClick={() => setMenuOpen(false)}>
+          <Link to="/login" className="py-4 bg-red-700 text-black font-black text-[12px] rounded-2xl text-center" onClick={() => setMenuOpen(false)}>
             {isRTL ? "تسجيل دخول" : "Login"}
           </Link>
 
@@ -568,7 +568,7 @@ const [showSocial, setShowSocial] = useState(false);
         </div>
       ) : (
         <Link to="/profile" className="p-4 border rounded-2xl flex items-center gap-3" onClick={() => setMenuOpen(false)}>
-          <User size={20} className="text-[#86FE05]" />
+          <User size={20} className="text-red-700" />
           <span className="font-black uppercase">
             {isRTL ? "البروفايل" : "Profile"}
           </span>
@@ -631,12 +631,12 @@ const [showSocial, setShowSocial] = useState(false);
               onKeyDown={(e) => e.key === "Enter" && executeSearch(searchQuery)}
               placeholder={isRTL ? "ابحث عن منتجك المفضل..." : "Search for products..."}
               className={`w-full bg-transparent border-b-2 py-4 text-2xl md:text-4xl font-black focus:outline-none transition-colors ${
-                darkMode ? "border-white/10 focus:border-[#86FE05]" : "border-gray-200 focus:border-black"
+                darkMode ? "border-white/10 focus:border-red-800" : "border-gray-200 focus:border-black"
               }`}
             />
             {searchLoading && (
               <div className="absolute right-0 top-1/2 -translate-y-1/2">
-                <Loader2 className="animate-spin text-[#86FE05]" size={24} />
+                <Loader2 className="animate-spin text-red-800" size={24} />
               </div>
             )}
           </div>
@@ -655,7 +655,7 @@ const [showSocial, setShowSocial] = useState(false);
           key={i} 
           onClick={() => executeSearch(k)} 
           className={`px-4 py-2 rounded-full text-[10px] font-black border uppercase transition-all ${
-            darkMode ? "border-zinc-800 hover:bg-[#86FE05] hover:text-black" : "border-gray-100 hover:bg-black hover:text-white"
+            darkMode ? "border-zinc-800 hover:bg-red-800 hover:text-black" : "border-gray-100 hover:bg-black hover:text-white"
           }`}
         >
           # {k}
@@ -685,7 +685,7 @@ const [showSocial, setShowSocial] = useState(false);
           />
           <div className={isRTL ? "text-right" : "text-left"}>
             <p className="font-black text-xs uppercase line-clamp-1">{p.name}</p>
-            <p className="text-[#86FE05] font-black text-[10px]">{p.price} EGP</p>
+            <p className="text-red-800 font-black text-[10px]">{p.price} EGP</p>
           </div>
         </div>
       ))}

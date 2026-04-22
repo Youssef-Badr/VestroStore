@@ -40,10 +40,10 @@ export default function AnnouncementBar() {
 
   return (
     <div
-      className={`w-full overflow-hidden border-b transition-colors duration-300 backdrop-blur-md ${
+      className={`w-full overflow-hidden  transition-colors duration-300 backdrop-blur-md ${
         darkMode
-          ? "bg-black/90 border-white shadow-sm"
-          : "bg-white/90 border-gray-200 shadow-sm"
+          ? "bg-red-600 border-white shadow-sm"
+          : "bg-red-600 border-gray-200 shadow-sm"
       }`}
       style={{ height: "36px", display: "flex", alignItems: "center" }}
     >
@@ -62,12 +62,12 @@ export default function AnnouncementBar() {
           <div key={index} className="flex items-center">
             <span
               className={`mx-10 font-black text-[10px] uppercase italic ${
-                darkMode ? "text-white" : "text-black"
+                darkMode ? "text-black" : "text-white"
               }`}
             >
               {a.text}
             </span>
-            <div className={`w-1 h-1 rotate-45 ${darkMode ? "bg-white" : "bg-black"}`} />
+            <div className={`w-1 h-1 rotate-45 ${darkMode ? "bg-black" : "bg-white"}`} />
           </div>
         ))}
       </motion.div>

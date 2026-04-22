@@ -79,7 +79,7 @@ const [position, setPosition] = useState({
           <div className="max-w-[1440px] mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
             {t.features.map((f, i) => (
               <div key={i} className="flex items-center gap-5 group">
-                <div className="w-14 h-14 rounded-2xl  text-black dark:text-white flex items-center justify-center group-hover:bg-[#59a607] group-hover:text-black transition-all duration-500">
+                <div className="w-14 h-14 rounded-2xl  text-black dark:text-white flex items-center justify-center group-hover:bg-red-800 group-hover:text-black transition-all duration-500">
                   {f.icon}
                 </div>
                 <div>
@@ -97,21 +97,21 @@ const [position, setPosition] = useState({
             {/* Brand Info */}
             <div className="md:col-span-5 space-y-8">
               <Link to="/" className="text-5xl font-black tracking-tighter    uppercase">
-                VESTRO<span className="text-[#59a409]">STORE</span>
+                VESTRO <span className="text-red-700"> STORE</span>
               </Link>
               <p className={`text-base leading-relaxed max-w-md ${darkMode ? "text-gray-300" : "text-black font-semibold"}`}>
                 {t.aboutDesc}
               </p>
               
-              <button onClick={() => setShowPolicyModal(true)} className="flex items-center gap-2 text-black dark:text-white text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform bg-slate-600 px-4 py-2 rounded-full">
+              <button onClick={() => setShowPolicyModal(true)} className="flex items-center gap-2 text-black dark:text-white text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform bg-red-700 px-4 py-2 rounded-full">
                 <FiInfo size={18} /> {isRTL ? "سياسات المتجر" : "Store Policies"}
               </button>
 
               <div className="flex gap-5">
                 {[
-                  { icon: <FaFacebookF />, link: "https://www.facebook.com/share/1E4b9xJXs2/?mibextid=wwXIfr", color: "hover:bg-[#1877F2]" },
+                  { icon: <FaFacebookF />, link: "https://www.facebook.com/share/1E4b9xJXs2/?mibextid=wwXIfr", color: "hover:bg-red-700" },
                   { icon: <FaInstagram />, link: "https://www.instagram.com/vestroeg?igsh=MXZpaHVtcm05bjUyeQ%3D%3D&utm_source=qr", color: "hover:bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF]" },
-                  { icon: <FaTiktok />, link: "https://www.tiktok.com/@stokecity58113?_r=1&_t=ZS-95FzIbdfEkm", color: "hover:bg-black" }
+                  { icon: <FaTiktok />, link: "https://www.tiktok.com/@stokecity58113?_r=1&_t=ZS-95FzIbdfEkm", color: "hover:bg-red-700" }
                 ].map((social, i) => (
                   <a key={i} href={social.link} target="_blank" rel="noreferrer" className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all ${darkMode ? "border-white/10 bg-white/5" : "border-black bg-white"} ${social.color} hover:text-white hover:-translate-y-2`}>
                     {social.icon}
@@ -122,7 +122,7 @@ const [position, setPosition] = useState({
 
             {/* Quick Links */}
             <div className="md:col-span-3 space-y-8">
-              <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black dark:text-white   ">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.1em] text-black dark:text-white   ">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
           <ul className="space-y-5">
   {[
     {
@@ -147,11 +147,11 @@ const [position, setPosition] = useState({
         to={item.path}
         className={`group flex items-center gap-4 text-base font-black transition-all ${
           darkMode
-            ? "text-gray-400 hover:text-[#68c308]"
-            : "text-black hover:text-[#68c308]"
+            ? "text-gray-400 hover:text-red-700"
+            : "text-black hover:text-red-700"
         }`}
       >
-        <span className="p-2.5 rounded-xl bg-[#86FE05]/5 group-hover:bg-[#68c308] group-hover:text-black transition-all">
+        <span className="p-2.5 rounded-xl  group-hover:bg-red-700 group-hover:text-black transition-all">
           {item.icon}
         </span>
         {item.name}
@@ -180,8 +180,8 @@ const [position, setPosition] = useState({
           <div className={`mt-24 pt-10 border-t-2 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-black uppercase tracking-widest ${darkMode ? "border-white/5 text-gray-500" : "border-gray-200 text-black"}`}>
             <p>{t.rights}</p>
             <div className="flex gap-8">
-              <Link to="/privacy" className="hover:text-[#68c308] transition-colors">{isRTL ? "الخصوصية" : "Privacy"}</Link>
-              <Link to="/terms" className="hover:text-[#68c308] transition-colors">{isRTL ? "الشروط" : "Terms"}</Link>
+              <Link to="/privacy" className="hover:text-red-700 transition-colors">{isRTL ? "الخصوصية" : "Privacy"}</Link>
+              <Link to="/terms" className="hover:text-red-700 transition-colors">{isRTL ? "الشروط" : "Terms"}</Link>
             </div>
           </div>
         </div>
@@ -191,16 +191,17 @@ const [position, setPosition] = useState({
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
           <div className={`relative max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 rounded-3xl border ${darkMode ? "bg-[#0a0a0a] border-white/10 text-white" : "bg-white border-black text-black"}`}>
             <button onClick={() => setShowPolicyModal(false)} className="absolute top-4 right-4 rtl:left-4 p-2 hover:bg-red-500 hover:text-white rounded-full transition-all"><FiX size={24}/></button>
-            <h2 className="text-2xl font-black    mb-6 border-b-2 border-[#86FE05] pb-2 inline-block uppercase">{isRTL ? "سياسة الإرجاع والاستبدال" : "Return Policy"}</h2>
+            <h2 className="text-2xl font-black    mb-6 border-b-2 border-red-700 pb-2 inline-block uppercase">{isRTL ? "سياسة الإرجاع والاستبدال" : "Return Policy"}</h2>
             <div className={`space-y-4 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"} ${!darkMode && "font-medium"}`}>
               <p>• يمكن إرجاع المنتجات في غضون 14 يومًا من استلام الشحنة.</p>
               <p>• يجب إثبات التلف أو النقص أثناء تواجد المندوب.</p>
-              <p className="bg-[#86FE05]/10 p-3 rounded-lg border-l-4 border-[#86FE05]">⚠️ يتم دفع مصاريف 65 ج.م فقط عند رفض الشحنة أثناء المعاينة.</p>
+              <p className="bg-red-800 p-3 rounded-lg border-l-4 border-red-700">⚠️ يتم دفع مصاريف 65 ج.م فقط عند رفض الشحنة أثناء المعاينة.</p>
               <p>• يجب أن يكون المنتج بحالته الأصلية وبغلافه الأصلي.</p>
             </div>
           </div>
         </div>
       )}
+
     </>
   );
 }

@@ -874,59 +874,10 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       <div className="md:w-1/2 flex flex-col p-2 sm:p-4">
         <div className="space-y-6">
           <div>
-            <h1 className="text-4xl sm:text-5xl font-black mb-3 tracking-tighter italic uppercase text-slate-900 dark:text-white leading-none">
+            <h1 className="text-2xl sm:text-5xl font-black mb-3 tracking-tighter italic uppercase text-slate-900 dark:text-white leading-none">
               {product.name}
             </h1>
-
-            <div className="flex items-center gap-3">
-              <RatingStars value={product.rating || 0} />
-              <span className="text-xs font-black uppercase tracking-widest text-slate-400">
-                {product.rating?.toFixed(1) || "0.0"} ({product.numReviews || 0} {isRTL ? "تقييم" : "reviews"})
-              </span>
-            </div>
-          </div>
-<p className={`
-        text-slate-600 dark:text-slate-400 
-        text-base leading-relaxed 
-        font-medium 
-        transition-all duration-300 ease-in-out
-        ${!isExpanded && shouldShowReadMore ? 'line-clamp-4' : ''} 
-      `}>
-        {/* طريقة الـ CSS (الأفضل للأداء): نعرض النص كاملاً ونستخدم line-clamp للقص */}
-        {product.description}
-      </p>
-
-      {shouldShowReadMore && (
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="
-            text-black dark:text-white  
-            hover:black dark:hover:white
-            font-bold text-xl  
-            flex items-center gap-1.5
-            transition-colors duration-150
-            focus:outline-none focus:ring-2 focus:ring-indigo-500/20 rounded-md px-1 py-0.5 -ms-1
-          "
-        >
-          {isExpanded ? (
-            <>
-              {/* أيقونة سهم لأعلى */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-              </svg>
-              {language === "ar" ? "عرض أقل" : "Show Less"}
-            </>
-          ) : (
-            <>
-              {/* أيقونة سهم لأسفل */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-              {language === "ar" ? "عرض المزيد..." : "Read More..."}
-            </>
-          )}
-        </button>)}
-          {/* Pricing Section */}
+             {/* Pricing Section */}
           <div translate="no" className="py-6 border-y  border-slate-100 dark:border-white/5 flex flex-wrap items-baseline gap-4">
             {product.salePrice ? (
               <>
@@ -943,9 +894,8 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
               </span>
             )}
           </div>
+            <div className="py-4 space-y-3">
 
-          {/* Social Proof Section (Viewers & Sales) */}
-<div className="py-4 space-y-3">
   {/* Viewers Count */}
   <div className="flex items-center gap-3">
     <div className="relative flex h-3 w-3">
@@ -963,7 +913,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
   {/* Sales Count */}
   <div className="flex items-center gap-3">
-    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#86FE05]/10 text-[#86FE05]">
+    <div className="flex items-center justify-center w-6 h-6 rounded-full  text-red-700">
       <ShoppingCart size={14} strokeWidth={3} />
     </div>
     <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
@@ -976,6 +926,56 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   </div>
 </div>
 
+            <div className="flex items-center gap-3">
+              <RatingStars value={product.rating || 0} />
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">
+                {product.rating?.toFixed(1) || "0.0"} ({product.numReviews || 0} {isRTL ? "تقييم" : "reviews"})
+              </span>
+            </div>
+          </div>
+
+
+<div className="text-slate-600 dark:text-slate-400 text-base leading-relaxed font-medium transition-all duration-300 ease-in-out">
+  {isExpanded && product.description}
+</div>
+
+<button
+  onClick={() => setIsExpanded(!isExpanded)}
+  className="
+    mt-2
+    px-4 py-2
+    rounded-lg
+    bg-red-800 text-white
+    hover:bg-red-700
+    active:bg-red-900
+    transition-all duration-200
+    font-semibold
+    text-sm
+    shadow-sm hover:shadow-md
+    flex items-center gap-2
+  "
+>
+  {isExpanded ? (
+    <>
+      {/* سهم لأعلى */}
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+      </svg>
+      {language === "ar" ? "إخفاء التفاصيل" : "Hide Details"}
+    </>
+  ) : (
+    <>
+      {/* سهم لأسفل */}
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+      {language === "ar" ? "عرض التفاصيل" : "View Details"}
+    </>
+  )}
+</button>
+         
+
+       
    <div className="space-y-4">
   {/* العنوان المظبوط بنفس ستايل فيسترو */}
   <h3 className={`text-[20px] sm:text-xs font-black uppercase tracking-[0.2em] mb-4 
@@ -984,58 +984,85 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     {isRTL ? "اختر اللون" : "Select Color"}
   </h3>
 
-  {/* حاوية الألوان مع دعم الاتجاهات */}
-  <div className={`flex gap-6 overflow-x-auto py-4 no-scrollbar ${isRTL ? "flex-row-reverse justify-start" : "justify-start"}`}>
-  {product.options.find(opt => opt.name === "Color")?.values.map((colorValue, index) => {
-    const variantsOfColor = product.variants?.filter(
-      v => v.options.Color === colorValue
-    );
+ <div
+  className={`flex gap-6 overflow-x-auto py-4 no-scrollbar ${
+    isRTL ? "flex-row-reverse justify-start" : "justify-start"
+  }`}
+>
+  {product.options
+    .find(opt => opt.name === "Color")
+    ?.values.map((colorValue, index) => {
 
-    const isOutOfStock = !variantsOfColor?.some(v => v.stock > 0);
-    const isSelected = selectedOptions.Color === colorValue;
-// القاموس الشامل لكل الألوان الممكنة (عربي وإنجليزي)
-  
-  const finalColor = colorMap[colorValue.trim()] || colorValue.toLowerCase();
+      // 🔥 كل variants الخاصة باللون
+      const colorVariants = product.variants?.filter(
+        v => v.options?.Color === colorValue
+      );
 
-    return (
-      <div key={index} className="flex flex-col items-center gap-2 min-w-fit">
-        <button
-          disabled={isOutOfStock}
-          onClick={() => {
-            if (isOutOfStock) return;
-            setSelectedOptions(prev => ({ ...prev, Color: colorValue }));
-            const variantWithImage = product.variants?.find(v => v.options.Color === colorValue);
-            if (variantWithImage?.images?.[0]?.url) {
-              setSelectedImage(variantWithImage.images[0].url);
-            }
-          }}
-          className={`w-10 h-10 rounded-full border-2 relative transition-all duration-300 ring-offset-2 dark:ring-offset-black ${
-            isOutOfStock
-              ? "opacity-20 cursor-not-allowed grayscale"
-              : isSelected
-              ? "ring-2 ring-[#e1ffad] scale-110 shadow-lg shadow-[#e1ffad]/20 border-white dark:border-black"
-              : "border-black/10 dark:border-white/20 hover:scale-110"
-          }`}
-          style={{ backgroundColor: finalColor }}
-        >
-          {/* علامة الـ Out of Stock */}
-          {isOutOfStock && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-[1.5px] bg-white mix-blend-difference rotate-45"></div>
-            </div>
-          )}
-        </button>
+      // 🎯 اختار variant فيه صورة فعليًا
+      const variantWithImage = colorVariants?.find(
+        v => v.images && v.images.length > 0 && v.images[0]?.url
+      );
 
-        {/* اسم اللون تحت الدائرة */}
-        <span className={`text-[10px] md:text-xs font-medium truncate max-w-[60px] transition-colors ${
-          isSelected ? "text-black dark:text-[#e1ffad]" : "text-gray-500 dark:text-gray-400"
-        }`}>
-          {colorValue}
-        </span>
-      </div>
-    );
-  })}
+      // 🖼️ الصورة النهائية للون
+      const colorImage =
+        variantWithImage?.images?.[0]?.url ||
+        product.images?.[0]?.url;
+
+      const isOutOfStock = !colorVariants?.some(v => v.stock > 0);
+      const isSelected = selectedOptions.Color === colorValue;
+
+      return (
+        <div key={index} className="flex flex-col items-center gap-2 min-w-fit">
+
+          <button
+            disabled={isOutOfStock}
+            onClick={() => {
+              if (isOutOfStock) return;
+
+              setSelectedOptions(prev => ({
+                ...prev,
+                Color: colorValue,
+              }));
+
+              setSelectedImage(colorImage);
+            }}
+            className={`w-14 h-14 rounded-full border-2 relative transition-all duration-300 overflow-hidden ring-offset-2 dark:ring-offset-black ${
+              isOutOfStock
+                ? "opacity-20 cursor-not-allowed grayscale"
+                : isSelected
+                ? "ring-2 ring-red-700 scale-110 shadow-lg   dark:border-black"
+                : "border-black/10 dark:border-white/20 hover:scale-110"
+            }`}
+          >
+            <img
+              src={colorImage}
+              alt={colorValue}
+              className="w-full h-full object-cover"
+            />
+
+            {isOutOfStock && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <div className="w-full h-[1.5px] bg-white rotate-45"></div>
+              </div>
+            )}
+          </button>
+
+          {/* ⭐ اسم اللون ثابت تحت الدائرة */}
+          <span
+            className={`text-[10px] pt-2 md:text-xs font-black uppercase italic truncate max-w-[70px] transition-colors ${
+              isSelected
+                ? "text-black dark:text-white"
+                : "text-gray-500 dark:text-gray-400"
+            }`}
+          >
+            {colorValue}
+          </span>
+        </div>
+      );
+    })}
 </div>
+
+
 </div>
 
 {/* 2. المقاسات (Size Selection) */}
@@ -1053,7 +1080,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   className={`group flex items-center gap-2 transition-all duration-300 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
 >
   {/* أيقونة المسطرة أو المقاسات بتدي إيحاء بصري للمحتوى */}
-  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center group-hover:bg-[#e1ffad] transition-colors duration-300">
+  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center group-hover:bg-red-800 transition-colors duration-300">
     <Ruler size={16} className="text-black dark:text-[#e1ffad] group-hover:text-black" />
   </div>
 
@@ -1086,7 +1113,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   onClick={() => setSelectedOptions(prev => ({ ...prev, Size: sizeValue }))}
   className={`min-w-[60px] h-12 px-4 rounded-2xl border-2 font-black italic transition-all relative ${
     isSelected
-      ? "bg-[#64b608] text-black border-black shadow-lg shadow-[#86FE05]/20"
+      ? "bg-red-700 text-black border-black shadow-lg shadow-[#86FE05]/20"
       : isOutOfStock
       ? "bg-slate-50 dark:bg-white/5 border-black dark:border-white text-slate-300 dark:text-slate-700 cursor-not-allowed opacity-50"
       : "bg-slate-50 dark:bg-[#111111] border-black dark:border-white text-slate-900 dark:text-white hover:border-slate-400 dark:hover:border-white"
@@ -1160,10 +1187,10 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     ease: "easeInOut"
   }}
   whileTap={{ scale: 0.92 }}
-  className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase italic transition-all flex items-center justify-center gap-3 dark:bg-slate-50 dark:text-black ${
+  className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase italic transition-all flex items-center justify-center gap-3 dark:bg-red-700 dark:text-black ${
     isSoldOut
       ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-      : "bg-black text-white "
+      : "bg-red-700 text-white "
   }`}
 >
   {isSoldOut ? (
@@ -1350,7 +1377,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     {/* Related Products Section */}
 {relatedProducts && relatedProducts.length > 0 && (
   <div className="mt-32">
-    <h2 className="text-[19px] font-bold uppercase tracking-[0.5em] text-center mb-12 text-black dark:text-[#e1ffad]/80">
+    <h2 className="text-[19px] font-bold uppercase tracking-[0.1em] text-center mb-12 text-black dark:text-red-700">
       {translations.relatedProductsTitle}
     </h2>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
@@ -1366,7 +1393,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     <div className="mt-32 border-t border-slate-100 dark:border-white/5 pt-16 max-w-4xl mx-auto">
       <div className="flex flex-col items-center mb-12 space-y-4">
         <h2 className="text-3xl font-black italic uppercase tracking-tighter">
-          {translations.reviewsSection} <span className="text-[#86FE05]">({reviews.length})</span>
+          {translations.reviewsSection} <span className="text-red-800">({reviews.length})</span>
         </h2>
         {!hasReviewed && (
           <p className="text-slate-400 text-sm uppercase tracking-widest">{translations.addReviewTitle}</p>
@@ -1382,7 +1409,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
                 type="text"
                 value={reviewerName}
                 onChange={(e) => setReviewerName(e.target.value)}
-                className="w-full p-4 rounded-2xl bg-white dark:bg-black border border-transparent dark:border-white/5 focus:border-[#86FE05] outline-none text-sm font-bold"
+                className="w-full p-4 rounded-2xl bg-white dark:bg-black border border-transparent dark:border-white/5 focus:border-red-700 outline-none text-sm font-bold"
                 placeholder={isRTL ? "أدخل اسمك" : "Enter your name"}
                 required
                 disabled={isSubmittingReview || (localStorage.getItem("guestReviewerName") && reviewerName)}
@@ -1401,7 +1428,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
               rows="4"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              className="w-full p-4 rounded-2xl bg-white dark:bg-black border border-transparent dark:border-white/5 focus:border-[#86FE05] outline-none text-sm font-bold resize-none"
+              className="w-full p-4 rounded-2xl bg-white dark:bg-black border border-transparent dark:border-white/5 focus:border-red-700 outline-none text-sm font-bold resize-none"
               placeholder={isRTL ? "شاركنا رأيك..." : "Share your thoughts..."}
               required
               disabled={isSubmittingReview}
@@ -1416,7 +1443,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           </button>
         </form>
       ) : (
-        <div className="bg-[#86FE05]/10 border border-[#86FE05]/20 text-[#86FE05] p-6 rounded-2xl mb-16 text-center font-black uppercase italic tracking-widest text-xs">
+        <div className="bg-[#86FE05]/10 border border-[#86FE05]/20 text-red-800 p-6 rounded-2xl mb-16 text-center font-black uppercase italic tracking-widest text-xs">
           {translations.alreadyReviewed}
         </div>
       )}
@@ -1426,7 +1453,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           <p className="text-center text-slate-400 italic py-10">{translations.noReviews}</p>
         ) : (
           reviews.map((review, index) => (
-            <div key={review._id || index} className="p-6 bg-slate-50 dark:bg-[#111111] rounded-[2rem] border border-slate-100 dark:border-white/5 transition-all hover:border-[#86FE05]/30">
+            <div key={review._id || index} className="p-6 bg-slate-50 dark:bg-[#111111] rounded-[2rem] border border-slate-100 dark:border-white/5 transition-all hover:border-red-800">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <p className="font-black italic uppercase tracking-tighter text-slate-900 dark:text-white">{review.name}</p>
@@ -1460,7 +1487,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
         <div className="w-2 h-2 rounded-full bg-[#e1ffad] dark:bg-black animate-pulse" />
       </div>
       {/* حلقة خارجية هادية */}
-      <div className="absolute w-14 h-14 rounded-full border border-[#e1ffad] dark:border-black opacity-20 animate-ping" />
+      <div className="absolute w-14 h-14 rounded-full border border-red-800 dark:border-black opacity-20 animate-ping" />
     </div>
     
     <span className="leading-relaxed tracking-wider opacity-90 dark:text-black">
@@ -1470,7 +1497,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     {/* شريط التقدم - نحيف جداً وأنيق */}
     <div className="h-[2px] w-16 bg-white/10 dark:bg-black/10 rounded-full mt-1 overflow-hidden">
         <div 
-            className="h-full bg-[#e1ffad] dark:bg-black opacity-60" 
+            className="h-full bg-red-800 dark:bg-black opacity-60" 
             style={{
               animation: 'progress 3000ms linear forwards'
             }}

@@ -24,6 +24,7 @@ const { darkMode } = useTheme();
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [discountError, setDiscountError] = useState(""); // لمسح رسائل الخطأ
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 const [nameError, setNameError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
@@ -201,13 +202,12 @@ const normalizePhone = (value) => {
       
       // ✅ إظهار التوست (الرسالة)
       toast.success(isRTL ? "تم تطبيق الخصم بنجاح! 🔥" : "Discount applied! 🔥", {
-        style: {
-          borderRadius: '20px',
-          background: '#000',
-          color: '#6cc908',
-          fontWeight: 'bold',
-          border: '1px solid #6cc908'
-        }
+     style: {
+  borderRadius: '20px',
+  background: '#0A0A0A',
+  color: '#ffffff',
+  border: '1px solid #dc2626',
+}
       });
 
       // لو الكود جاي من المودال، اقفله بعد النجاح
@@ -419,11 +419,11 @@ return (
                 onClick={() => navigate(-1)} 
                 className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-colors z-10"
               >
-                <ChevronLeft size={24} className={`${isRTL ? 'rotate-180' : ''} text-slate-900 dark:text-[#6bc905]`} />
+                <ChevronLeft size={24} className={`${isRTL ? 'rotate-180' : ''} text-slate-900 dark:text-red-700`} />
               </button>
 
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <h1 className="text-base sm:text-lg font-black uppercase italic tracking-[0.1em] text-slate-900 dark:text-white pointer-events-auto">
+                <h1 className="text-base sm:text-lg font-black uppercase   tracking-[0.1em] text-slate-900 dark:text-white pointer-events-auto">
                   {isRTL ? "إتمام الطلب" : "Checkout"}
                 </h1>
               </div>
@@ -441,7 +441,7 @@ return (
   <div className="relative group">
     <User 
       size={18} 
-      className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 ${nameError ? 'text-red-500' : 'text-slate-400'} group-focus-within:text-[#86FE05] transition-colors`} 
+      className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 ${nameError ? 'text-red-500' : 'text-slate-400'} group-focus-within:text-red-700 transition-colors`} 
     />
     <input
       type="text" 
@@ -463,7 +463,7 @@ return (
         }
       }}
       placeholder={isRTL ? "الاسم بالكامل" : "Full Name"}
-      className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border ${nameError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-[#6fd107] outline-none transition-all font-bold text-slate-900 dark:text-white`}
+      className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border ${nameError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white`}
     />
   </div>
   
@@ -479,7 +479,7 @@ return (
 <div className="relative group">
   <Phone 
     size={18} 
-    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#71d307] transition-colors`} 
+    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700 transition-colors`} 
   />
   <input
     type="tel" 
@@ -488,7 +488,7 @@ return (
     value={formData.phone} 
     onChange={handleChange}
     placeholder={isRTL ? "رقم الهاتف" : "Phone Number"}
-    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#68c405] outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
+    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
   />
 </div>
 
@@ -496,7 +496,7 @@ return (
 <div className="relative group">
   <Phone 
     size={18} 
-    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#67c206] transition-colors`} 
+    className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700 transition-colors`} 
   />
   <input
     type="tel" 
@@ -504,17 +504,17 @@ return (
     value={formData.secondaryPhone || ''} 
     onChange={handleChange}
     placeholder={isRTL ? "رقم هاتف إضافي (اختياري)" : "Secondary Phone (Optional)"}
-    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6bcb06] outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
+    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
   />
 </div>
 
 
               <div className="relative group">
-                <Mail size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#70d307] transition-colors`} />
+                <Mail size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700 transition-colors`} />
                 <input
                   type="email" name="email" value={formData.email} onChange={handleChange}
                   placeholder={isRTL ? "البريد الإلكتروني (اختياري)" : "Email (Optional)"}
-                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6fd106] outline-none transition-all font-bold text-slate-900 dark:text-white`}
+                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white`}
                 />
               </div>
             </div>
@@ -528,7 +528,7 @@ return (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <select
                 name="city" value={formData.city} onChange={handleChange} required
-                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#69c606] outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
+                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
               >
                 <option value="">{isRTL ? "المحافظة" : "Select City"}</option>
                 {citiesList.map((c) => (
@@ -538,7 +538,7 @@ return (
 
               <select
                 name="district" value={formData.bostaDistrictId} onChange={handleChange} required
-                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6fd106] outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
+                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
               >
                 <option value="">{isRTL ? "الحي / المنطقة" : "Select District"}</option>
                 {districts.map((d) => (
@@ -548,19 +548,19 @@ return (
             </div>
 
             <div className="relative group">
-              <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#6fcd09]`} />
+              <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700`} />
               <input
                 type="text" name="address" required value={formData.address} onChange={handleChange}
                 autoComplete="new-address"
                 placeholder={isRTL ? "العنوان بالتفصيل (اسم الشارع / علامة مميزة)" : "Detailed Address"}
-                className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6dcd06] outline-none transition-all font-bold text-slate-900 dark:text-white`}
+                className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white`}
               />
             </div>
 
             <div className="grid grid-cols-3 gap-3">
-              <input type="text" name="buildingNumber" placeholder={isRTL ? "عمارة" : "Bldg"} value={formData.buildingNumber} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#6cc908]" />
-              <input type="text" name="floor" placeholder={isRTL ? "دور" : "Floor"} value={formData.floor} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#6cc908]" />
-              <input type="text" name="apartment" placeholder={isRTL ? "شقة" : "Apt"} value={formData.apartment} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-[#6cc908]" />
+              <input type="text" name="buildingNumber" placeholder={isRTL ? "عمارة" : "Bldg"} value={formData.buildingNumber} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
+              <input type="text" name="floor" placeholder={isRTL ? "دور" : "Floor"} value={formData.floor} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
+              <input type="text" name="apartment" placeholder={isRTL ? "شقة" : "Apt"} value={formData.apartment} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
             </div>
           </section>
 
@@ -571,31 +571,46 @@ return (
                 {isRTL ? "كود الخصم" : "Discount Code"}
               </h2>
               <button
-                type="button"
-                onClick={() => setShowDiscountModal(true)}
-                className="text-[1(px] font-black text-black dark:text-white uppercase italic hover:underline"
-              >
-                ✨ {isRTL ? "استكشف العروض" : "View Offers"}
-              </button>
+  type="button"
+  onClick={() => setShowDiscountModal(true)}
+  className="text-[15px] font-black text-black dark:text-white uppercase  underline decoration-2 decoration-red-800 underline-offset-4 hover:decoration-red-600 transition-all"
+>
+  ✨ {isRTL ? "استكشف العروض" : "View Offers"}
+</button>
             </div>
             
             <div className="flex gap-2">
               <div className="relative flex-1 group">
-                <Tag size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#6cc908]`} />
+                <Tag size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700`} />
                 <input
                   type="text" name="discountCode" value={formData.discountCode} 
                   onChange={(e) => setFormData(p => ({...p, discountCode: e.target.value.toUpperCase()}))}
                   placeholder={isRTL ? "أدخل الكود هنا" : "Enter Code"}
-                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-[#6cc908] outline-none transition-all font-black text-slate-900 dark:text-[#6cc908] uppercase`}
+                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black text-slate-900 dark:text-red-700 uppercase`}
                 />
               </div>
-              <button
-                type="button"
-                onClick={() => validateDiscount()}
-                className="px-6 bg-slate-900 dark:bg-white text-white dark:text-black rounded-[1.5rem] font-black uppercase italic text-xs hover:bg-[#6cc908] dark:hover:bg-[#6cc908] transition-colors"
-              >
-                {isRTL ? "تفعيل" : "Apply"}
-              </button>
+             <button
+  type="button"
+  onClick={async () => {
+    const result = await validateDiscount(formData.discountCode);
+
+    // 🔥 هنا بنفترض إن النجاح بيرجع true أو success
+    if (result?.success || result === true) {
+      setIsDiscountApplied(true);
+      setDiscountError(""); 
+    }
+  }}
+  disabled={isDiscountApplied}
+  className={`px-6 rounded-[1.5rem] font-black uppercase text-xs transition-all ${
+    isDiscountApplied
+      ? "bg-green-600 text-white cursor-not-allowed"
+      : "bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-red-700 dark:hover:bg-red-700"
+  }`}
+>
+  {isDiscountApplied
+    ? (isRTL ? "تم التفعيل" : "Applied")
+    : (isRTL ? "تفعيل" : "Apply")}
+</button>
             </div>
             {discountError && <p className="text-[10px] font-bold text-red-500 px-4">{discountError}</p>}
           </section>
@@ -610,7 +625,7 @@ return (
       <div className="p-6 border-b border-black/10 dark:border-white/10 flex justify-between items-center">
 
         <div>
-          <h3 className="text-xl font-black italic uppercase text-black dark:text-white">
+          <h3 className="text-xl font-black   uppercase text-black dark:text-white">
             {isRTL ? "فيسترو أوفيرز" : "Vestro Offers"}
           </h3>
 
@@ -654,7 +669,7 @@ return (
                 <div className="flex justify-between items-start mb-4">
 
                   <div>
-                    <span className="text-2xl font-black italic text-black dark:text-white uppercase tracking-tighter">
+                    <span className="text-2xl font-black   text-black dark:text-white uppercase tracking-tighter">
                       {disc.code}
                     </span>
 
@@ -680,7 +695,7 @@ return (
                       validateDiscount(disc.code, false);
                       
                     }}
-                    className="px-4 py-2 rounded-full text-[10px] font-black uppercase italic
+                    className="px-4 py-2 rounded-full text-[10px] font-black uppercase  
                     bg-black text-white dark:bg-white dark:text-black
                     hover:bg-red-500 hover:text-white dark:hover:bg-red-500 dark:hover:text-white
                     transition-all active:scale-95"
@@ -720,7 +735,7 @@ return (
                   {disc.appliesToAll ? (
                     <div className="flex items-center gap-2">
                       <span className="text-red-500 text-sm">●</span>
-                      <span className="text-[10px] font-black uppercase italic text-black dark:text-white">
+                      <span className="text-[10px] font-black uppercase   text-black dark:text-white">
                         {isRTL ? "يشمل جميع منتجات المتجر" : "Applied to all products"}
                       </span>
                     </div>
@@ -772,19 +787,19 @@ return (
             <div className="grid grid-cols-2 gap-4">
               <div 
                 onClick={() => setFormData(p => ({...p, paymentMethod: 'cash'}))}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'cash' ? 'border-[#6cc908] bg-[#86FE05]/5 shadow-[0_0_30px_#86FE0515]' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
+                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'cash' ? 'border-red-700 bg-red-700/10 ' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
               >
-                <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-[#6cc908]' : 'text-slate-400'} />
-                <span className={`text-[10px] font-black uppercase italic ${formData.paymentMethod === 'cash' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-red-700' : 'text-slate-400'} />
+                <span className={`text-[10px] font-black uppercase   ${formData.paymentMethod === 'cash' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                   {isRTL ? "عند الاستلام" : "Cash"}
                 </span>
               </div>
               <div 
                 onClick={() => setFormData(p => ({...p, paymentMethod: 'card'}))}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'card' ? 'border-[#6cc908] bg-[#86FE05]/5 shadow-[0_0_30px_#86FE0515]' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
+                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'card' ? 'border-red-700 bg-red-700/10' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
               >
-                <CreditCard size={28} className={formData.paymentMethod === 'card' ? 'text-[#6cc908]' : 'text-slate-400'} />
-                <span className={`text-[10px] font-black uppercase italic ${formData.paymentMethod === 'card' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                <CreditCard size={28} className={formData.paymentMethod === 'card' ? 'text-red-700' : 'text-slate-400'} />
+                <span className={`text-[10px] font-black uppercase   ${formData.paymentMethod === 'card' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                   {isRTL ? "فيزا / ماستر" : "Card"}
                 </span>
               </div>
@@ -793,14 +808,14 @@ return (
 
          {/* 💎 Vestro Dynamic Discount Summary */}
 {discountInfo && (
-  <div className="rounded-[2.5rem] bg-white dark:bg-[#0A0A0A] p-6 border-[3px] border-black dark:border-[#519707] relative overflow-hidden shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(134,254,5,0.2)]">
+  <div className="rounded-[2.5rem] bg-white dark:bg-[#0A0A0A] p-6 border-[3px] border-black dark:border-red-700 relative overflow-hidden ] ">
     
     {/* Header: Title and Type */}
     <div className="flex justify-between items-center mb-6">
-      <div className="bg-black text-white px-4 py-1 rounded-full text-xs font-black italic uppercase">
+      <div className="bg-black text-white px-4 py-1 rounded-full text-xs font-black   uppercase">
         {discountInfo.discountType === 'free_shipping' ? '🚚 FREE SHIPPING MODE' : '🔥 OFFER ACTIVE'}
       </div>
-      <span className="text-black dark:text-white font-black text-xl italic">{discountInfo.discountCode}</span>
+      <span className="text-black dark:text-white font-black text-xl  ">{discountInfo.discountCode}</span>
     </div>
 
     {/* Items List */}
@@ -825,7 +840,7 @@ return (
             <span className="text-[10px] text-slate-400 line-through font-bold">
               {item.price} EGP
             </span>
-            <span className="text-sm font-black text-emerald-600 dark:text-[#6cc908]">
+            <span className="text-sm font-black text-emerald-600 dark:text-red-700">
               {Math.round(
                 item.price * (1 - discountInfo.percentage / 100)
               )}{" "}
@@ -838,10 +853,10 @@ return (
       ) {
         priceDisplay = (
           <div className="flex flex-col items-end">
-            <span className="text-[10px] text-red-500 font-black uppercase italic">
+            <span className="text-[10px] text-red-500 font-black uppercase  ">
               Get Unit
             </span>
-            <span className="text-sm font-black bg-emerald-500 dark:bg-[#6cc908] text-white dark:text-black px-2 rounded-md tracking-tighter">
+            <span className="text-sm font-black bg-emerald-500 dark:bg-red-700 text-white dark:text-black px-2 rounded-md tracking-tighter">
               FREE / DISCOUNTED
             </span>
           </div>
@@ -855,7 +870,7 @@ return (
         className={`flex items-center justify-between p-4 rounded-2xl transition-all border
           ${
             isApp
-              ? "bg-white dark:bg-[#111111] border-emerald-500 dark:border-[#6cc908] shadow-sm"
+              ? "bg-white dark:bg-[#111111] border-emerald-500 dark:border-red-700 shadow-sm"
               : "bg-slate-50 dark:bg-[#0A0A0A] border-transparent opacity-60"
           }`}
       >
@@ -883,7 +898,7 @@ return (
               {item.name}
             </span>
 
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 italic">
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400  ">
               QTY: {item.quantity}
             </span>
           </div>
@@ -899,19 +914,19 @@ return (
 </div>
 
     {/* Total Savings: الواجهة القوية */}
-    <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 border-[#549a08]">
+    <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 ">
       <div>
         <p className="text-white text-[15px] font-black uppercase tracking-widest mb-1">
           {isRTL ? "إجمالي التوفير" : "TOTAL SAVINGS"}
         </p>
-        <h3 className="text-white text-3xl font-black italic tracking-tighter">
-          -{discountInfo.discountAmount} <span className="text-sm not-italic uppercase">EGP</span>
+        <h3 className="text-white text-3xl font-black   tracking-tighter">
+          -{Math.round(discountInfo.discountAmount)} <span className="text-sm not-  uppercase">EGP</span>
         </h3>
       </div>
       <div className="text-right">
          {discountInfo.freeShippingApplied && (
             <div className="flex flex-col items-end">
-                <span className="bg-[#519707] text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic mb-1">
+                <span className="bg-red-700 text-black text-[9px] font-black px-3 py-1 rounded-full uppercase   mb-1">
                    Free Delivery
                 </span>
                 <span className="text-white/50 text-[8px] font-bold uppercase">Applied to Order</span>
@@ -940,7 +955,7 @@ return (
     <span
       className={
         shippingCost === 0 && selectedCityObj
-          ? "text-emerald-600 dark:text-[#6cc908] font-black italic"
+          ? "text-emerald-600 dark:text-red-700 font-black  "
           : "text-slate-900 dark:text-white"
       }
     >
@@ -960,8 +975,8 @@ return (
   {discountInfo && (
     <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
       <span>{isRTL ? "الخصم" : "Discount"}</span>
-      <span className="text-[#559d08] italic">
-        -{discountInfo.discountAmount} EGP
+      <span className="text-red-700 ">
+        -{Math.round(discountInfo.discountAmount)} EGP
       </span>
     </div>
   )}
@@ -974,9 +989,9 @@ return (
         {isRTL ? "المبلغ الإجمالي" : "Grand Total"}
       </span>
 
-      <div className="text-4xl font-black italic leading-none tracking-tighter text-slate-900 dark:text-white">
+      <div className="text-4xl font-black   leading-none tracking-tighter text-red-600">
         {totalWithDiscount}
-        <small className="text-xs not-italic opacity-40 font-bold ml-1">
+        <small className="text-xs not-  opacity-40 font-bold ml-1">
           EGP
         </small>
       </div>
@@ -984,7 +999,7 @@ return (
 
     {/* Icon */}
     <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center">
-      <Home size={20} className="text-slate-900 dark:text-white opacity-60" />
+      <Home size={20} className="text-red-600 opacity-60" />
     </div>
 
   </div>
@@ -993,8 +1008,8 @@ return (
           {/* 🚀 Submit Button */}
           <button
             type="submit" disabled={loading}
-            className={`w-full py-6 rounded-[2rem] font-black uppercase italic tracking-[0.2em] transition-all shadow-2xl relative overflow-hidden group
-              ${loading ? 'bg-slate-800 cursor-wait' : 'bg-[#519707] text-black hover:scale-[1.02] active:scale-95 shadow-[#86FE05]/20 hover:shadow-[#86FE05]/40'}
+            className={`w-full py-6 rounded-[2rem] font-black uppercase   tracking-[0.2em] transition-all shadow-2xl relative overflow-hidden group
+              ${loading ? 'bg-slate-800 cursor-wait' : 'bg-black text-white dark:text-black dark:bg-white hover:scale-[1.02] active:scale-95 '}
             `}
           >
             {loading ? (
@@ -1005,7 +1020,7 @@ return (
             ) : (
               <span className="relative z-10">{isRTL ? "تأكيد الأوردر الآن" : "Confirm Order Now"}</span>
             )}
-            {!loading && <div className="absolute inset-0 bg-white/20 translate-x-full group-hover:-translate-x-full transition-transform duration-700 italic"></div>}
+            {!loading && <div className="absolute inset-0 bg-white/20 translate-x-full group-hover:-translate-x-full transition-transform duration-700  "></div>}
           </button>
 
         </form>

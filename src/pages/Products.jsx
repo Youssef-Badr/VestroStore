@@ -1,8 +1,10 @@
 
 
 /* eslint-disable no-unused-vars */
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo  } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { ArrowLeft } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
@@ -23,6 +25,7 @@ export default function Products() {
 
   const { language } = useLanguage();
   const { darkMode } = useTheme();
+  const navigate = useNavigate();
   const isRTL = language === "ar";
 
   const t = useMemo(() => ({
@@ -80,9 +83,31 @@ export default function Products() {
     }`} dir={isRTL ? "rtl" : "ltr"}>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1600px]">
-        
+       
+  <button
+  onClick={() => navigate(-1)}
+  className="group flex items-center gap-2 mt-4 md:mt-7 px-4 py-2 rounded-full
+             bg-black/5 dark:bg-white/5
+             border border-black/10 dark:border-white/10
+             hover:bg-black/10 dark:hover:bg-white/10
+             hover:scale-[1.03]
+             active:scale-95
+             transition-all duration-300"
+>
+  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/60 dark:bg-black/40 group-hover:rotate-[-10deg] transition">
+    <ArrowLeft
+      size={16}
+      className={isRTL ? "rotate-180" : ""}
+    />
+  </span>
+
+  <span className="font-black uppercase tracking-wider text-sm">
+    {isRTL ? "رجوع" : "Back"}
+  </span>
+</button>
+
         <header className="flex flex-col items-center mb-8 sm:mb-24 text-center">
-        <h1 className="pt-8 sm:pt-12 md:pt-16 
+        <h1 className=" sm:pt-12 md:pt-16 
                text-[8vw] sm:text-5xl md:text-6xl lg:text-7xl 
                font-black mt-4 italic tracking-tighter uppercase leading-[0.9] 
                mb-4 sm:mb-6 text-black dark:text-white">

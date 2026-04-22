@@ -109,34 +109,38 @@ ${darkMode
                 src={product.images?.[0]?.url || product.image} 
                 className="w-10 h-10 rounded-xl object-cover border border-black/10" 
               />
-              <span className="text-[11px] font-black uppercase truncate max-w-[120px] group-hover:opacity-70">
+              <span className="text-[11px] font-black uppercase truncate max-w-[100px] group-hover:opacity-70">
                 {product.name}
               </span>
             </div>
 
             <div className="flex items-center gap-2"> 
               
-              {/* Preview */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setPreviewProduct(product);
-                  setCurrentImgIndex(0);
-                }}
-                className="text-[15px] opacity-60 hover:opacity-100 transition"
-              >
-                👁
-              </button>
+            {/* Preview */}
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    setPreviewProduct(product);
+    setCurrentImgIndex(0);
+  }}
+  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[9px] uppercase transition-all active:scale-90
+    ${darkMode 
+      ? "bg-red-800 text-black hover:bg-red-600" 
+      : "bg-red-800 text-white hover:bg-red-600 hover:text-black"
+    }`}
+>
+  {isRTL ? "عرض الصور" : "View"}
+</button>
 
               {/* Add Button */}
               <button 
                 onClick={() => onAddToCart(product)}
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[9px] uppercase transition-all active:scale-90
                   ${darkMode 
-                    ? "bg-white text-black hover:bg-[#549e06]" 
-                    : "bg-black text-white hover:bg-[#549e06] hover:text-black"}`}
+                    ? "bg-red-800 text-black hover:bg-red-600" 
+                    : "bg-red-800 text-white hover:bg-red-600 hover:text-black"}`}
               >
-                <FiPlus /> {isRTL ? "أضف" : "Add"}
+                {isRTL ? "أضف للسلة" : "Add to cart"}
               </button>
 
             </div>
@@ -156,10 +160,10 @@ ${darkMode
       : "bg-black/[0.03] border-black/20"}`}>
       
     <span className="text-[8px] opacity-40 uppercase">
-      {isRTL ? "استخدم الكود" : "USE CODE"}
+      {isRTL ? " الكود" : " CODE"}
     </span>
 
-    <span className="text-lg font-black tracking-tighter">
+    <span className="text-lg font-black tracking-tighter text-red-800">
       {discount.code}
     </span>
   </div>
@@ -169,10 +173,10 @@ ${darkMode
     onClick={() => copyToClipboard(discount.code)} 
     className={`w-full py-4 rounded-2xl font-black text-sm transition-all border flex items-center justify-center gap-2 uppercase italic
       ${copied 
-        ? "bg-[#86FE05] text-black border-transparent" 
+        ? "bg-red-800 text-black border-transparent" 
         : darkMode 
-          ? "bg-white text-black hover:bg-[#5cac07]" 
-          : "bg-black text-white hover:bg-[#5cac07] hover:text-black"}`}
+          ? "bg-white text-black hover:bg-red-700" 
+          : "bg-black text-white hover:bg-red-700 hover:text-black"}`}
   >
     {copied ? <FiCheck strokeWidth={3} /> : <FiCopy strokeWidth={3} />}
     {copied ? (isRTL ? "تم النسخ" : "COPIED") : (isRTL ? "نسخ" : "COPY")}
@@ -193,16 +197,18 @@ ${darkMode
     className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center"
     onClick={() => setPreviewProduct(null)}
   >
-    {/* Close */}
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        setPreviewProduct(null);
-      }}
-      className="absolute top-6 right-6 text-white text-3xl"
-    >
-      ✕
-    </button>
+   {/* Close */}
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    setPreviewProduct(null);
+  }}
+  className="absolute top-24 right-6 w-10 h-10 flex items-center justify-center 
+             rounded-full bg-slate-500 hover:bg-white/20 text-black 
+             text-xl font-bold transition"
+>
+  ✕
+</button>
 
     {/* Prev */}
     {previewProduct.images?.length > 1 && (
@@ -215,7 +221,7 @@ ${darkMode
               : prev - 1
           );
         }}
-        className="absolute left-6 text-white text-5xl"
+        className="absolute left-6 text-slate-800 text-5xl"
       >
         ‹
       </button>
@@ -239,7 +245,7 @@ ${darkMode
               : prev + 1
           );
         }}
-        className="absolute right-6 text-white text-5xl"
+        className="absolute right-6 text-slate-800 text-5xl"
       >
         ›
       </button>

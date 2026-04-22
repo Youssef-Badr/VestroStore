@@ -87,10 +87,10 @@ const OrdersPage = () => {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center px-4 transition-colors duration-300 ${darkMode ? 'bg-black' : 'bg-white'}`}>
         <div className="relative mb-4">
-          <div className={`w-12 h-12 md:w-16 md:h-16 border-2 rounded-full ${darkMode ? 'border-[#86FE05]/10' : 'border-gray-100'}`}></div>
-          <div className="absolute top-0 w-12 h-12 md:w-16 md:h-16 border-t-2 border-[#86FE05] rounded-full animate-spin"></div>
+          <div className={`w-12 h-12 md:w-16 md:h-16 border-2 rounded-full ${darkMode ? 'border-red-800' : 'border-gray-100'}`}></div>
+          <div className="absolute top-0 w-12 h-12 md:w-16 md:h-16 border-t-2 border-red-700 rounded-full animate-spin"></div>
         </div>
-        <p className="text-[#65bc08] font-black tracking-widest text-[10px] uppercase animate-pulse">Vestro Orders</p>
+        <p className="text-red-800 font-black tracking-widest text-[10px] uppercase animate-pulse">Vestro Orders</p>
       </div>
     );
   }
@@ -102,11 +102,11 @@ const OrdersPage = () => {
         {/* --- Header --- */}
         <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10 border-b pb-8 ${darkMode ? 'border-white/5' : 'border-gray-200'}`}>
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-start">
-            <div className="w-14 h-14 md:w-16 md:h-16 bg-[#63b808] flex items-center justify-center rounded-2xl md:rounded-[24px] rotate-2 shadow-lg">
+            <div className="w-14 h-14 md:w-16 md:h-16 bg-red-700 flex items-center justify-center rounded-2xl md:rounded-[24px] rotate-2 shadow-lg">
               <ShoppingBag size={28} className="text-black -rotate-2" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-5xl font-black italic tracking-tighter uppercase leading-none">
+              <h1 className="text-3xl md:text-5xl font-black  tracking-tighter uppercase leading-none">
                 {isRTL ? "طلباتي" : "My Orders"}
               </h1>
               <p className={`font-bold mt-2 text-[15px] uppercase tracking-[0.2em] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
@@ -118,7 +118,7 @@ const OrdersPage = () => {
 
         {/* --- Stats --- */}
         <div className="grid grid-cols-3 gap-3 md:gap-6 mb-10">
-          <StatCard icon={<Package size={18} />} label={isRTL ? "العدد" : "Count"} value={stats.total} color="#86FE05" darkMode={darkMode} />
+          <StatCard icon={<Package size={18} />} label={isRTL ? "العدد" : "Count"} value={stats.total} color="#B91C1C" darkMode={darkMode} />
           <StatCard icon={<CheckCircle size={18} />} label={isRTL ? "مكتمل" : "Done"} value={stats.completed} color="#10b981" darkMode={darkMode} />
           <StatCard icon={<CreditCard size={18} />} label={isRTL ? "إجمالي" : "Total"} value={`${stats.totalSpent} EGP`} color={darkMode ? "#fff" : "#000"} darkMode={darkMode} />
         </div>
@@ -128,7 +128,7 @@ const OrdersPage = () => {
           <div className={`text-center py-24 border-2 border-dashed rounded-[40px] px-4 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-gray-200 bg-white shadow-sm'}`}>
             <Package size={50} className={`mx-auto mb-6 ${darkMode ? 'text-gray-800' : 'text-gray-200'}`} />
             <h2 className="text-xl md:text-2xl font-black mb-2 uppercase italic">{isRTL ? "السجل فارغ" : "Empty Vault"}</h2>
-            <Link to="/products" className="mt-6 inline-flex items-center gap-3 bg-[#65bc08] text-black px-8 py-4 rounded-2xl font-black uppercase text-[10px] hover:scale-105 transition-all shadow-xl shadow-[#86FE05]/20">
+            <Link to="/products" className="mt-6 inline-flex items-center gap-3 bg-red-700 text-black px-8 py-4 rounded-2xl font-black uppercase text-[10px] hover:scale-105 transition-all shadow-xl shadow-[#86FE05]/20">
               {isRTL ? "تسوق الآن" : "Go Shopping"} <ArrowUpRight size={16}/>
             </Link>
           </div>
@@ -170,7 +170,7 @@ const OrdersPage = () => {
                             alt="item"
                           />
                           {(item.qty > 1 || item.quantity > 1) && (
-                            <span className="absolute -top-2 -right-2 bg-[#86FE05] text-black text-[9px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black z-10 shadow-lg">
+                            <span className="absolute -top-2 -right-2 bg-red-700 text-black text-[9px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black z-10 shadow-lg">
                               {item.qty || item.quantity}
                             </span>
                           )}
@@ -189,7 +189,7 @@ const OrdersPage = () => {
                       
                       <Link 
                         to={`/thankyou/${order._id}`}
-                        className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[24px] flex items-center justify-center transition-all ${darkMode ? 'bg-white/5 text-[#86FE05] hover:bg-[#86FE05] hover:text-black shadow-lg shadow-black' : 'bg-gray-100 text-black hover:bg-black hover:text-white shadow-sm'}`}
+                        className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[24px] flex items-center justify-center transition-all ${darkMode ? 'bg-white/5 text-red-700 hover:bg-red-800 hover:text-black shadow-lg shadow-black' : 'bg-gray-100 text-black hover:bg-black hover:text-white shadow-sm'}`}
                       >
                         {isRTL ? <ChevronLeft size={24}/> : <ChevronRight size={24}/>}
                       </Link>

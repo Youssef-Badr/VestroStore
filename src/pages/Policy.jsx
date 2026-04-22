@@ -19,7 +19,7 @@ export default function Policy() {
 
         {/* 1 */}
         <div className="flex items-start gap-3 p-4 rounded-2xl border bg-gray-50 dark:bg-zinc-900">
-          <RefreshCcw className="text-[#86FE05]" />
+          <RefreshCcw className="text-red-700" />
           <p className="text-sm leading-6">
             يمكن إرجاع المنتجات خلال <b>14 يوم</b> من استلام الشحنة.
           </p>
@@ -27,7 +27,7 @@ export default function Policy() {
 
         {/* 2 */}
         <div className="flex items-start gap-3 p-4 rounded-2xl border bg-gray-50 dark:bg-zinc-900">
-          <ShieldCheck className="text-[#86FE05]" />
+          <ShieldCheck className="text-red-700" />
           <p className="text-sm leading-6">
             يجب إثبات التلف أو النقص أثناء تواجد المندوب.
           </p>
@@ -43,7 +43,7 @@ export default function Policy() {
 
         {/* 4 */}
         <div className="flex items-start gap-3 p-4 rounded-2xl border bg-gray-50 dark:bg-zinc-900">
-          <Package className="text-[#86FE05]" />
+          <Package className="text-red-700" />
           <p className="text-sm leading-6">
             يجب أن يكون المنتج بحالته الأصلية وبغلافه الأصلي.
           </p>

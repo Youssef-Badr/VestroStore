@@ -49,18 +49,18 @@ export default function LoginPage() {
   };
 
   // تعديل الـ padding والـ icon position ليناسب الـ RTL و LTR
-  const inputStyle = `w-full bg-transparent border ${darkMode ? 'border-white/10 text-white' : 'border-black/10 text-black'} p-4 rounded-2xl focus:border-[#86FE05] outline-none transition-all font-bold ${isRTL ? 'pr-12' : 'pl-12'}`;
+  const inputStyle = `w-full bg-transparent border ${darkMode ? 'border-white/10 text-white' : 'border-black/10 text-black'} p-4 rounded-2xl focus:border-[#B91C1C] outline-none transition-all font-bold ${isRTL ? 'pr-12' : 'pl-12'}`;
 
   return (
     <div className={`min-h-screen flex items-center justify-center px-4 ${darkMode ? 'bg-black' : 'bg-gray-50'}`} dir={isRTL ? "rtl" : "ltr"}>
       <div className={`max-w-md w-full p-8 rounded-[2.5rem] border ${darkMode ? 'bg-[#0a0a0a] border-white/5' : 'bg-white border-black/5 shadow-2xl'}`}>
         
         <div className="text-center mb-10">
-          <div className="w-16 h-16 bg-[#61b408] rounded-2xl flex items-center justify-center mx-auto mb-4 rotate-3 shadow-[0_0_20px_#86FE0566]">
+          <div className="w-16 h-16 bg-red-700 rounded-2xl flex items-center justify-center mx-auto mb-4 rotate-3 ">
             <LogIn size={30} className="text-black" />
           </div>
           <h1 className="text-3xl font-black uppercase italic tracking-tighter">
-            {isRTL ? "تسجيل" : "Client"} <span className="text-[#61b408]">{isRTL ? "الدخول" : "Login"}</span>
+            {isRTL ? "تسجيل" : "Client"} <span className="text-red-700">{isRTL ? "الدخول" : "Login"}</span>
           </h1>
           <p className="text-gray-500 font-bold mt-2 text-sm">{isRTL ? "ادخل لمتابعة تسوقك في VESTRO" : "Enter your details to continue"}</p>
         </div>
@@ -91,7 +91,7 @@ export default function LoginPage() {
 
           <button 
             disabled={loading}
-            className="w-full bg-[#69c20a] text-black font-black py-5 rounded-2xl uppercase hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_#86FE0533]"
+            className="w-full bg-red-700 text-black font-black py-5 rounded-2xl uppercase hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 "
           >
             {loading ? <Loader2 className="animate-spin" /> : (
               <>
@@ -103,9 +103,9 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-8 text-center border-t border-white/5 pt-6">
-          <p className="text-gray-500 font-bold text-sm">
+          <p className="text-red-700 font-bold text-sm">
             {isRTL ? "ليس لديك حساب؟" : "Don't have an account?"} {" "}
-            <Link to="/register" className="text-[#61b408] hover:underline">
+            <Link to="/register" className="text-redd-700 hover:underline">
               {isRTL ? "إنشاء حساب جديد" : "Create one now"}
             </Link>
           </p>

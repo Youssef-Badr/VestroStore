@@ -44,7 +44,7 @@ const handleClaimFromDetails = () => {
       <div 
         className={`group relative rounded-[2.5rem] overflow-hidden transition-all duration-500 border ${
           darkMode 
-            ? "bg-[#0A0A0A] border-white/5 hover:border-[#86FE05]/20 shadow-2xl shadow-black" 
+            ? "bg-[#0A0A0A] border-white/5 hover:border-red-700 shadow-2xl shadow-black" 
             : "bg-white border-slate-100 hover:border-black/10 shadow-sm"
         }`}
         dir={isAr ? "rtl" : "ltr"}
@@ -77,14 +77,14 @@ const handleClaimFromDetails = () => {
             {/* السطر ده هو اللي فيه التعديل: العنوان والتفاصيل في سطر واحد */}
             <div className="flex justify-between items-start gap-4 mb-2">
               <h3 className={`text-xl font-black uppercase italic tracking-tighter leading-tight ${darkMode ? "text-white" : "text-slate-900"}`}>
-                {bundle.name}<span className="text-[#86FE05]">.</span>
+                {bundle.name}<span className="text-red-800">.</span>
               </h3>
               
               <button 
                 onClick={() => setIsDetailsOpen(true)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all duration-300 ${
                   darkMode 
-                    ? "bg-white/5 border-white/10 text-gray-400 hover:text-[#86FE05] hover:border-[#86FE05]/30 hover:bg-[#86FE05]/5" 
+                    ? "bg-white/5 border-white/10 text-gray-400 hover:text-red-800 hover:border-red-800 hover:bg-[#86FE05]/5" 
                     : "bg-black/5 border-black/5 text-gray-600 hover:text-black hover:border-black/20 hover:bg-black/5"
                 }`}
               >
@@ -108,10 +108,10 @@ const handleClaimFromDetails = () => {
           <div className="flex flex-col gap-3">
             <button
               onClick={() => handleAction('add_to_cart')}
-              className={`w-full py-4 rounded-2xl font-black text-[18px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${
+              className={`w-full py-4 rounded-2xl font-black text-[18px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all border bg-red-700 ${
                 darkMode 
-                  ? "border-white/10 text-white hover:bg-white hover:text-black" 
-                  : "border-black/10 text-black hover:bg-black hover:text-white"
+                  ? "border-white/10 text-white hover:bg-red-600 hover:text-black" 
+                  : "border-black/10 text-black hover:bg-red-600 hover:text-white"
               }`}
             >
               <ShoppingBag size={16} />

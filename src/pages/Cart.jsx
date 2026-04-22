@@ -65,7 +65,7 @@ const CartPage = () => {
     ? "bg-[#0A0A0A] border-white/5"
     : "bg-white border-gray-200";
   const neonButton =
-    "bg-black text-white dark:bg-white dark:text-black hover:shadow-[0_0_30px_#86FE05] hover:scale-[1.02]";
+    "bg-black text-white dark:bg-white dark:text-black  hover:scale-[1.02]";
 
  return (
     <div
@@ -98,11 +98,11 @@ const CartPage = () => {
         </div>
 
         {cart.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 rounded-[3rem] border border-dashed border-white/10 bg-white/5 backdrop-blur-sm">
+          <div className="flex flex-col items-center justify-center py-10 rounded-[3rem] border border-dashed border-white/10 bg-white/5 backdrop-blur-sm">
             <div className="mb-8 opacity-20">
               <ShoppingBag size={80} strokeWidth={1} />
             </div>
-            <p className="text-xl font-black uppercase italic tracking-widest opacity-40 mb-10">
+            <p className="text-xl font-black uppercase  tracking-widest opacity-40 mb-10">
               {translations.emptyCart}
             </p>
             <Link
@@ -122,7 +122,7 @@ const CartPage = () => {
                 return (
                   <div
                     key={itemId}
-                    className={`${cardBg} border p-4 rounded-[2.5rem] flex flex-col sm:flex-row items-center gap-6 group transition-all duration-300 hover:border-[#86FE05]/30 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.3)]`}
+                    className={`${cardBg} border p-4 rounded-[2.5rem] flex flex-col sm:flex-row items-center gap-6 group transition-all duration-300 hover:border-red-700 `}
                   >
                     {/* 1. قسم الصورة (توزيع ديناميكي للباندل أو منتج عادي) */}
                     <div className="relative overflow-hidden rounded-[1.5rem] w-32 h-44 flex-shrink-0 bg-gray-100 dark:bg-[#111] shadow-inner border border-white/5">
@@ -142,7 +142,7 @@ const CartPage = () => {
 
                           {/* عداد الصور الإضافية في حالة أكثر من 4 منتجات */}
                           {item.bundleItems.length > 4 && (
-                            <div className="absolute bottom-0 right-0 bg-black/80 backdrop-blur-sm text-[#86FE05] text-[10px] font-black w-1/2 h-1/2 flex items-center justify-center border-t border-l border-white/10">
+                            <div className="absolute bottom-0 right-0 bg-black/80 backdrop-blur-sm text-red-800 text-[10px] font-black w-1/2 h-1/2 flex items-center justify-center border-t border-l border-white/10">
                               +{item.bundleItems.length - 4}
                             </div>
                           )}
@@ -157,7 +157,7 @@ const CartPage = () => {
 
                       {/* شارة الباندل */}
                       {item.isBundle && (
-                        <div className="absolute top-2 left-2 z-10 bg-white text-black  text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-xl">
+                        <div className="absolute top-2 left-2 z-10 bg-red-700  text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-xl">
                           Bundle
                         </div>
                       )}
@@ -177,7 +177,7 @@ const CartPage = () => {
                             <div className="flex flex-col gap-1.5 mt-1">
                               {item.bundleItems.map((bItem, i) => (
                                 <div key={i} className="flex items-center gap-2 group/item">
-                                  <span className="w-1 h-1 rounded-full bg-[#86FE05] group-hover/item:scale-150 transition-transform"></span>
+                                  <span className="w-1 h-1 rounded-full bg-red-700 group-hover/item:scale-150 transition-transform"></span>
                                   <p className="text-[10px] font-bold uppercase tracking-tight text-gray-500 dark:text-gray-400">
                                     {bItem.name}: <span className="text-gray-900 dark:text-white">{bItem.color}</span> / <span className="text-black dark:text-white">{bItem.size}</span>
                                   </p>
@@ -198,7 +198,7 @@ const CartPage = () => {
                       </div>
 
                       {/* السعر */}
-                      <p className="text-2xl font-black text-black dark:text-white italic mt-4">
+                      <p className="text-2xl font-black text-black dark:text-white  mt-4">
                         {item.price.toLocaleString()} 
                         <span className="text-[10px] not-italic font-bold opacity-40 uppercase ml-1">EGP</span>
                       </p>
@@ -214,12 +214,12 @@ const CartPage = () => {
                         >
                           <Minus size={16} />
                         </button>
-                        <span className="w-10 text-center font-black text-xl italic tabular-nums">
+                        <span className="w-10 text-center font-black text-xl  tabular-nums">
                           {item.qty}
                         </span>
                         <button
                           onClick={() => handleUpdateQty(item, item.qty + 1)}
-                          className="p-2 hover:bg-[#6bca06] hover:text-black rounded-xl transition-all active:scale-90"
+                          className="p-2 hover:bg-red-700 hover:text-black rounded-xl transition-all active:scale-90"
                         >
                           <Plus size={16} />
                         </button>
@@ -242,7 +242,7 @@ const CartPage = () => {
               <div
                 className={`${cardBg} border p-10 rounded-[2.5rem] sticky top-32 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.5)]`}
               >
-                <h2 className="text-xl font-black italic uppercase tracking-widest mb-10 border-b border-white/5 pb-6">
+                <h2 className="text-xl font-black  uppercase tracking-widest mb-10 border-b border-white/5 pb-6">
                   {isRTL ? "ملخص الحساب" : "Checkout"}
                 </h2>
 
@@ -269,7 +269,7 @@ const CartPage = () => {
                 <div className="space-y-4">
                   <Link
                     to="/checkout"
-                    className={`w-full flex items-center justify-center gap-3 py-6 rounded-[1.5rem] font-black uppercase text-xs tracking-widest transition-all ${neonButton}`}
+                    className={`w-full flex items-center bg-red-700 justify-center gap-3 py-6 rounded-[1.5rem] font-black uppercase text-xs tracking-widest transition-all ${neonButton}`}
                   >
                     <Zap size={18} fill="currentColor" />{" "}
                     {translations.checkout}
@@ -277,7 +277,7 @@ const CartPage = () => {
 
                   <button
                     onClick={handleClearCart}
-                    className="w-full py-4 text-[15px] font-black uppercase tracking-[0.2em]  hover:opacity-100 hover:text-red-500 transition-all"
+                    className="w-full py-4 text-[15px] font-black uppercase  hover:opacity-100 hover:text-red-500 transition-all"
                   >
                     {translations.clearCart}
                   </button>

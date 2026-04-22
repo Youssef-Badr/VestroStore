@@ -44,7 +44,7 @@ const ThankYou = () => {
   if (loading) {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
-        <div className="w-12 h-12 border-4 border-[#86FE05]/20 border-t-[#86FE05] rounded-full animate-spin mb-4"></div>
+        <div className="w-12 h-12 border-4 border-red-800 border-t-red-700 rounded-full animate-spin mb-4"></div>
         <p className="font-black italic uppercase tracking-widest text-[10px]">Loading Success...</p>
       </div>
     );
@@ -53,7 +53,7 @@ const ThankYou = () => {
   if (!order) return (
     <div className={`min-h-screen flex flex-col items-center justify-center gap-4 ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
        <p>{isRTL ? "الطلب غير موجود" : "Order not found"}</p>
-       <button onClick={() => navigate("/")} className="px-6 py-2 bg-[#86FE05] text-black font-bold rounded-full text-xs">HOME</button>
+       <button onClick={() => navigate("/")} className="px-6 py-2 bg-red-700 text-black font-bold rounded-full text-xs">HOME</button>
     </div>
   );
 
@@ -65,7 +65,7 @@ const ThankYou = () => {
         <div className="flex justify-between items-center m-8">
             <button 
               onClick={() => navigate("/")} 
-              className={`flex items-center gap-2 uppercase text-[14px] font-black tracking-[0.2em] transition-all ${darkMode ? 'text-gray-500 hover:text-[#86FE05]' : 'text-gray-400 hover:text-black'}`}
+              className={`flex items-center gap-2 uppercase text-[14px] font-black tracking-[0.2em] transition-all ${darkMode ? 'text-gray-500 hover:text-red-700' : 'text-gray-400 hover:text-black'}`}
             >
               {isRTL ? <MoveRight size={18} /> : <MoveLeft size={18} />}
               {isRTL ? "الرئيسية" : "Back to Home"}
@@ -74,12 +74,12 @@ const ThankYou = () => {
         </div>
 
         {/* Hero Success Card */}
-        <div className={`relative overflow-hidden mb-8 p-8 rounded-[40px] border transition-all ${darkMode ? 'bg-[#0A0A0A] border-white/5 shadow-2xl shadow-[#86FE05]/5' : 'bg-white border-gray-100 shadow-xl'}`}>
+        <div className={`relative overflow-hidden mb-8 p-8 rounded-[40px] border transition-all ${darkMode ? 'bg-[#0A0A0A] border-white/5 shadow-2xl ' : 'bg-white border-gray-100 shadow-xl'}`}>
           {/* Decorative Gradient Background */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#86FE05]/10 blur-[100px] -z-10 rounded-full"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-red-800 blur-[100px] -z-10 rounded-full"></div>
           
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-start">
-            <div className="w-20 h-20 bg-[#6cca08] rounded-3xl flex items-center justify-center rotate-3 shadow-[0_10px_40px_rgba(134,254,5,0.3)] shrink-0">
+            <div className="w-20 h-20 bg-red-700 rounded-3xl flex items-center justify-center rotate-3  shrink-0">
               <CheckCircle size={40} className="text-black stroke-[3px]" />
             </div>
             <div>
@@ -126,7 +126,7 @@ const ThankYou = () => {
             
             <div className="flex justify-between items-center">
               {item.isBundle ? (
-                <span className="text-[13px] bg-[#86FE05]/10 text-[#5dac08] px-2 py-1 rounded-md font-black uppercase tracking-widest">
+                <span className="text-[13px]  text-red-700 px-2 py-1 rounded-md font-black uppercase tracking-widest">
                   {isRTL ? "عرض توفيري" : "SAVE BUNDLE"}
                 </span>
               ) : (
@@ -177,10 +177,10 @@ const ThankYou = () => {
         </span>
       </div>
       <div className="flex justify-between items-center text-[12px] font-black">
-        <span className="text-[#71d506] uppercase tracking-tighter text-[15px]">
+        <span className="text-red-700 uppercase tracking-tighter text-[15px]">
           {isRTL ? "سعر العرض الحالي:" : "Final Bundle Price:"}
         </span>
-        <span className="text-[#64ba07] italic animate-pulse text-[15px]">
+        <span className="text-red-700 italic animate-pulse text-[15px]">
           {item.price * item.quantity} EGP
         </span>
       </div>
@@ -208,7 +208,7 @@ const ThankYou = () => {
 
           {/* Checkout Summary Sidebar */}
           <div className="lg:col-span-5 space-y-6">
-            <div className={`rounded-[40px] p-8 border sticky top-24 transition-all overflow-hidden ${darkMode ? 'bg-white text-black border-transparent shadow-2xl shadow-[#86FE05]/20' : 'bg-black text-white border-white/10 shadow-xl'}`}>
+            <div className={`rounded-[40px] p-8 border sticky top-24 transition-all overflow-hidden ${darkMode ? 'bg-white text-black border-transparent shadow-2xl shadow-red-800' : 'bg-black text-white border-white/10 shadow-xl'}`}>
               
               <h3 className="text-[15px] font-black uppercase tracking-[0.3em] mb-8">{isRTL ? "ملخص الدفع" : "Payment Summary"}</h3>
               
@@ -224,7 +224,7 @@ const ThankYou = () => {
                 {discount > 0 && (
                   <div className={`flex justify-between items-center ${darkMode ? 'text-red-600' : 'text-red-400'}`}>
                     <span className="uppercase tracking-widest text-[9px]">{isRTL ? "الخصم" : "Discount"}</span>
-                    <span className="font-black italic">-{discount} EGP</span>
+                    <span className="font-black italic">-{Math.round(discount)} EGP</span>
                   </div>
                 )}
                 
@@ -233,7 +233,7 @@ const ThankYou = () => {
                       <p className="text-[15px] uppercase tracking-[0.3em] opacity mb-1">{isRTL ? "الإجمالي النهائي" : "Total Amount"}</p>
                       <p className="text-[11px] uppercase font-black px-2 py-1 bg-black/5 rounded-md inline-block">{order.paymentMethod}</p>
                   </div>
-                  <span className="text-4xl tracking-tighter leading-none font-black italic">{total}<span className="text-sm ml-1">EGP</span></span>
+                  <span className="text-4xl tracking-tighter leading-none font-black italic">{Math.round(total)}<span className="text-sm ml-1">EGP</span></span>
                 </div>
               </div>
             </div>
@@ -248,13 +248,6 @@ const ThankYou = () => {
                >
                  <MessageCircle size={18}/> {isRTL ? "  يمكنك التحدث إلي الدعم متي شئت" : "Contact Support"}
                </a>
-
-               {/* <button 
-                onClick={() => navigate("/orders")} 
-                className={`flex items-center justify-center gap-3 py-5 rounded-[25px] text-[11px] font-black uppercase tracking-[0.2em] transition-all ${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}
-               >
-                 {isRTL ? "تتبع طلباتك" : "Track Orders"} <ExternalLink size={16}/>
-               </button> */}
             </div>
           </div>
 
