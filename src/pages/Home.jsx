@@ -46,30 +46,33 @@ const MarqueeScroller = React.memo(
       }
     };
 
-    // 🎯 Auto Scroll Engine
-    useEffect(() => {
-      const el = containerRef.current;
-      if (!el) return;
+   useEffect(() => {
+  const el = containerRef.current;
+  if (!el) return;
 
-      const baseSpeed = direction === "right" ? 0.7 : -0.7;
+  const isMobile = window.innerWidth < 768;
 
-      const animate = () => {
-        if (!isPaused) {
-          el.scrollLeft += baseSpeed + velocityRef.current;
+  const baseSpeed = direction === "right"
+    ? (isMobile ? 1.2 : 0.7)
+    : (isMobile ? -1.2 : -0.7);
 
-          velocityRef.current *= 0.96;
+  const animate = () => {
+    if (!isPaused) {
+      el.scrollLeft += baseSpeed + velocityRef.current;
 
-          handleInfiniteLoop(); // 🔥 أهم سطر
-        }
+      // 🔥 inertia أقوى
+      velocityRef.current *= isMobile ? 0.98 : 0.96;
 
-        rafRef.current = requestAnimationFrame(animate);
-      };
+      handleInfiniteLoop();
+    }
 
-      rafRef.current = requestAnimationFrame(animate);
+    rafRef.current = requestAnimationFrame(animate);
+  };
 
-      return () => cancelAnimationFrame(rafRef.current);
-    }, [isPaused, direction]);
+  rafRef.current = requestAnimationFrame(animate);
 
+  return () => cancelAnimationFrame(rafRef.current);
+}, [isPaused, direction]);
     // ⏸️ Pause / Resume
     const pause = () => {
       setIsPaused(true);
@@ -91,44 +94,46 @@ const MarqueeScroller = React.memo(
     };
 
     const onTouchMove = (e) => {
-      const x = e.touches[0].clientX;
-      const dx = lastTouchX.current - x;
+  const x = e.touches[0].clientX;
+  const dx = lastTouchX.current - x;
 
-      const now = Date.now();
-      const dt = now - lastTime.current;
+  const now = Date.now();
+  const dt = now - lastTime.current;
 
-      velocityRef.current = (dx / dt) * 1.8;
+  // 🔥 حساسية أعلى بكتير
+  velocityRef.current = (dx / dt) * 3;
 
-      const el = containerRef.current;
-      el.scrollLeft += dx;
+  const el = containerRef.current;
 
-      handleInfiniteLoop(); // 🔥 يخلي السحب لا نهائي
+  // 🔥 حركة أقوى
+  el.scrollLeft += dx * 1.3;
 
-      lastTouchX.current = x;
-      lastTime.current = now;
-    };
+  handleInfiniteLoop();
+
+  lastTouchX.current = x;
+  lastTime.current = now;
+};
 
     const onTouchEnd = () => {
       resume();
     };
 
-    // 👉 الأسهم
-    const scrollManual = (offset) => {
-      pause();
+  const scrollManual = (offset) => {
+  pause();
 
-      const el = containerRef.current;
+  const el = containerRef.current;
 
-      el.scrollBy({
-        left: offset,
-        behavior: "smooth",
-      });
+  el.scrollBy({
+    left: offset * 1.5, // 🔥 أسرع
+    behavior: "smooth",
+  });
 
-      setTimeout(() => {
-        handleInfiniteLoop(); // 🔥 مهم
-      }, 300);
+  setTimeout(() => {
+    handleInfiniteLoop();
+  }, 300);
 
-      resume();
-    };
+  resume();
+};
 
     if (!scrollItems.length) return null;
 
@@ -295,7 +300,7 @@ export default function Home() {
     bg-slate-300 text-black
     dark:bg-white dark:text-black
 
-    hover:shadow-[0_0_25px_rgba(103,190,10,0.6)]
+    hover:shadow-red-700]
   "
 >
   <span className="inline-flex items-center gap-2">
@@ -386,10 +391,12 @@ export default function Home() {
           {/* Image */}
           {cat.image?.url && (
             <img
-              src={cat.image.url}
-              alt={cat.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            />
+  src={cat.image.url.replace("/upload/", "/upload/f_auto,q_auto,w_400/")}
+  alt={cat.name}
+  loading="lazy"
+  decoding="async"
+  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+/>
           )}
 
           {/* Overlay */}

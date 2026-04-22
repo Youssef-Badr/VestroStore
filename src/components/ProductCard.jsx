@@ -183,6 +183,7 @@ function ProductCard({ product }) {
   const productId = product._id || product.id;
   const defaultImageUrl =
     "https://via.placeholder.com/600x800?text=Vestro+Product";
+    
 
   const isSoldOut = useMemo(() => {
     if (!product.variants || product.variants.length === 0)
@@ -316,10 +317,15 @@ function ProductCard({ product }) {
         >
           {/* الصورة الحالية */}
           <img
-            src={allImages[currentImageIndex]?.url || defaultImageUrl}
-            alt={product.name}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100"
-          />
+  src={
+    (allImages[currentImageIndex]?.url || defaultImageUrl)
+      ?.replace("/upload/", "/upload/f_auto,q_auto,w_800/")
+  }
+  alt={product.name}
+  loading="eager"
+  decoding="async"
+  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100"
+/>
 
           {/* الصورة اللي بعدها */}
           {allImages.length > 1 && (
