@@ -97,7 +97,7 @@ const BundlesPage = () => {
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 bg-black/5 dark:bg-white text-black dark:text-black px-6 py-2.5 pt-3 rounded-full mb-5 text-[14px] font-black uppercase  border border-black/5 dark:border-[#86FE05]/20 shadow-sm"
+            className="inline-flex items-center gap-2 mt-2 bg-black/5 dark:bg-white text-black dark:text-black px-6 py-2.5 rounded-full mb-5 text-[14px] font-black uppercase  border border-black/5 dark:border-[#86FE05]/20 shadow-sm"
           >
             <LayoutGrid size={10} />
             {isRTL ? 'عروض فيسترو الحصرية' : 'Vestro Limited Offers'}

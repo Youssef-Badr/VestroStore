@@ -59,7 +59,7 @@ export default function AnnouncementBar() {
         {marqueeItems.map((a, index) => (
           <div key={index} className="flex items-center">
             <span
-              className={`mx-10 font-black text-[10px] uppercase italic ${
+              className={`mx-10 font-black text-[10px] uppercase  ${
                 darkMode ? "text-black" : "text-white"
               }`}
             >
