@@ -86,7 +86,7 @@ const MarqueeScroller = React.memo(({ products, direction = "right", darkMode })
         onScroll={onScroll}
         className="overflow-x-auto no-scrollbar flex gap-4 px-6 scroll-smooth"
         style={{
-          scrollSnapType: "x mandatory",
+          scrollSnapType: "x none",
           WebkitOverflowScrolling: "touch",
           scrollBehavior: "smooth",
         }}
