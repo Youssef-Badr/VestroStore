@@ -175,7 +175,7 @@ const [showSocial, setShowSocial] = useState(false);
             dir="ltr" 
             className="font-black text-xl md:text-2xl flex items-center gap-1               "
           >
-            <span className={darkMode ? "text-white" : "text-black"}>VESTRO STORE</span>
+            <span className={darkMode ? "text-white" : "text-black"}>VESTRO </span>
             {/* <span className="text-red-800">STORE</span> */}
           </Link>
 

@@ -449,7 +449,7 @@ createPortal (
              setIsDirectBuy(true);
 setShowVariantSelector(true);
             }}
-            className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
+            className="w-full mt-2 bg-black dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
           >
             <Zap size={14} className="fill-current" />
             {isRTL ? "اشتري الآن" : "Buy Now"}
