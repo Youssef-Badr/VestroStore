@@ -214,7 +214,8 @@ function ProductCard({ product }) {
         )}
 
        {/* ✅ Gorilla Style Variant Selector Modal */}
-{showVariantSelector && createPortal (
+{showVariantSelector && 
+createPortal (
   <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300">
     {/* Backdrop */}
     <div
@@ -372,7 +373,8 @@ function ProductCard({ product }) {
         </button>
       </div>
     </div>
-  </div>
+  </div>,
+  document.body // 🔥 أهم سطر
 )}
 
         {isSoldOut && (
