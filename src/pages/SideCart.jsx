@@ -205,14 +205,13 @@ export default function SideCart() {
   const isRTL = language === "ar";
 
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-
   const getId = (item) => (item.isBundle ? item.uniqueId : item.variantId);
 
   return (
     <AnimatePresence>
       {isCartOpen && (
         <>
-          {/* الخلفية المظلمة */}
+          {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -221,147 +220,180 @@ export default function SideCart() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
           />
 
-          {/* جسم الكارت */}
+          {/* Drawer */}
           <motion.div
             initial={{ x: isRTL ? "100%" : "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: isRTL ? "100%" : "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} h-full w-[85%] sm:w-full max-w-md z-[1000] shadow-2xl flex flex-col
+            className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} h-full w-[85%] max-w-md z-[1000]
+              flex flex-col shadow-2xl overflow-hidden
               ${darkMode ? "bg-zinc-950 text-white" : "bg-white text-black"}`}
             dir={isRTL ? "rtl" : "ltr"}
           >
-            {/* Header */}
-            <div className="p-6 border-b border-zinc-800/10 flex items-center justify-between">
+
+            {/* HEADER */}
+            <div className="p-5 border-b border-zinc-800/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ShoppingBag size={24} />
-                <h2 className="text-xl font-black uppercase">
-                  {isRTL ? "سلة التسوق" : "Your Cart"}
+                <ShoppingBag size={22} />
+                <h2 className="text-lg font-black uppercase">
+                  {isRTL ? "السلة" : "Cart"}
                 </h2>
               </div>
-              <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-zinc-500/10 rounded-full">
-                <X size={24} />
+
+              <button
+                onClick={() => setIsCartOpen(false)}
+                className="p-2 rounded-full hover:bg-zinc-500/10"
+              >
+                <X size={20} />
               </button>
             </div>
 
-            {/* محتويات السلة */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-6">
+            {/* BODY */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
+
               {cart.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
-                  <ShoppingBag size={60} className="text-zinc-500 opacity-20" />
-                  <div className="space-y-2">
-                    <p className="text-zinc-500 font-bold uppercase text-sm">
-                      {isRTL ? "السلة فارغة حالياً" : "Your cart is empty"}
-                    </p>
-                    <Link
-                      to="/products"
-                      onClick={() => setIsCartOpen(false)}
-                      className="flex items-center gap-2 text-black dark:text-white font-black uppercase text-xs border-b-2 border-red-800 pb-1 mx-auto w-fit"
-                    >
-                      {isRTL ? "اذهب للتسوق" : "Go Shopping"}
-                      <ArrowRight size={14} className={isRTL ? "rotate-180" : ""} />
-                    </Link>
-                  </div>
+                <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
+                  <ShoppingBag size={50} className="opacity-20" />
+                  <p className="text-sm text-zinc-500 font-bold">
+                    {isRTL ? "السلة فارغة" : "Cart is empty"}
+                  </p>
+
+                  <Link
+                    to="/products"
+                    onClick={() => setIsCartOpen(false)}
+                    className="text-xs font-bold border-b border-red-700"
+                  >
+                    {isRTL ? "ابدأ التسوق" : "Start Shopping"}
+                  </Link>
                 </div>
               ) : (
                 cart.map((item) => {
                   const itemId = getId(item);
+
                   return (
-                    <div key={itemId} className="flex gap-3 items-start w-full border-b border-zinc-500/5 pb-4">
-                      {/* 1. قسم الصورة */}
-                      <div className="w-20 h-24 bg-zinc-100 dark:bg-zinc-900 rounded-xl overflow-hidden flex-shrink-0 border border-zinc-800/10 relative">
+                    <div
+                      key={itemId}
+                      className="flex gap-3 border-b border-zinc-500/10 pb-4"
+                    >
+
+                      {/* IMAGE */}
+                      <div className="w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 border border-zinc-800/10">
                         {item.isBundle ? (
-                          <div className={`grid h-full w-full gap-0.5 ${item.bundleItems.length === 2 ? "grid-cols-1" : "grid-cols-2"}`}>
-                            {item.bundleItems.slice(0, 4).map((bItem, index) => (
-                              <img key={index} src={bItem.image} className="w-full h-full object-cover" alt="" />
+                          <div className="grid grid-cols-2 gap-[2px] h-full w-full">
+                            {item.bundleItems.slice(0, 4).map((b, i) => (
+                              <img
+                                key={i}
+                                src={b.image}
+                                className="w-full h-full object-cover"
+                              />
                             ))}
                           </div>
                         ) : (
-                          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                          <img
+                            src={item.image}
+                            className="w-full h-full object-cover"
+                          />
                         )}
                       </div>
 
-                      {/* 2. قسم التفاصيل - هنا السر في منع السكرول */}
-                      <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch">
+                      {/* DETAILS */}
+                      <div className="flex-1 min-w-0 flex flex-col justify-between">
+
                         <div className="space-y-1">
-                          <h3 className="font-black text-sm uppercase leading-tight break-words">
+                          <h3 className="text-sm font-bold break-words">
                             {item.name}
                           </h3>
-                          
+
                           {item.isBundle ? (
                             <div className="space-y-0.5">
-                               {item.bundleItems.map((b, i) => (
-                                 <p key={i} className="text-[10px] text-zinc-500 font-bold break-words">
-                                   • {b.name} ({b.size})
-                                 </p>
-                               ))}
+                              {item.bundleItems.map((b, i) => (
+                                <p
+                                  key={i}
+                                  className="text-[10px] text-zinc-500 break-words"
+                                >
+                                  • {b.name} ({b.size})
+                                </p>
+                              ))}
                             </div>
                           ) : (
-                            <p className="text-xs text-zinc-500 font-bold">
+                            <p className="text-xs text-zinc-500">
                               {item.color} / {item.size}
                             </p>
                           )}
                         </div>
 
-                        {/* التحكم في الكمية والسعر */}
-                        <div className="flex items-center justify-between mt-auto pt-2">
-                          <div className="flex items-center border border-zinc-800/10 rounded-lg overflow-hidden">
-                            <button 
-                              onClick={() => updateQty(itemId, item.qty - 1)} 
+                        {/* ACTIONS */}
+                        <div className="flex items-center justify-between mt-2">
+
+                          {/* qty */}
+                          <div className="flex items-center border rounded-md overflow-hidden">
+                            <button
+                              onClick={() => updateQty(itemId, item.qty - 1)}
                               disabled={item.qty <= 1}
-                              className="p-1 px-2 hover:bg-zinc-500/10 disabled:opacity-20"
+                              className="px-2 py-1 disabled:opacity-30"
                             >
-                              <Minus size={12}/>
+                              <Minus size={12} />
                             </button>
-                            <span className="px-2 text-xs font-bold">{item.qty}</span>
-                            <button 
-                              onClick={() => updateQty(itemId, item.qty + 1)} 
-                              className="p-1 px-2 hover:bg-zinc-500/10"
+
+                            <span className="px-2 text-xs font-bold">
+                              {item.qty}
+                            </span>
+
+                            <button
+                              onClick={() => updateQty(itemId, item.qty + 1)}
+                              className="px-2 py-1"
                             >
-                              <Plus size={12}/>
+                              <Plus size={12} />
                             </button>
                           </div>
-                          <p className="font-black text-sm">{item.price.toLocaleString()} EGP</p>
+
+                          {/* price */}
+                          <span className="text-sm font-black">
+                            {item.price.toLocaleString()} EGP
+                          </span>
                         </div>
+
                       </div>
 
-                      {/* 3. زر الحذف */}
-                      <button 
-                        onClick={() => removeFromCart(itemId)} 
-                        className="text-red-500 p-1 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors flex-shrink-0 self-start"
+                      {/* DELETE */}
+                      <button
+                        onClick={() => removeFromCart(itemId)}
+                        className="text-red-500 self-start p-1"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
+
                     </div>
                   );
                 })
               )}
             </div>
 
-            {/* Footer */}
+            {/* FOOTER */}
             {cart.length > 0 && (
-              <div className="p-6 border-t border-zinc-800/10 space-y-4 bg-zinc-50/50 dark:bg-zinc-900/30">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-zinc-500">{isRTL ? "المجموع الفرعي" : "Subtotal"}</span>
-                  <span className="text-2xl font-black">{totalPrice.toLocaleString()} EGP</span>
+              <div className="p-5 border-t border-zinc-800/10 space-y-3">
+
+                <div className="flex justify-between">
+                  <span className="text-sm text-zinc-500">
+                    {isRTL ? "الإجمالي" : "Total"}
+                  </span>
+                  <span className="text-xl font-black">
+                    {totalPrice.toLocaleString()} EGP
+                  </span>
                 </div>
-                <Link 
-                  to="/checkout" 
+
+                <Link
+                  to="/checkout"
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full bg-black text-white dark:text-black dark:bg-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-red-800 transition-all uppercase text-sm"
+                  className="w-full bg-black text-white py-3 rounded-xl text-sm font-bold text-center block"
                 >
-                  {isRTL ? "إتمام الطلب" : "Checkout Now"}
-                  <ArrowRight size={18} className={isRTL ? "rotate-180" : ""} />
+                  {isRTL ? "إتمام الطلب" : "Checkout"}
                 </Link>
-                <Link 
-                  to="/cart" 
-                  onClick={() => setIsCartOpen(false)}
-                  className="w-full block text-center text-[13px] font-black uppercase text-zinc-500 hover:text-red-800"
-                >
-                  {isRTL ? "عرض السلة بالكامل" : "View Full Cart"}
-                </Link>
+
               </div>
             )}
+
           </motion.div>
         </>
       )}
