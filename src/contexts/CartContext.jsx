@@ -3,7 +3,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-
+import { fbqTrack } from "../utils/fbq";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -89,7 +89,7 @@ export const CartProvider = ({ children }) => {
         return [...prev, newItem];
       }
     });
-    fbq("track", "AddToCart", {
+    fbqTrack("track", "AddToCart", {
   content_ids: [product._id],
   content_name: product.name,
   content_type: "product",
@@ -150,7 +150,7 @@ export const CartProvider = ({ children }) => {
       }
     });
 
-fbq("track", "AddToCart", {
+fbqTrack("track", "AddToCart", {
   content_ids: [bundle._id],
   content_name: bundle.name,
   content_type: "product_group",
