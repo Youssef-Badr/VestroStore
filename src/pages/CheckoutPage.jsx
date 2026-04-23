@@ -26,6 +26,7 @@ const { darkMode } = useTheme();
   const [discountError, setDiscountError] = useState(""); // لمسح رسائل الخطأ
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 const [nameError, setNameError] = useState("");
+const [baseShippingCost, setBaseShippingCost] = useState(0);  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -127,112 +128,230 @@ const normalizePhone = (value) => {
     .replace(/[^0-9]/g, "");
 };
 
-  // 🔄 معالجة التغييرات في الحقول
-  const handleChange = async (e) => {
-    const { name, value } = e.target;
+ // 🔄 معالجة التغييرات في الحقول
+const handleChange = async (e) => {
+  const { name, value } = e.target;
 
-    if (name === "city") {
-      setFormData((prev) => ({ ...prev, city: value, district: "", bostaDistrictId: "" }));
-      const cityData = citiesList.find((c) => c._id === value);
+  if (name === "city") {
+    setFormData((prev) => ({
+      ...prev,
+      city: value,
+      district: "",
+      bostaDistrictId: "",
+    }));
 
-      if (cityData) {
-        setShippingCost(cityData.charge);
-        setSelectedCityObj(cityData);
-        try {
-          const res = await api.get(`/districts/${cityData.bostaCityId}`);
-          setDistricts(res.data);
-        } catch (err) {
-          setDistricts([]);
-          toast.error(isRTL ? "تعذر تحميل الأحياء" : "Could not load districts");
-        }
-      } else {
-        setShippingCost(0);
-        setSelectedCityObj(null);
-        setDistricts([]);
-      }
-      return;
-    }
+    const cityData = citiesList.find((c) => c._id === value);
 
-    if (name === "district") {
-      const selected = districts.find(d => String(d.bostaDistrictId) === String(value));
-      if (selected) {
-        setFormData(prev => ({
-          ...prev,
-          district: selected.nameAr,
-          bostaDistrictId: String(value),
-        }));
-      } else {
-        setFormData(prev => ({ ...prev, district: "", bostaDistrictId: "" }));
-      }
-      return;
-    }  
+    if (cityData) {
+      // =========================
+      // 🔥 الشحن الأساسي الحقيقي
+      // =========================
+      setShippingCost(cityData.charge);
+      setBaseShippingCost(cityData.charge);
 
-   if (name === "phone" || name === "secondaryPhone") {
-  setFormData((prev) => ({
-    ...prev,
-    [name]: normalizePhone(value).slice(0, 11), // 🔥 تحويل + limit
-  }));
-} else {
-  setFormData((prev) => ({ ...prev, [name]: value }));
-}
-  };
-
-  // 🎫 التحقق من الكود (متوافق مع منطق validateDiscount الجديد)
-  const validateDiscount = async (codeToValidate, isCheckout = true) => {
-    const code = codeToValidate || formData.discountCode;
-    setDiscountError("");
-
-    if (!code || code.trim() === "") {
+      // =========================
+      // 🔥 reset أي خصم شحن
+      // =========================
       setDiscountInfo(null);
-      return;
-    }
+      setIsDiscountApplied(false);
 
-    try {
-      const res = await api.post("/discounts/validate", {
-        code: code.trim(),
-        orderItems: cart.map((item) => ({
-          product: item.product || item._id, // تأكد من إرسال ID المنتج فقط
-          quantity: item.qty|| item.quantity,
-        })),
-shippingPrice: discountInfo?.freeShippingApplied ? 0 : shippingCost      });
+      setSelectedCityObj(cityData);
 
-      if (res.data.valid) {
-      setDiscountInfo(res.data);
-      
-      // ✅ إظهار التوست (الرسالة)
-      toast.success(isRTL ? "تم تطبيق الخصم بنجاح! 🔥" : "Discount applied! 🔥", {
-     style: {
-  borderRadius: '20px',
-  background: '#0A0A0A',
-  color: '#ffffff',
-  border: '1px solid #dc2626',
-}
-      });
-
-      // لو الكود جاي من المودال، اقفله بعد النجاح
-      if (showDiscountModal) setShowDiscountModal(false);
-    }
-
-    if (res.data.freeShippingApplied) {
-  setShippingCost(0);
-}
-  } catch (err) {
-    const msg = err.response?.data?.message || (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
-    setDiscountInfo(null); 
-    setDiscountError(msg);
-    
-    // ❌ توست الخطأ
-    toast.error(msg, {
-      style: {
-        borderRadius: '20px',
-        background: '#fff',
-        color: '#ff0000',
-        fontWeight: 'bold'
+      try {
+        const res = await api.get(
+          `/districts/${cityData.bostaCityId}`
+        );
+        setDistricts(res.data);
+      } catch (err) {
+        setDistricts([]);
+        toast.error(
+          isRTL
+            ? "تعذر تحميل الأحياء"
+            : "Could not load districts"
+        );
       }
-    });
+    } else {
+      setShippingCost(0);
+      setBaseShippingCost(0);
+      setSelectedCityObj(null);
+      setDistricts([]);
+    }
+
+    return;
+  }
+
+  if (name === "district") {
+    const selected = districts.find(
+      (d) => String(d.bostaDistrictId) === String(value)
+    );
+
+    if (selected) {
+      setFormData((prev) => ({
+        ...prev,
+        district: selected.nameAr,
+        bostaDistrictId: String(value),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        district: "",
+        bostaDistrictId: "",
+      }));
+    }
+
+    return;
+  }
+
+  if (name === "phone" || name === "secondaryPhone") {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: normalizePhone(value).slice(0, 11),
+    }));
+  } else {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
 };
+//   // 🎫 التحقق من الكود (متوافق مع منطق validateDiscount الجديد)
+//   const validateDiscount = async (codeToValidate, isCheckout = true) => {
+//     const code = codeToValidate || formData.discountCode;
+//     setDiscountError("");
 
+//     if (!code || code.trim() === "") {
+//       setDiscountInfo(null);
+//       return;
+//     }
+
+//     try {
+//       const res = await api.post("/discounts/validate", {
+//         code: code.trim(),
+//         orderItems: cart.map((item) => ({
+//           product: item.product || item._id, // تأكد من إرسال ID المنتج فقط
+//           quantity: item.qty|| item.quantity,
+//         })),
+// shippingPrice: discountInfo?.freeShippingApplied ? 0 : shippingCost      });
+
+//       if (res.data.valid) {
+//       setDiscountInfo(res.data);
+      
+      
+//       // ✅ إظهار التوست (الرسالة)
+//       toast.success(isRTL ? "تم تطبيق الخصم بنجاح! 🔥" : "Discount applied! 🔥", {
+//      style: {
+//   borderRadius: '20px',
+//   background: '#0A0A0A',
+//   color: '#ffffff',
+//   border: '1px solid #dc2626',
+// }
+//       });
+
+//       // لو الكود جاي من المودال، اقفله بعد النجاح
+//       if (showDiscountModal) setShowDiscountModal(false);
+//     }
+
+//     if (res.data.freeShippingApplied) {
+//   setShippingCost(0);
+// }
+//   } catch (err) {
+//     const msg = err.response?.data?.message || (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
+//     setDiscountInfo(null); 
+//     setDiscountError(msg);
+    
+//     // ❌ توست الخطأ
+//     toast.error(msg, {
+//       style: {
+//         borderRadius: '20px',
+//         background: '#fff',
+//         color: '#ff0000',
+//         fontWeight: 'bold'
+//       }
+//     });
+//   }
+// };
+const validateDiscount = async (codeToValidate, isCheckout = true) => {
+  const code = codeToValidate || formData.discountCode;
+  setDiscountError("");
+
+  if (!code || code.trim() === "") {
+    setDiscountInfo(null);
+    setIsDiscountApplied(false);
+    setShippingCost(baseShippingCost); // 🔥 reset
+    return false;
+  }
+
+  try {
+    const res = await api.post("/discounts/validate", {
+      code: code.trim(),
+      orderItems: cart.map((item) => ({
+        product: item.product || item._id,
+        quantity: item.qty || item.quantity,
+      })),
+      shippingPrice: baseShippingCost, // 🔥 ابعت الأصل مش المتغير
+    });
+
+    // ❌ لو الكود غير صالح
+    if (!res.data.valid) {
+      setDiscountInfo(null);
+      setIsDiscountApplied(false);
+      setShippingCost(baseShippingCost);
+      return false;
+    }
+
+    // =========================
+    // ✅ SUCCESS CASE
+    // =========================
+    setDiscountInfo(res.data);
+    setIsDiscountApplied(true);
+    setDiscountError("");
+
+    // 🔥 أهم جزء: reset الأول
+    setShippingCost(baseShippingCost);
+
+    // لو فيه شحن مجاني
+    if (res.data.freeShippingApplied) {
+      setShippingCost(0);
+    }
+
+    toast.success(
+      isRTL ? "تم تطبيق الخصم بنجاح! 🔥" : "Discount applied! 🔥",
+      {
+        style: {
+          borderRadius: "20px",
+          background: "#0A0A0A",
+          color: "#ffffff",
+          border: "1px solid #dc2626",
+        },
+      }
+    );
+
+    if (showDiscountModal) setShowDiscountModal(false);
+
+    return true;
+
+  } catch (err) {
+    const msg =
+      err.response?.data?.message ||
+      (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
+
+    setDiscountInfo(null);
+    setIsDiscountApplied(false);
+    setShippingCost(baseShippingCost); // 🔥 reset مهم جداً
+    setDiscountError(msg);
+
+    toast.error(msg, {
+      style: {
+        borderRadius: "20px",
+        background: "#fff",
+        color: "#ff0000",
+        fontWeight: "bold",
+      },
+    });
+
+    return false;
+  }
+};
 
 const scrollToError = () => {
   // بنستنى لحظة عشان الـ React يلحق يضيف كلاسات الخطأ للـ DOM
@@ -252,40 +371,33 @@ const scrollToError = () => {
     }
   }, 150); // زودنا الوقت شوية لـ 150ms للتأكيد
 };
-
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
 
   try {
-    // 1. فحص العربة
     if (cart.length === 0) {
       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
       setLoading(false);
-      return; // العربة فارغة مش محتاجة سكرول غالباً لأنها توست
+      return;
     }
 
-    // 2. فحص الاسم (الثنائي)
     const nameParts = formData.name.trim().split(/\s+/);
     if (nameParts.length < 2) {
       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
       setLoading(false);
-      scrollToError(); // <--- سكرول لمكان اسم العميل
+      scrollToError();
       return;
     }
 
-
-
-    // 3. فحص رقم الهاتف
     const phoneRegex = /^(010|011|012|015)\d{8}$/;
     if (!formData.phone || !phoneRegex.test(formData.phone)) {
       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
       setLoading(false);
-      scrollToError(); // <--- سكرول لمكان الموبايل
+      scrollToError();
       return;
     }
 
-    // 4. فحص الهاتف الإضافي
     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
       setLoading(false);
@@ -293,43 +405,57 @@ const handleSubmit = async (e) => {
       return;
     }
 
-    // 5. فحص البيانات الأساسية (العنوان والمحافظة)
     if (!formData.city || !formData.bostaDistrictId || !formData.address) {
       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
       setLoading(false);
-      scrollToError(); // <--- سكرول لمكان العنوان
+      scrollToError();
       return;
     }
 
-    // --- تكملة الكود (تجهيز الـ orderItems والبيانات) ---
+    // =========================
+    // ORDER ITEMS
+    // =========================
     const orderItems = cart.map((item) => {
       const actualId = item.bundle || item.product || item._id || item.id;
-      return item.isBundle ? {
-        bundle: actualId,
-        isBundle: true,
-        quantity: item.qty,
-        bundleItems: item.bundleItems.map((bi) => ({
-          product: bi.productId || bi.product || bi._id,
-          variantId: bi.variantId,
-          name: bi.name, size: bi.size, color: bi.color
-        })),
-      } : {
-        product: actualId,
-        variantId: item.variantId,
-        quantity: item.qty,
-        color: item.color, size: item.size, price: item.price
-      };
+
+      return item.isBundle
+        ? {
+            bundle: actualId,
+            isBundle: true,
+            quantity: item.qty,
+            bundleItems: item.bundleItems.map((bi) => ({
+              product: bi.productId || bi.product || bi._id,
+              variantId: bi.variantId,
+              name: bi.name,
+              size: bi.size,
+              color: bi.color,
+            })),
+          }
+        : {
+            product: actualId,
+            variantId: item.variantId,
+            quantity: item.qty,
+            color: item.color,
+            size: item.size,
+            price: item.price,
+          };
     });
 
     const token = localStorage.getItem("token");
+
     const commonData = {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
       secondaryPhone: formData.secondaryPhone,
+
       shippingAddress: {
         city: formData.city,
-        cityName: selectedCityObj ? (isRTL ? selectedCityObj.cityAr : selectedCityObj.cityEn) : "",
+        cityName: selectedCityObj
+          ? isRTL
+            ? selectedCityObj.cityAr
+            : selectedCityObj.cityEn
+          : "",
         district: formData.district,
         address: formData.address,
         buildingNumber: formData.buildingNumber,
@@ -339,8 +465,9 @@ const handleSubmit = async (e) => {
         bostaCityId: selectedCityObj?.bostaCityId || "",
         bostaDistrictId: formData.bostaDistrictId,
       },
+
       paymentMethod: formData.paymentMethod,
-      orderItems: orderItems,
+      orderItems,
       discountCode: discountInfo?.valid ? formData.discountCode : null,
       buildingNumber: formData.buildingNumber,
       floor: formData.floor,
@@ -348,16 +475,21 @@ const handleSubmit = async (e) => {
     };
 
     let res;
+
     if (formData.paymentMethod === "card") {
-      res = await api.post("/orders", commonData, { headers: { Authorization: `Bearer ${token}` } });
+      res = await api.post("/orders", commonData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       if (res.data.paymentURL) {
         clearCart();
         window.location.href = res.data.paymentURL;
       }
     } else {
       const payload = new FormData();
-      Object.keys(commonData).forEach(key => {
-        if (key === 'shippingAddress' || key === 'orderItems') {
+
+      Object.keys(commonData).forEach((key) => {
+        if (key === "shippingAddress" || key === "orderItems") {
           payload.append(key, JSON.stringify(commonData[key]));
         } else if (commonData[key]) {
           payload.append(key, commonData[key]);
@@ -365,7 +497,10 @@ const handleSubmit = async (e) => {
       });
 
       res = await api.post("/orders", payload, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       clearCart();
@@ -374,27 +509,177 @@ const handleSubmit = async (e) => {
     }
 
   } catch (error) {
-    toast.error(error.response?.data?.message || (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong"));
-    scrollToError(); // حتى لو الخطأ جاي من السيرفر، سكرول لأول مشكلة
+    toast.error(
+      error.response?.data?.message ||
+        (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
+    );
+    scrollToError();
   } finally {
     setLoading(false);
   }
 };
 
-const isFreeShipping = !!discountInfo?.freeShippingApplied;
+const isFreeShipping = shippingCost === 0 && discountInfo?.freeShippingApplied;
 
 const cartTotal = cart.reduce(
   (acc, item) => acc + item.price * item.qty,
   0
 );
 
-const totalDiscountAmount = Math.round(discountInfo?.discountAmount || 0);
-
-const totalWithDiscount = Math.round(
-  cartTotal +
-  (isFreeShipping ? 0 : shippingCost) -
-  totalDiscountAmount
+// خصم المنتجات فقط (بدون الشحن)
+const totalDiscountAmount = Math.round(
+  isFreeShipping ? 0 : (discountInfo?.discountAmount || 0)
 );
+
+// الشحن
+const effectiveShippingCost = isFreeShipping ? 0 : shippingCost;
+
+// الإجمالي النهائي
+const totalWithDiscount = Math.round(
+  cartTotal + effectiveShippingCost - totalDiscountAmount
+);
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   setLoading(true);
+
+//   try {
+//     // 1. فحص العربة
+//     if (cart.length === 0) {
+//       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
+//       setLoading(false);
+//       return; // العربة فارغة مش محتاجة سكرول غالباً لأنها توست
+//     }
+
+//     // 2. فحص الاسم (الثنائي)
+//     const nameParts = formData.name.trim().split(/\s+/);
+//     if (nameParts.length < 2) {
+//       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
+//       setLoading(false);
+//       scrollToError(); // <--- سكرول لمكان اسم العميل
+//       return;
+//     }
+
+
+
+//     // 3. فحص رقم الهاتف
+//     const phoneRegex = /^(010|011|012|015)\d{8}$/;
+//     if (!formData.phone || !phoneRegex.test(formData.phone)) {
+//       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
+//       setLoading(false);
+//       scrollToError(); // <--- سكرول لمكان الموبايل
+//       return;
+//     }
+
+//     // 4. فحص الهاتف الإضافي
+//     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
+//       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
+//       setLoading(false);
+//       scrollToError();
+//       return;
+//     }
+
+//     // 5. فحص البيانات الأساسية (العنوان والمحافظة)
+//     if (!formData.city || !formData.bostaDistrictId || !formData.address) {
+//       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
+//       setLoading(false);
+//       scrollToError(); // <--- سكرول لمكان العنوان
+//       return;
+//     }
+
+//     // --- تكملة الكود (تجهيز الـ orderItems والبيانات) ---
+//     const orderItems = cart.map((item) => {
+//       const actualId = item.bundle || item.product || item._id || item.id;
+//       return item.isBundle ? {
+//         bundle: actualId,
+//         isBundle: true,
+//         quantity: item.qty,
+//         bundleItems: item.bundleItems.map((bi) => ({
+//           product: bi.productId || bi.product || bi._id,
+//           variantId: bi.variantId,
+//           name: bi.name, size: bi.size, color: bi.color
+//         })),
+//       } : {
+//         product: actualId,
+//         variantId: item.variantId,
+//         quantity: item.qty,
+//         color: item.color, size: item.size, price: item.price
+//       };
+//     });
+
+//     const token = localStorage.getItem("token");
+//     const commonData = {
+//       name: formData.name,
+//       email: formData.email,
+//       phone: formData.phone,
+//       secondaryPhone: formData.secondaryPhone,
+//       shippingAddress: {
+//         city: formData.city,
+//         cityName: selectedCityObj ? (isRTL ? selectedCityObj.cityAr : selectedCityObj.cityEn) : "",
+//         district: formData.district,
+//         address: formData.address,
+//         buildingNumber: formData.buildingNumber,
+//         floor: formData.floor,
+//         apartment: formData.apartment,
+//         country: "Egypt",
+//         bostaCityId: selectedCityObj?.bostaCityId || "",
+//         bostaDistrictId: formData.bostaDistrictId,
+//       },
+//       paymentMethod: formData.paymentMethod,
+//       orderItems: orderItems,
+//       discountCode: discountInfo?.valid ? formData.discountCode : null,
+//       buildingNumber: formData.buildingNumber,
+//       floor: formData.floor,
+//       apartment: formData.apartment,
+//     };
+
+//     let res;
+//     if (formData.paymentMethod === "card") {
+//       res = await api.post("/orders", commonData, { headers: { Authorization: `Bearer ${token}` } });
+//       if (res.data.paymentURL) {
+//         clearCart();
+//         window.location.href = res.data.paymentURL;
+//       }
+//     } else {
+//       const payload = new FormData();
+//       Object.keys(commonData).forEach(key => {
+//         if (key === 'shippingAddress' || key === 'orderItems') {
+//           payload.append(key, JSON.stringify(commonData[key]));
+//         } else if (commonData[key]) {
+//           payload.append(key, commonData[key]);
+//         }
+//       });
+
+//       res = await api.post("/orders", payload, {
+//         headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+//       });
+
+//       clearCart();
+//       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
+//       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
+//     }
+
+//   } catch (error) {
+//     toast.error(error.response?.data?.message || (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong"));
+//     scrollToError(); // حتى لو الخطأ جاي من السيرفر، سكرول لأول مشكلة
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+// const isFreeShipping = !!discountInfo?.freeShippingApplied;
+
+// const cartTotal = cart.reduce(
+//   (acc, item) => acc + item.price * item.qty,
+//   0
+// );
+
+// const totalDiscountAmount = Math.round(discountInfo?.discountAmount || 0);
+
+// const totalWithDiscount = Math.round(
+//   cartTotal +
+//   (isFreeShipping ? 0 : shippingCost) -
+//   totalDiscountAmount
+// );
 
 //   // الحسابات النهائية
 //   const cartTotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -602,12 +887,24 @@ return (
             <div className="flex gap-2">
               <div className="relative flex-1 group">
                 <Tag size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700`} />
-                <input
-                  type="text" name="discountCode" value={formData.discountCode} 
-                  onChange={(e) => setFormData(p => ({...p, discountCode: e.target.value.toUpperCase()}))}
-                  placeholder={isRTL ? "أدخل الكود هنا" : "Enter Code"}
-                  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black text-slate-900 dark:text-red-700 uppercase`}
-                />
+               <input
+  type="text"
+  name="discountCode"
+  value={formData.discountCode}
+  onChange={(e) => {
+    setFormData(p => ({
+      ...p,
+      discountCode: e.target.value.toUpperCase()
+    }));
+
+    // 🔥 مهم جدًا: reset الحالة عند أي تغيير
+    setIsDiscountApplied(false);
+    setDiscountInfo(null);
+    setDiscountError("");
+  }}
+  placeholder={isRTL ? "أدخل الكود هنا" : "Enter Code"}
+  className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black text-slate-900 dark:text-red-700 uppercase`}
+/>
               </div>
              <button
   type="button"
@@ -623,7 +920,7 @@ return (
   disabled={isDiscountApplied}
   className={`px-6 rounded-[1.5rem] font-black uppercase text-xs transition-all ${
     isDiscountApplied
-      ? "bg-green-600 text-white cursor-not-allowed"
+      ? "bg-red-600 text-white cursor-not-allowed"
       : "bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-red-700 dark:hover:bg-red-700"
   }`}
 >
@@ -799,32 +1096,66 @@ return (
   </div>
 )}
 
-          {/* 💳 Payment Method */}
-          <section className="space-y-4">
-            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
-              {isRTL ? "طريقة الدفع" : "Payment Method"}
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div 
-                onClick={() => setFormData(p => ({...p, paymentMethod: 'cash'}))}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'cash' ? 'border-red-700 bg-red-700/10 ' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
-              >
-                <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-red-700' : 'text-slate-400'} />
-                <span className={`text-[10px] font-black uppercase   ${formData.paymentMethod === 'cash' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
-                  {isRTL ? "عند الاستلام" : "Cash"}
-                </span>
-              </div>
-              <div 
-                onClick={() => setFormData(p => ({...p, paymentMethod: 'card'}))}
-                className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === 'card' ? 'border-red-700 bg-red-700/10' : 'border-transparent bg-slate-50 dark:bg-[#111111]'}`}
-              >
-                <CreditCard size={28} className={formData.paymentMethod === 'card' ? 'text-red-700' : 'text-slate-400'} />
-                <span className={`text-[10px] font-black uppercase   ${formData.paymentMethod === 'card' ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
-                  {isRTL ? "فيزا / ماستر" : "Card"}
-                </span>
-              </div>
-            </div>
-          </section>
+       {/* 💳 Payment Method */}
+<section className="space-y-4">
+  <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
+    {isRTL ? "طريقة الدفع" : "Payment Method"}
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    {/* 💵 Cash */}
+    <div 
+      onClick={() => setFormData(p => ({...p, paymentMethod: 'cash'}))}
+      className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 
+      ${formData.paymentMethod === 'cash' 
+        ? 'border-red-700 bg-red-700/10' 
+        : 'border-transparent bg-slate-50 dark:bg-[#111111]'
+      }`}
+    >
+      <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-red-700' : 'text-slate-400'} />
+
+      <span className={`text-[10px] font-black uppercase 
+        ${formData.paymentMethod === 'cash' 
+          ? 'text-slate-900 dark:text-white' 
+          : 'text-slate-400'
+        }`}
+      >
+        {isRTL ? "عند الاستلام" : "Cash on Delivery"}
+      </span>
+    </div>
+
+    {/* 💳 Card (Disabled) */}
+    <div
+      onClick={() => {
+        toast.info(
+          isRTL
+            ? "الدفع الإلكتروني قيد التحديث حالياً 🔧"
+            : "Online payment is currently unavailable 🔧"
+        );
+      }}
+      className="relative p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 
+                 border-dashed border-red-400 bg-slate-50 dark:bg-[#111111] opacity-70"
+    >
+      <CreditCard size={28} className="text-slate-400" />
+
+      <span className="text-[10px] font-black uppercase text-slate-400">
+        {isRTL ? "فيزا / ماستر" : "Card / Visa"}
+      </span>
+
+      {/* ⚠️ Badge */}
+      <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-black px-2 py-[2px] rounded-full">
+        {isRTL ? " غير متاح حاليا للتحديث" : "OFF"}
+      </span>
+
+      {/* 🔒 Overlay hint */}
+      <span className="text-[9px] font-bold text-red-500 mt-1">
+        {isRTL ? "قيد التحديث" : "Coming soon"}
+      </span>
+    </div>
+
+  </div>
+</section>
 
          {/* 💎 Vestro Dynamic Discount Summary */}
 {discountInfo && (
