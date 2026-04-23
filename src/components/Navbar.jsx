@@ -174,7 +174,7 @@ const [showSocial, setShowSocial] = useState(false);
   to="/" 
   dir="ltr"
   className={`font-black text-2xl md:text-2xl flex items-center gap-1 transition-transform duration-300 ${
-    isRTL ? "-translate-x-4" : "translate-x-4"
+    isRTL ? "-translate-x-3" : "translate-x-3"
   }`}
 >
             <span className={darkMode ? "text-white" : "text-black"}>VESTRO </span>
@@ -396,7 +396,7 @@ const [showSocial, setShowSocial] = useState(false);
     <Link
       to={l.path}
       onClick={() => setMenuOpen(false)}
-      className="block text-2xl font-black   uppercase leading-tight py-3"
+      className="block text-xl font-black   uppercase leading-tight py-3"
     >
       {l.name}
     </Link>
