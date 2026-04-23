@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { useCart } from "../contexts/CartContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,9 @@ const { darkMode } = useTheme();
   const [discountError, setDiscountError] = useState(""); // لمسح رسائل الخطأ
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 const [nameError, setNameError] = useState("");
+const [cityError, setCityError] = useState("");
+const [districtError, setDistrictError] = useState("");
+const shippingSectionRef = useRef(null); // عشان السكرول
 const [baseShippingCost, setBaseShippingCost] = useState(0);  
   const [formData, setFormData] = useState({
     name: "",
@@ -357,6 +360,24 @@ const handleSubmit = async (e) => {
       return;
     }
 
+    let hasError = false;
+
+  if (!formData.city) {
+    setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
+    hasError = true;
+  }
+
+  if (!formData.bostaDistrictId) {
+    setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
+    hasError = true;
+  }
+
+  if (hasError) {
+    // السكرول اللي بيطلع العميل لمكان المشكلة
+    shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
     // =========================
     // ORDER ITEMS
     // =========================
@@ -614,49 +635,84 @@ return (
             </div>
           </section>
 
-          {/* 🚚 Section 2: Shipping */}
-          <section className="space-y-4">
-            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase  px-1">
-              {isRTL ? "عنوان الشحن" : "Shipping Address"}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <select
-                name="city" value={formData.city} onChange={handleChange} required
-                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
-              >
-                <option value="">{isRTL ? "المحافظة" : "Select City"}</option>
-                {citiesList.map((c) => (
-                  <option key={c._id} value={c._id}>{isRTL ? c.cityAr : c.cityEn}</option>
-                ))}
-              </select>
+       {/* 🚚 Section 2: Shipping */}
+<section ref={shippingSectionRef} className="space-y-4">
+  <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase px-1">
+    {isRTL ? "عنوان الشحن" : "Shipping Address"}
+  </h2>
+  
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {/* 🏙️ المحافظة */}
+    <div className="space-y-2">
+      <select
+        name="city" 
+        value={formData.city} 
+        onChange={(e) => {
+          handleChange(e);
+          if (cityError) setCityError(""); // مسح الخطأ عند الاختيار
+        }} 
+        required
+        className={`w-full p-4 bg-slate-50 dark:bg-[#111111] border ${cityError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none`}
+      >
+        <option value="">{isRTL ? "المحافظة" : "Select City"}</option>
+        {citiesList.map((c) => (
+          <option key={c._id} value={c._id}>{isRTL ? c.cityAr : c.cityEn}</option>
+        ))}
+      </select>
+      {cityError && (
+        <p className={`text-[11px] font-bold text-red-500 ${isRTL ? 'pr-4' : 'pl-4'} animate-pulse`}>
+          {cityError}
+        </p>
+      )}
+    </div>
 
-              <select
-                name="district" value={formData.bostaDistrictId} onChange={handleChange} required
-                className="w-full p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none"
-              >
-                <option value="">{isRTL ? "الحي / المنطقة" : "Select District"}</option>
-                {districts.map((d) => (
-                  <option key={d._id} value={d.bostaDistrictId}>{isRTL ? d.nameAr : (d.nameEn || d.nameAr)}</option>
-                ))}
-              </select>
-            </div>
+    {/* 🏘️ الحي / المنطقة */}
+    <div className="space-y-2">
+      <select
+        name="district" 
+        value={formData.bostaDistrictId} 
+        onChange={(e) => {
+          handleChange(e);
+          if (districtError) setDistrictError(""); // مسح الخطأ عند الاختيار
+        }} 
+        required
+        className={`w-full p-4 bg-slate-50 dark:bg-[#111111] border ${districtError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none`}
+      >
+        <option value="">{isRTL ? "الحي / المنطقة" : "Select District"}</option>
+        {districts.map((d) => (
+          <option key={d._id} value={d.bostaDistrictId}>{isRTL ? d.nameAr : (d.nameEn || d.nameAr)}</option>
+        ))}
+      </select>
+      {districtError && (
+        <p className={`text-[11px] font-bold text-red-500 ${isRTL ? 'pr-4' : 'pl-4'} animate-pulse`}>
+          {districtError}
+        </p>
+      )}
+    </div>
+  </div>
 
-            <div className="relative group">
-              <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700`} />
-              <input
-                type="text" name="address" required value={formData.address} onChange={handleChange}
-                autoComplete="new-address"
-                placeholder={isRTL ? "العنوان بالتفصيل (اسم الشارع / علامة مميزة)" : "Detailed Address"}
-                className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white`}
-              />
-            </div>
+  {/* 📍 العنوان بالتفصيل */}
+  <div className="relative group">
+    <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700`} />
+    <input
+      type="text" 
+      name="address" 
+      required 
+      value={formData.address} 
+      onChange={handleChange}
+      autoComplete="new-address"
+      placeholder={isRTL ? "العنوان بالتفصيل (اسم الشارع / علامة مميزة)" : "Detailed Address"}
+      className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white`}
+    />
+  </div>
 
-            <div className="grid grid-cols-3 gap-3">
-              <input type="text" name="buildingNumber" placeholder={isRTL ? "عمارة" : "Bldg"} value={formData.buildingNumber} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
-              <input type="text" name="floor" placeholder={isRTL ? "دور" : "Floor"} value={formData.floor} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
-              <input type="text" name="apartment" placeholder={isRTL ? "شقة" : "Apt"} value={formData.apartment} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
-            </div>
-          </section>
+  {/* 🏢 تفاصيل السكن */}
+  <div className="grid grid-cols-3 gap-3">
+    <input type="text" name="buildingNumber" placeholder={isRTL ? "عمارة" : "Bldg"} value={formData.buildingNumber} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
+    <input type="text" name="floor" placeholder={isRTL ? "دور" : "Floor"} value={formData.floor} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
+    <input type="text" name="apartment" placeholder={isRTL ? "شقة" : "Apt"} value={formData.apartment} onChange={handleChange} className="p-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-2xl outline-none text-center font-black text-slate-900 dark:text-white focus:border-red-700" />
+  </div>
+</section>
 
           {/* 🏷️ Discount Section */}
           <section className="space-y-3">

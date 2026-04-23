@@ -100,26 +100,23 @@ function ProductCard({ product }) {
     [addToCart, isRTL, product, isDirectBuy, navigate, resetSelector],
   );
 
-  const handleStepClick = (val) => {
-    const currentKey = optionKeys[currentStep];
-    const newFilters = { ...selectedFilters, [currentKey]: val };
-    if (currentStep < optionKeys.length - 1) {
-      setSelectedFilters(newFilters);
-      setCurrentStep(currentStep + 1);
-    } else {
-      const finalVariant = product.variants.find((variant) =>
-        Object.entries(newFilters).every(
-          ([key, value]) => variant.options[key] === value,
-        ),
-      );
-      if (finalVariant) handleSelectVariant(finalVariant);
-      else {
-        toast.error(isRTL ? "غير متوفر" : "Not available");
-        resetSelector();
-      }
-    }
-  };
+ 
+const handleStepClick = (val) => {
+  const currentKey = optionKeys[currentStep];
+  
+  // 1️⃣ تحديث الفلاتر المختارة فوراً
+  setSelectedFilters((prev) => ({
+    ...prev,
+    [currentKey]: val,
+  }));
 
+  // 2️⃣ الانتقال للخطوة التالية فقط إذا لم نكن في الخطوة الأخيرة
+  if (currentStep < optionKeys.length - 1) {
+    setCurrentStep((prev) => prev + 1);
+  } 
+  // لو إحنا في الخطوة الأخيرة، مش هنغير الـ currentStep 
+  // وبكده المقاس هيفضل ظاهر قدامه ومختار، ويقدر يدوس "تأكيد الطلب"
+};
   useEffect(() => {
     if (!isHovering || allImages.length <= 1) return;
 
@@ -288,22 +285,17 @@ createPortal (
         </div>
 
         {/* Options Grid */}
-        <div className="grid grid-cols-2 gap-3">
+<div className="grid grid-cols-2 gap-3">
           {availableOptionsForStep.map((val, idx) => {
             const currentOptionKey = optionKeys[currentStep];
+            const isSelected = selectedFilters[currentOptionKey] === val;
             const isColor = currentOptionKey === "Color" || currentOptionKey === "اللون";
 
-            // 🛠️ الحل: منطق فحص المتاح بناءً على الخطوات السابقة فقط
-            const isOptionAvailable = product.variants.some(v => {
-              const matchesCurrent = v.options[currentOptionKey] === val;
-              
-              // بنشيك بس على الفلاتر اللي تم اختيارها في الستيبس اللي "قبل" دي
-              const matchesPrev = optionKeys.slice(0, currentStep).every(key => {
-                return v.options[key] === selectedFilters[key];
-              });
-
-              return matchesCurrent && matchesPrev && v.stock > 0;
-            });
+           const isOptionAvailable = product.variants.some(v => {
+      const matchesCurrent = v.options[currentOptionKey] === val;
+      const matchesPrev = optionKeys.slice(0, currentStep).every(key => v.options[key] === selectedFilters[key]);
+      return matchesCurrent && matchesPrev && v.stock > 0;
+    });
 
             // جلب بيانات اللون والسعر
             const colorVariant = product.variants.find(v => v.options.Color === val);
@@ -319,13 +311,15 @@ createPortal (
               <button
                 key={idx}
                 disabled={!isOptionAvailable}
-                onClick={() => handleStepClick(val)}
-                className={`group relative flex flex-col items-start gap-2 p-3 rounded-xl border-2 transition-all duration-300 ${
-                  isOptionAvailable
-                    ? "border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 hover:border-black dark:hover:border-[#e1ffad]"
-                    : "opacity-40 cursor-not-allowed grayscale"
-                }`}
-              >
+              onClick={() => handleStepClick(val)}
+        className={`group relative flex flex-col items-start gap-2 p-3 rounded-xl border-2 transition-all duration-300 ${
+          isSelected
+            ? "border-red-600 bg-red-50 dark:bg-red-900/20" // ✅ شكل الزرار لما يتم اختياره
+            : isOptionAvailable
+              ? "border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 hover:border-black"
+              : "opacity-40 cursor-not-allowed grayscale"
+        }`}
+      >
                 {/* TOP SECTION */}
                 <div className="flex items-center gap-2">
                   {isColor ? (
@@ -363,15 +357,37 @@ createPortal (
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="p-4 bg-gray-50 dark:bg-white/5">
-        <button
-          onClick={resetSelector}
-          className="w-full py-3 text-[14px] font-black uppercase                  text-red-700 dark:hover:text-white transition-colors"
-        >
-          {isRTL ? "إلغاء العملية" : "Cancel Process"}
-        </button>
-      </div>
+{/* Footer */}
+<div className="p-4 bg-gray-50 dark:bg-white/5 flex gap-3">
+  <button onClick={resetSelector} className="flex-1 py-3 text-[13px] font-black uppercase text-gray-500">
+    {isRTL ? "إلغاء" : "Cancel"}
+  </button>
+
+  <button
+    onClick={() => {
+      // 1. نجيب الـ Variant اللي بيطابق كل الاختيارات
+      const finalVariant = product.variants.find((v) =>
+        optionKeys.every((key) => v.options[key] === selectedFilters[key])
+      );
+
+      if (finalVariant) {
+        handleSelectVariant(finalVariant); // دي بتعمل addToCart وبتروح للكارت أو التشيك أوت
+      } else {
+        toast.error(isRTL ? "برجاء اختيار المقاس واللون" : "Please select color and size");
+      }
+    }}
+    // ✅ الزرار مش هيتفعل (Disabled) غير لما كل الـ keys يكون ليها قيم مختارة
+    disabled={!optionKeys.every(key => selectedFilters[key])}
+    className={`flex-1 py-3 text-[14px] font-black uppercase rounded-xl transition-all ${
+      optionKeys.every(key => selectedFilters[key])
+        ? "bg-red-600 text-white hover:bg-red-700 shadow-lg active:scale-95"
+        : "bg-gray-300 dark:bg-white/10 text-gray-500 cursor-not-allowed"
+    }`}
+  >
+    {isRTL ? "تأكيد الطلب" : "Confirm Order"}
+  </button>
+</div>
+
     </div>
   </div>,
   document.body // 🔥 أهم سطر
