@@ -13,179 +13,145 @@ import api from "../../src/api/axiosInstance";
 import ProductCard from "../components/ProductCard";
 
 
-const MarqueeScroller = React.memo(
-  ({ products, direction = "right", darkMode }) => {
-    const containerRef = useRef(null);
+const MarqueeScroller = React.memo(({ products, direction = "right", darkMode }) => {
+  const containerRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const rafRef = useRef(null);
+  const velocityRef = useRef(0);
+  const lastTouchX = useRef(0);
+  const lastTime = useRef(0);
+  const resumeTimeout = useRef(null);
 
-    const [isPaused, setIsPaused] = useState(false);
+  // مضاعفة المنتجات لضمان اللانهاية
+  const scrollItems = useMemo(() => {
+    if (!products?.length) return [];
+    return [...products, ...products, ...products]; // 3 مرات لضمان تغطية السحب السريع
+  }, [products]);
 
-    const rafRef = useRef(null);
-    const velocityRef = useRef(0);
-    const lastTouchX = useRef(0);
-    const lastTime = useRef(0);
-    const resumeTimeout = useRef(null);
+  const handleInfiniteLoop = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    const half = el.scrollWidth / 3; // مقسوم على 3 لأننا كررنا المنتجات 3 مرات
 
-    const scrollItems = useMemo(() => {
-      if (!products?.length) return [];
-      return [...products, ...products];
-    }, [products]);
+    if (el.scrollLeft >= half * 2) {
+      el.scrollLeft -= half;
+    } else if (el.scrollLeft <= 0) {
+      el.scrollLeft += half;
+    }
+  };
 
-    // 🔁 Infinite Loop Fix
-    const handleInfiniteLoop = () => {
-      const el = containerRef.current;
-      if (!el) return;
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-      const half = el.scrollWidth / 2;
+    const baseSpeed = direction === "right" ? 0.7 : -0.7;
 
-      if (el.scrollLeft >= half) {
-        el.scrollLeft -= half;
+    const animate = () => {
+      if (!isPaused) {
+        el.scrollLeft += baseSpeed + velocityRef.current;
+        velocityRef.current *= 0.95; // تباطؤ السحب (Friction)
+        handleInfiniteLoop();
       }
-
-      if (el.scrollLeft <= 0) {
-        el.scrollLeft += half;
-      }
-    };
-
-    // 🎯 Auto Scroll Engine
-    useEffect(() => {
-      const el = containerRef.current;
-      if (!el) return;
-
-      const baseSpeed = direction === "right" ? 0.7 : -0.7;
-
-      const animate = () => {
-        if (!isPaused) {
-          el.scrollLeft += baseSpeed + velocityRef.current;
-
-          velocityRef.current *= 0.96;
-
-          handleInfiniteLoop(); // 🔥 أهم سطر
-        }
-
-        rafRef.current = requestAnimationFrame(animate);
-      };
-
       rafRef.current = requestAnimationFrame(animate);
-
-      return () => cancelAnimationFrame(rafRef.current);
-    }, [isPaused, direction]);
-
-    // ⏸️ Pause / Resume
-    const pause = () => {
-      setIsPaused(true);
-      clearTimeout(resumeTimeout.current);
     };
 
-    const resume = () => {
-      clearTimeout(resumeTimeout.current);
-      resumeTimeout.current = setTimeout(() => {
-        setIsPaused(false);
-      }, 3000);
-    };
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isPaused, direction]);
 
-    // 👆 Touch (Mobile)
-    const onTouchStart = (e) => {
-      pause();
-      lastTouchX.current = e.touches[0].clientX;
-      lastTime.current = Date.now();
-    };
+  const pause = () => { setIsPaused(true); clearTimeout(resumeTimeout.current); };
+  const resume = () => {
+    clearTimeout(resumeTimeout.current);
+    resumeTimeout.current = setTimeout(() => setIsPaused(false), 2000);
+  };
 
-    const onTouchMove = (e) => {
-      const x = e.touches[0].clientX;
-      const dx = lastTouchX.current - x;
+  // --- التحكم بالسحب (Touch) ---
+  const onTouchStart = (e) => {
+    pause();
+    lastTouchX.current = e.touches[0].clientX;
+    lastTime.current = Date.now();
+  };
 
-      const now = Date.now();
-      const dt = now - lastTime.current;
+  const onTouchMove = (e) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const x = e.touches[0].clientX;
+    const dx = lastTouchX.current - x; // المسافة اللي إيدك حركتها
+    
+    el.scrollLeft += dx; // تحريك فوري مع الإيد
+    handleInfiniteLoop();
 
-      velocityRef.current = (dx / dt) * 1.8;
+    const now = Date.now();
+    const dt = now - lastTime.current;
+    if (dt > 0) velocityRef.current = dx / dt * 10; // قوة الدفعة بعد ما تشيل إيدك
 
-      const el = containerRef.current;
-      el.scrollLeft += dx;
+    lastTouchX.current = x;
+    lastTime.current = now;
+  };
 
-      handleInfiniteLoop(); // 🔥 يخلي السحب لا نهائي
+  // --- التحكم بالأسهم (Card by Card) ---
+  const scrollManual = (dir) => {
+    pause();
+    const el = containerRef.current;
+    if (!el) return;
 
-      lastTouchX.current = x;
-      lastTime.current = now;
-    };
+    const cardWidth = el.querySelector('.product-card-container')?.offsetWidth || 300;
+    const gap = 16; // الـ gap-4 هي 16px
+    const offset = (cardWidth + gap) * (dir === "next" ? 1 : -1);
 
-    const onTouchEnd = () => {
+    el.scrollBy({ left: offset, behavior: "smooth" });
+    
+    setTimeout(() => {
+      handleInfiniteLoop();
       resume();
-    };
+    }, 500);
+  };
 
-    // 👉 الأسهم
-    const scrollManual = (offset) => {
-      pause();
+  if (!scrollItems.length) return null;
 
-      const el = containerRef.current;
+  return (
+    <div className="relative w-full py-5 group" dir="ltr">
+      {/* الأسهم - تظهر فقط عند الهوفر في الديسكتوب وتظهر دايماً في الموبايل */}
+      <button
+        onClick={() => scrollManual("prev")}
+        className={`absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-2xl transition-all active:scale-90
+        ${darkMode ? "bg-zinc-900 text-white border border-white/10" : "bg-white text-black border border-black/5"}`}
+      >
+        <ChevronLeft size={24} />
+      </button>
 
-      el.scrollBy({
-        left: offset,
-        behavior: "smooth",
-      });
+      <button
+        onClick={() => scrollManual("next")}
+        className={`absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-2xl transition-all active:scale-90
+        ${darkMode ? "bg-zinc-900 text-white border border-white/10" : "bg-white text-black border border-black/5"}`}
+      >
+        <ChevronRight size={24} />
+      </button>
 
-      setTimeout(() => {
-        handleInfiniteLoop(); // 🔥 مهم
-      }, 300);
-
-      resume();
-    };
-
-    if (!scrollItems.length) return null;
-
-    return (
-      <div className="relative w-full py-6" dir="ltr">
-
-        {/* ⬅️➡️ Arrows */}
-        <button
-          onClick={() => scrollManual(-300)}
-          className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-xl
-          ${darkMode
-              ? "bg-zinc-900/80 text-white"
-              : "bg-white/80 text-black"
-            }`}
-        >
-          <ChevronLeft />
-        </button>
-
-        <button
-          onClick={() => scrollManual(300)}
-          className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full shadow-xl
-          ${darkMode
-              ? "bg-zinc-900/80 text-white"
-              : "bg-white/80 text-black"
-            }`}
-        >
-          <ChevronRight />
-        </button>
-
-        {/* 🔥 SCROLLER */}
-        <div
-          ref={containerRef}
-          className="overflow-x-auto whitespace-nowrap scroll-smooth no-scrollbar"
-          onMouseEnter={pause}
-          onMouseLeave={resume}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-        >
-          <div className="inline-flex gap-4 px-3">
-            {scrollItems.map((product, index) => (
-              <div
-                key={`${product._id}-${index}`}
-                className="w-56 sm:w-64 md:w-72 flex-shrink-0"
-              >
-                <ProductCard
-                  product={product}
-                  onClick={(e) => e.stopPropagation()} // ✅ click من أول مرة
-                />
-              </div>
-            ))}
-          </div>
+      <div
+        ref={containerRef}
+        className="overflow-x-auto whitespace-nowrap no-scrollbar touch-pan-x"
+        onMouseEnter={pause}
+        onMouseLeave={resume}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={resume}
+        style={{ scrollBehavior: 'auto' }} // auto عشان السحب بالإيد ميكونش "ثقيل"
+      >
+        <div className="inline-flex gap-4 px-10">
+          {scrollItems.map((product, index) => (
+            <div
+              key={`${product._id}-${index}`}
+              className="product-card-container w-48 sm:w-72 md:w-80 flex-shrink-0 whitespace-normal"
+            >
+              <ProductCard product={product} />
+            </div>
+          ))}
         </div>
       </div>
-    );
-  }
-);
+    </div>
+  );
+});
 
 export default function Home() {
   const { language } = useLanguage();
@@ -233,11 +199,11 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen pt-24 transition-colors duration-500"
+      className="min-h-screen pt-20 md:pt-24 transition-colors duration-500"
       dir={isRTL ? "rtl" : "ltr"}
       style={{ backgroundColor: darkMode ? "#000000" : "#ffffff", color: darkMode ? "#ffffff" : "#000000" }}
     >
-      <div className="container mx-auto px-4 py-10 space-y-20">
+      <div className="container mx-auto px-4 py-10 space-y-5">
         
        
     <Suspense
@@ -253,7 +219,7 @@ export default function Home() {
           ? "border-red-700 bg-[#0a0a0a]"
           : "border-zinc-200 bg-white"
       }`}
-      style={{ height: "350px" }}
+      style={{ height: "300px" }}
     >
 
       {/* IMAGE */}
@@ -272,11 +238,11 @@ export default function Home() {
 
       {/* TEXT */}
 <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white -translate-y-8 md:-translate-y-12">
-        <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-3 ">
+        <h1 className="text-3xl md:text-7xl font-black    uppercase tracking-tighter mb-3 ">
           {isRTL ? hero.titleAr : hero.titleEn}
         </h1>
 
-        <p className="text-lg md:text-xl font-medium max-w-2xl opacity-90 uppercase tracking-widest">
+        <p className="text-xl md:text-xl font-medium max-w-2xl opacity-90 uppercase tracking-widest">
           {isRTL ? hero.subtitleAr : hero.subtitleEn}
         </p>
 
@@ -309,54 +275,39 @@ export default function Home() {
   )}
 </Suspense>
 
-        {/* --- Scroller Section --- */}
-        {!loading && allProducts.length > 0 && (
-          <div className="flex flex-col items-center w-full overflow-hidden">
-            <div className="w-full flex justify-between items-end px-4 mb-2">
-               <h3 className="text-2xl font-black uppercase tracking-tighter">
-                 {isRTL ? "اكتشف مجموعتنا" : "Explore Collection"}
-               </h3>
-            </div>
-            
-            <MarqueeScroller 
-              products={allProducts} 
-              direction={isRTL ? "right" : "left"} 
-              darkMode={darkMode}
-              isPaused={isPaused}
-              setIsPaused={setIsPaused}
-            />
-            
-           <motion.button
-  whileHover={{ scale: 1.1 }} // بيكبر أكتر شوية وقت الهوفر
-  whileTap={{ scale: 0.9 }}
-  
-  // --- الحركة المستمرة (Infinite Animation) ---
-  animate={{
-    y: [0, -8, 0], // بيطلع 8 بيكسل وينزل مكانه
-    boxShadow: darkMode 
-      ? ["0px 0px 0px #B91C1C", "0px 0px 20px #B91C1C", "0px 0px 0px #B91C1C"] // نبض ضوئي في الدارك مود
-      : ["0px 0px 0px rgba(0,0,0,0)", "0px 10px 20px rgba(0,0,0,0.1)", "0px 0px 0px rgba(0,0,0,0)"]
-  }}
- transition={{
-  duration: 6,   // ⬅️ بدل 3 = أبطأ وناعم
-  repeat: Infinity,
-  ease: "easeInOut"
-}}
-  // ------------------------------------------
-
-  onClick={() => navigate("/products")}
-  className={`mt-6 px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-sm  transition-all duration-300
-    ${darkMode ? " text-black bg-white hover:bg-red-600 " : "bg-black  text-white hover:bg-red-600 "}`}
->
-  {isRTL ? " تسوق كل المنتجات " : " Shop All Products"}
-</motion.button>
-          </div>
-        )}
+      {/* --- Scroller Section --- */}
+{!loading && allProducts.length > 0 && (
+  <div className="flex flex-col items-center w-full overflow-hidden">
+    <div className="w-full flex justify-between items-end px-6 mb-1">
+      <h3 className="text-2xl font-black uppercase tracking-tighter   ">
+        {isRTL ? "اكتشف مجموعتنا" : "Explore Collection"}
+      </h3>
+    </div>
+    
+    <MarqueeScroller 
+      products={allProducts} 
+      direction={isRTL ? "right" : "left"} 
+      darkMode={darkMode}
+      // شيلنا الـ isPaused من هنا عشان المكون بيدير نفسه داخلياً
+    />
+    
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      // ... باقي الـ props زي ما هي
+      onClick={() => navigate("/products")}
+      className={`mt-5 px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-lg transition-all duration-300
+        ${darkMode ? "text-black bg-white" : "bg-black text-white hover:bg-red-600"}`}
+    >
+      {isRTL ? "تسوق كل المنتجات" : "Shop All Products"}
+    </motion.button>
+  </div>
+)}
 
 {/* Categories Section */}
-<div className="py-10">
+<div className="py-5">
 
-  <div className="text-center mb-12">
+  <div className="text-center mb-8">
     <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
       {isRTL ? "الأقسام" : "Categories"}
     </h2>
@@ -375,7 +326,7 @@ export default function Home() {
             navigate(`/products/category/${cat.id || cat._id}`)
           }
           className={`
-            group relative h-44 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer 
+            group relative h-32 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer 
             border border-transparent hover:border-red-700
             transition-all duration-500 shadow-lg
 
@@ -398,7 +349,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center 
                           transition-colors duration-500 group-hover:bg-black/20 text-center">
 
-            <h3 className="text-white text-2xl md:text-4xl font-black uppercase italic tracking-tighter drop-shadow-2xl text-center">
+            <h3 className="text-white text-2xl md:text-4xl font-black uppercase    tracking-tighter drop-shadow-2xl text-center">
               {cat.name}
             </h3>
 
@@ -415,8 +366,8 @@ export default function Home() {
   </div>
 </div>
         {/* Featured Section */}
-        <div className="py-10">
-           <h2 className="text-4xl md:text-7xl font-black uppercase mb-12 italic">
+        <div className="pb-7">
+           <h2 className="text-4xl md:text-7xl font-black uppercase mb-12   ">
              {isRTL ? "منتجات مميزة" : "Featured Produts"}
            </h2>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

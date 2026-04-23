@@ -70,28 +70,28 @@ const CategoryPage = () => {
           onClick={() => navigate(-1)}
           className={`absolute top-0 ${
             isRTL ? "right-4" : "left-4"
-          } w-12 h-12 flex items-center justify-center rounded-full border border-zinc-800 transition-all`}
+          } w-8 h-8 flex items-center justify-center rounded-full border border-zinc-800 transition-all`}
         >
           {isRTL ? <ArrowRight /> : <ArrowLeft />}
         </motion.button>
 
         {/* Header Section */}
-        <header className="text-center mb-16 mt-6">
+        <header className="text-center mb-6 mt-6">
           <motion.span 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
-            className="text-black dark:text-white font-black text-3xl tracking-[0.3em] uppercase mb-2 block"
+            className="text-black  dark:text-white font-black text-xl tracking-[0.3em] uppercase mb-2 block"
           >
-            {isRTL ? "قسم" : "Collection"}
+            {/* {isRTL ? "قسم" : "Collection"} */}
           </motion.span>
-          <h1 className="text-5xl md:text-6xl font-black  uppercase tracking-tighter">
+          <h1 className="text-2xl md:text-6xl  font-black  uppercase tracking-tighter">
             {categoryData?.name || (isRTL ? "القسم" : "Category")}
           </h1>
         </header>
 
         {/* Content Section */}
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
             {products.map((p) => (
               <ProductCard key={p._id} product={p} />
             ))}

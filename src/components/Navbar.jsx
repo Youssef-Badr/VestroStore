@@ -32,7 +32,7 @@ import api from "../api/axiosInstance";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
 
-export default function Navbar() {
+export default function Navbar({onCartClick }) {
   const { darkMode, setDarkMode } = useTheme();
   const { language, setLanguage } = useLanguage();
   const isRTL = language === "ar";
@@ -350,7 +350,10 @@ const [showSocial, setShowSocial] = useState(false);
 
         <Link
   to="/cart"
-  onClick={() => setMenuOpen(false)}
+ onClick={() => {
+  setMenuOpen(false);
+  onCartClick?.(); // يقفل الـ offers
+}}
   className="relative z-[9999] w-9 h-9 sm:w-10 sm:h-10 rounded-xl border flex items-center justify-center"
 >
   <ShoppingCart size={18} />

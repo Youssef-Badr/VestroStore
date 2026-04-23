@@ -14,7 +14,6 @@ import { FiGift } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useTheme } from "./contexts/ThemeContext"; // تأكد من المسار
 import { useLanguage } from "./contexts/LanguageContext"; // تأكد من المسار
-
 // ✅ Lazy loading للصفحات
 const Home = lazy(() => import("./pages/Home"));
 const Products = lazy(() => import(/* webpackPrefetch: true */ "./pages/Products"));
@@ -37,14 +36,19 @@ const Policy = lazy(() => import("./pages/Policy"));
 function App() {
   // حالة فتح موديل العروض (أصبحت Global هنا)
   const [isOffersOpen, setIsOffersOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { darkMode } = useTheme();
   const { language } = useLanguage();
-
+const handleCartOpen = () => {
+  setIsOffersOpen(false); // يقفل الاوفرز
+  setIsCartOpen(true);    // يفتح السلة
+};
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-      <Layout>
+      <Layout onCartClick={handleCartOpen}>
         <ScrollToTop />
+
 
         <Suspense
           fallback={

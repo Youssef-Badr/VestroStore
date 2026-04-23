@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {
   useState,
   useRef,
@@ -10,142 +11,6 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 import { toast } from "react-toastify";
 import { ShoppingBag, Zap, ChevronLeft } from "lucide-react";
-
-// const getColorCode = (colorName) => {
-//   if (!colorName) return "transparent";
-
-//   // تنظيف النص من الهمزات والمسافات والحروف الزيادة عشان الدقة
-//   const normalize = (text) =>
-//     text
-//       .toLowerCase()
-//       .trim()
-//       .replace(/[أإآ]/g, "ا") // تحويل كل أنواع الألف لألف عادية
-//       .replace(/ة/g, "ه"); // تحويل التاء المربوطة لـ هاء
-
-//   const colors = {
-//     // --- الأبيض والأسود ---
-//     أبيض: "#FFFFFF",
-//     ابيض: "#FFFFFF",
-//     وايت: "#FFFFFF",
-//     white: "#FFFFFF",
-//     "اوف وايت": "#FAF9F6",
-//     "أوف وايت": "#FAF9F6",
-//     "off-white": "#FAF9F6",
-//     أسود: "#121212",
-//     اسود: "#121212",
-//     بلاك: "#121212",
-//     black: "#121212",
-//     فحمي: "#374151",
-//     charcoal: "#374151",
-
-//     // --- الرماديات ---
-//     رمادي: "#6b7280",
-//     رصاصي: "#6b7280",
-//     جراي: "#6b7280",
-//     gray: "#6b7280",
-//     grey: "#6b7280",
-//     فضي: "#d1d5db",
-//     سيلفر: "#d1d5db",
-//     silver: "#d1d5db",
-
-//     // --- الأحمر والنبيتي ---
-//     أحمر: "#e11d48",
-//     احمر: "#e11d48",
-//     red: "#e11d48",
-//     نبيتي: "#7f1d1d",
-//     مارون: "#7f1d1d",
-//     maroon: "#7f1d1d",
-//     بورجوندي: "#800020",
-//     طوبي: "#991b1b",
-//     brick: "#991b1b",
-
-//     // --- الأزرق والكحلي ---
-//     أزرق: "#2563eb",
-//     ازرق: "#2563eb",
-//     blue: "#2563eb",
-//     كحلي: "#1e3a8a",
-//     نيفي: "#1e3a8a",
-//     navy: "#1e3a8a",
-//     سماوي: "#0ea5e9",
-//     لبني: "#7dd3fc",
-//     "sky blue": "#7dd3fc",
-//     بترولي: "#005F69",
-//     petrol: "#005F69",
-
-//     // --- الأخضر والزيتي ---
-//     أخضر: "#16a34a",
-//     اخضر: "#16a34a",
-//     green: "#16a34a",
-//     زيتي: "#3f6212",
-//     زيتوني: "#3f6212",
-//     olive: "#3f6212",
-//     فسفوري: "#86FE05",
-//     فوسفوري: "#86FE05",
-//     neon: "#86FE05",
-//     منت: "#a7f3d0",
-//     مينت: "#a7f3d0",
-//     mint: "#a7f3d0",
-
-//     // --- الأصفر والبرتقالي ---
-//     أصفر: "#facc15",
-//     اصفر: "#facc15",
-//     yellow: "#facc15",
-//     برتقالي: "#ea580c",
-//     أورنج: "#ea580c",
-//     اورنج: "#ea580c",
-//     orange: "#ea580c",
-//     مستردة: "#ca8a04",
-//     خردلي: "#ca8a04",
-//     mustard: "#ca8a04",
-//     ذهبي: "#d4af37",
-//     جولد: "#d4af37",
-//     gold: "#d4af37",
-
-//     // --- البنيات والبيج ---
-//     بني: "#451a03",
-//     brown: "#451a03",
-//     شوكلت: "#451a03",
-//     بيج: "#f5f5dc",
-//     beige: "#f5f5dc",
-//     كريمي: "#fffdd0",
-//     cream: "#fffdd0",
-//     هافان: "#92400e",
-//     جملي: "#b45309",
-//     camel: "#b45309",
-//     كافيه: "#6F4E37",
-//     خاكي: "#bdb76b",
-//     khaki: "#bdb76b",
-
-//     // --- الموف والوردي ---
-//     بنفسجي: "#7c3aed",
-//     موف: "#7c3aed",
-//     purple: "#7c3aed",
-//     أرجواني: "#7c3aed",
-//     ارجواني: "#7c3aed",
-//     وردي: "#db2777",
-//     بينك: "#db2777",
-//     pink: "#db2777",
-//     بمبي: "#ff69b4",
-//     فوشيا: "#ff00ff",
-//     fuchsia: "#ff00ff",
-//     سيمون: "#FF8C69",
-//     salmon: "#FF8C69",
-
-//     // --- ألوان الموضة (Trendy) ---
-//     فيروزي: "#06b6d4",
-//     تركواز: "#06b6d4",
-//     turquoise: "#06b6d4",
-//     تيفاني: "#0ABAB5",
-//     tiffany: "#0ABAB5",
-//     ليموني: "#bef264",
-//     lime: "#bef264",
-//   };
-
-//   const normalizedInput = normalize(colorName);
-
-//   // لو المدخل كود لون (Hex) زي #000 سيبه زي ما هو، غير كدة دور في القائمة
-//   return colors[normalizedInput] || colorName;
-// };
 
 function ProductCard({ product }) {
   const { language } = useLanguage();
@@ -293,7 +158,7 @@ function ProductCard({ product }) {
       onMouseLeave={() => setIsHovering(false)}
       // ✅ الموبايل الحقيقي
       onTouchStart={() => setIsHovering(true)}
-      onTouchMove={() => setIsHovering(true)}
+      onTouchEnd={() => setIsHovering(true)}
       // onTouchEnd={() => setIsHovering(false)}
       onTouchCancel={() => setIsHovering(false)}
       onClick={(e) => {
@@ -303,7 +168,7 @@ function ProductCard({ product }) {
       }}
       className="group relative flex flex-col w-full bg-transparent transition-all duration-500"
     >
-      <div className="relative w-full aspect-[3/4] rounded-[2.2rem] sm:rounded-[2.8rem] overflow-hidden bg-gray-100 dark:bg-[#0F0F0F] border border-slate-200/60 dark:border-white/5 group-hover:border-black dark:group-hover:border-white transition-all duration-500 shadow-sm group-hover:shadow-xl text-center">
+      <div className="relative w-full aspect-[3/3.5] rounded-[2.2rem] sm:rounded-[2.8rem] overflow-hidden bg-gray-100 dark:bg-[#0F0F0F] border border-slate-200/60 dark:border-white/5 group-hover:border-black dark:group-hover:border-white transition-all duration-500 shadow-sm group-hover:shadow-xl text-center">
         <div
           onClick={(e) => {
             e.stopPropagation();
@@ -370,174 +235,166 @@ function ProductCard({ product }) {
           </button>
         )}
 
-        {/* ✅ Gorilla Style Variant Selector Modal */}
-        {showVariantSelector && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-            {/* Backdrop */}
+       {/* ✅ Gorilla Style Variant Selector Modal */}
+{showVariantSelector && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+    {/* Backdrop */}
+    <div
+      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      onClick={resetSelector}
+    />
+
+    {/* Modal Content */}
+    <div className="relative w-full max-w-md max-h-[90vh] overflow-hidden bg-white dark:bg-[#0A0A0A] rounded-[1.8rem] shadow-2xl flex flex-col animate-in zoom-in duration-300">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-white/5">
+        <div className="flex flex-col">
+          <h4 className="text-lg md:text-xl font-[900] text-red-600 uppercase tracking-tighter">
+            {isRTL ? "تخصيص الطلب" : "Customize"}
+          </h4>
+          <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate max-w-[180px]">
+            {product.name}
+          </p>
+        </div>
+
+        <button
+          onClick={resetSelector}
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/5 text-black dark:text-white hover:rotate-90 transition-transform"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* BODY */}
+      <div className="p-5 overflow-y-auto">
+        {/* Progress Bar */}
+        <div className="flex gap-1 mb-5">
+          {optionKeys.map((_, index) => (
             <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={resetSelector}
+              key={index}
+              className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                index <= currentStep
+                  ? "bg-red-600"
+                  : "bg-gray-100 dark:bg-white/10"
+              }`}
             />
+          ))}
+        </div>
 
-            {/* Modal Content */}
-            <div className="relative w-full max-w-md max-h-[90vh] overflow-hidden bg-white dark:bg-[#0A0A0A] rounded-[1.8rem] shadow-2xl flex flex-col animate-in zoom-in duration-300">
-              {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-white/5">
-                <div className="flex flex-col">
-                  <h4 className="text-lg md:text-xl font-[900] text-red-600 uppercase italic tracking-tighter">
-                    {isRTL ? "تخصيص الطلب" : "Customize"}
-                  </h4>
-                  <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate max-w-[180px]">
-                    {product.name}
-                  </p>
-                </div>
+        {/* Option Title & Back Button */}
+        <div className="mb-4 flex justify-between items-center">
+          <span className="text-[11px] font-black uppercase text-red-600">
+            {isRTL ? "اختر" : "Select"} {optionKeys[currentStep]}
+          </span>
 
-                <button
-                  onClick={resetSelector}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/5 text-black dark:text-white hover:rotate-90 transition-transform"
-                >
-                  ✕
-                </button>
-              </div>
+          {currentStep > 0 && (
+            <button
+              onClick={() => {
+                // 🛠️ الحل: نمسح الفلتر الحالي والفلتر اللي راجعين له عشان يصفر الاختيار
+                setSelectedFilters((prev) => {
+                  const updated = { ...prev };
+                  delete updated[optionKeys[currentStep]];     // مسح الحالي
+                  delete updated[optionKeys[currentStep - 1]]; // مسح اللي قبله
+                  return updated;
+                });
+                setCurrentStep(currentStep - 1);
+              }}
+              className="text-[14px] font-bold text-red-800 underline uppercase tracking-tighter"
+            >
+              {isRTL ? "الرجوع" : "Go Back"}
+            </button>
+          )}
+        </div>
 
-              {/* BODY */}
-              <div className="p-5 overflow-y-auto">
-                {/* Progress Bar */}
-                <div className="flex gap-1 mb-5">
-                  {optionKeys.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
-                        index <= currentStep
-                          ? "bg-red-600"
-                          : "bg-gray-100 dark:bg-white/10"
-                      }`}
-                    />
-                  ))}
-                </div>
+        {/* Options Grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {availableOptionsForStep.map((val, idx) => {
+            const currentOptionKey = optionKeys[currentStep];
+            const isColor = currentOptionKey === "Color" || currentOptionKey === "اللون";
 
-                {/* Option Title */}
-                <div className="mb-4 flex justify-between items-center">
-                  <span className="text-[11px] font-black uppercase text-red-600">
-                    {isRTL ? "اختر" : "Select"} {optionKeys[currentStep]}
-                  </span>
+            // 🛠️ الحل: منطق فحص المتاح بناءً على الخطوات السابقة فقط
+            const isOptionAvailable = product.variants.some(v => {
+              const matchesCurrent = v.options[currentOptionKey] === val;
+              
+              // بنشيك بس على الفلاتر اللي تم اختيارها في الستيبس اللي "قبل" دي
+              const matchesPrev = optionKeys.slice(0, currentStep).every(key => {
+                return v.options[key] === selectedFilters[key];
+              });
 
-                  {currentStep > 0 && (
-                    <button
-                      onClick={() => setCurrentStep(currentStep - 1)}
-                      className="text-[10px] font-bold  text-red-800 underline"
-                    >
-                      {isRTL ? "الرجوع" : "Go Back"}
-                    </button>
+              return matchesCurrent && matchesPrev && v.stock > 0;
+            });
+
+            // جلب بيانات اللون والسعر
+            const colorVariant = product.variants.find(v => v.options.Color === val);
+            const colorImage = colorVariant?.images?.[0]?.url || product.images?.[0]?.url;
+
+            // حساب أقل سعر متاح لهذا الخيار
+            const prices = product.variants
+              .filter(v => v.options[currentOptionKey] === val)
+              .map(v => v.price || product.price);
+            const lowestPrice = prices.length > 0 ? Math.min(...prices) : product.price;
+
+            return (
+              <button
+                key={idx}
+                disabled={!isOptionAvailable}
+                onClick={() => handleStepClick(val)}
+                className={`group relative flex flex-col items-start gap-2 p-3 rounded-xl border-2 transition-all duration-300 ${
+                  isOptionAvailable
+                    ? "border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 hover:border-black dark:hover:border-[#e1ffad]"
+                    : "opacity-40 cursor-not-allowed grayscale"
+                }`}
+              >
+                {/* TOP SECTION */}
+                <div className="flex items-center gap-2">
+                  {isColor ? (
+                    <>
+                      <div className="w-12 h-12 rounded-full overflow-hidden border border-black/10 shadow-sm">
+                        <img
+                          src={colorImage}
+                          className="w-full h-full object-cover"
+                          alt={val}
+                        />
+                      </div>
+                      <span className="text-[13px] font-black uppercase">{val}</span>
+                    </>
+                  ) : (
+                    <span className="text-[13px] font-black uppercase">{val}</span>
                   )}
                 </div>
 
- {/* Options */}
-<div className="grid grid-cols-2 gap-3">
+                {/* PRICE INFO */}
+                <span className="text-[9px] font-bold text-gray-500">
+                  {lowestPrice} EGP
+                </span>
 
-  {availableOptionsForStep.map((val, idx) => {
-
-    const isColor =
-      optionKeys[currentStep] === "Color" ||
-      optionKeys[currentStep] === "اللون";
-
-    const isOptionAvailable = product.variants.some(v => {
-      const matchesCurrent =
-        v.options[optionKeys[currentStep]] === val;
-
-      const matchesPrev = Object.entries(selectedFilters).every(
-        ([k, fv]) => v.options[k] === fv
-      );
-
-      return matchesCurrent && matchesPrev && v.stock > 0;
-    });
-
-    const colorVariant = product.variants.find(
-      v => v.options.Color === val
-    );
-
-    const colorImage =
-      colorVariant?.images?.[0]?.url ||
-      product.images?.[0]?.url;
-
-    const prices = product.variants
-      .filter(v => v.options.Color === val)
-      .map(v => v.price || product.price);
-
-    const lowestPrice =
-      prices.length > 0 ? Math.min(...prices) : product.price;
-
-    return (
-      <button
-        key={idx}
-        disabled={!isOptionAvailable}
-        onClick={() => handleStepClick(val)}
-        className={`group relative flex flex-col items-start gap-2 p-3 rounded-xl border-2 transition-all duration-300 ${
-          isOptionAvailable
-            ? "border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 hover:border-black dark:hover:border-[#86FE05]"
-            : "opacity-40 cursor-not-allowed grayscale"
-        }`}
-      >
-
-        {/* TOP SECTION */}
-        <div className="flex items-center gap-2">
-
-          {isColor ? (
-            <>
-              <div className="w-6 h-6 rounded-full overflow-hidden border border-black/10 shadow-sm">
-                <img
-                  src={colorImage}
-                  className="w-full h-full object-cover"
-                  alt={val}
-                />
-              </div>
-
-              <span className="text-[10px] font-black uppercase italic">
-                {val}
-              </span>
-            </>
-          ) : (
-            <span className="text-[11px] font-black uppercase italic">
-              {val}
-            </span>
-          )}
-
+                {/* OUT OF STOCK BADGE */}
+                {!isOptionAvailable && (
+                  <div className="absolute  left-12 top-12 flex items-center justify-center bg-white/5 dark:bg-black/60 rounded-xl">
+                    <span className="text-[11px] font-black bg-red-600 text-white px-2 py-1  rounded-sm rotate-12">
+                      {isRTL ? "نفذ" : "OUT"}
+                    </span>
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* PRICE */}
-        {isColor && (
-          <span className="text-[9px] font-bold text-gray-500">
-             {lowestPrice} EGP
-          </span>
-        )}
-
-        {/* OUT OF STOCK */}
-        {!isOptionAvailable && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-black/60 rounded-xl">
-            <span className="text-[11px] font-black bg-red-600 text-white px-2 py-1 rounded-sm">
-              {isRTL ? "نفذ" : "OUT"}
-            </span>
-          </div>
-        )}
-
-      </button>
-    );
-  })}
-</div>
-              </div>
-
-              {/* Footer */}
-              <div className="p-4 bg-gray-50 dark:bg-white/5">
-                <button
-                  onClick={resetSelector}
-                  className="w-full py-3 text-[11px] font-black uppercase tracking-[0.2em] text-red-700 dark:hover:text-white transition-colors"
-                >
-                  {isRTL ? "إلغاء العملية" : "Cancel Process"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Footer */}
+      <div className="p-4 bg-gray-50 dark:bg-white/5">
+        <button
+          onClick={resetSelector}
+          className="w-full py-3 text-[14px] font-black uppercase tracking-[0.2em] text-red-700 dark:hover:text-white transition-colors"
+        >
+          {isRTL ? "إلغاء العملية" : "Cancel Process"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
         {isSoldOut && (
           <div className="absolute inset-0 bg-white/60 dark:bg-black/40 backdrop-blur-[2px] flex items-center justify-center z-20 pointer-events-none">
@@ -551,7 +408,7 @@ function ProductCard({ product }) {
       <div className="pt-5 px-1 flex flex-col items-center text-center gap-3">
         <h3
           onClick={handleNavigate}
-          className="text-[14px] sm:text-[16px] font-black uppercase tracking-tight text-black dark:text-white italic truncate max-w-full cursor-pointer hover:text-red-800"
+          className="text-[14px] sm:text-[16px] font-black uppercase tracking-tight text-black dark:text-white      truncate max-w-full cursor-pointer hover:text-red-800"
         >
           {product.name}
         </h3>
@@ -560,7 +417,7 @@ function ProductCard({ product }) {
           className={`flex items-center gap-4 ${isRTL ? "flex-row-reverse" : "flex-row"} justify-center`}
         >
           <div className="flex items-baseline gap-1">
-            <span className="text-black dark:text- font-black text-3xl sm:text-4xl italic tracking-tighter leading-none">
+            <span className="text-black dark:text- font-black text-3xl sm:text-4xl      tracking-tighter leading-none">
               {product.price}
             </span>
             <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 ">
@@ -576,10 +433,10 @@ function ProductCard({ product }) {
               <div
                 className={`flex flex-col ${isRTL ? "items-end" : "items-start"} justify-center leading-tight`}
               >
-                <span className="text-[9px] font-black bg-[#FF3B3B] text-white px-1.5 py-0.5 rounded-sm uppercase italic mb-1">
+                <span className="text-[9px] font-black bg-[#FF3B3B] text-white px-1.5 py-0.5 rounded-sm uppercase      mb-1">
                   -{product.salePercentage}%
                 </span>
-                <span className="text-sm font-bold italic text-slate-400 dark:text-white/20 line-through decoration-slate-400/50">
+                <span className="text-sm font-bold      text-slate-400 dark:text-white/20 line-through decoration-slate-400/50">
                   {product.originalPrice}
                 </span>
               </div>
@@ -597,7 +454,7 @@ function ProductCard({ product }) {
                 setShowVariantSelector(true);
               }, 0);
             }}
-            className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase italic tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
+            className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase      tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
           >
             <Zap size={14} className="fill-current" />
             {isRTL ? "اشتري الآن" : "Buy Now"}

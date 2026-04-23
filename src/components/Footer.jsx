@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
@@ -13,7 +14,7 @@ export default function Footer() {
   const { darkMode } = useTheme();
   const isRTL = language === "ar";
 
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
   const [showHub, setShowHub] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
 
@@ -49,13 +50,22 @@ const [position, setPosition] = useState({
 };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + window.innerHeight;
-      if (scrollPos > document.body.offsetHeight - 600) setVisible(true);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+      }
+    },
+    {
+      threshold: 0.1,
+    }
+  );
+
+  const el = document.getElementById("footer-trigger");
+  if (el) observer.observe(el);
+
+  return () => observer.disconnect();
+}, []);
 
   const t = {
     features: [
@@ -72,7 +82,11 @@ const [position, setPosition] = useState({
       {/* --- حاوية الحدود (تغطي الشاشة بالكامل) --- */}
       <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-[9998]" />
 
-      <footer dir={isRTL ? "rtl" : "ltr"} className={`w-full border-t transition-all duration-1000 ${darkMode ? "bg-black border-white/5 text-white" : "bg-white border-gray-200 text-black"} ${visible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}>
+      <footer dir={isRTL ? "rtl" : "ltr"} className={`w-full border-t transition-all duration-300 ${
+  darkMode
+    ? "bg-black border-white/5 text-white"
+    : "bg-white border-gray-200 text-black"
+}`}>
         
         {/* Features Grid */}
         <div className={`border-b ${darkMode ? "border-white/5" : "border-gray-100"}`}>

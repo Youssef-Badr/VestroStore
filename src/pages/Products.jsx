@@ -94,7 +94,7 @@ export default function Products() {
              active:scale-95
              transition-all duration-300"
 >
-  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/60 dark:bg-black/40 group-hover:rotate-[-10deg] transition">
+  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/60 dark:bg-black/40 group-hover:rotate-[-10deg] transition">
     <ArrowLeft
       size={16}
       className={isRTL ? "rotate-180" : ""}
@@ -109,17 +109,17 @@ export default function Products() {
         <header className="flex flex-col items-center mb-8 sm:mb-24 text-center">
         <h1 className=" sm:pt-12 md:pt-16 
                text-[8vw] sm:text-5xl md:text-6xl lg:text-7xl 
-               font-black mt-4 italic tracking-tighter uppercase leading-[0.9] 
-               mb-4 sm:mb-6 text-black dark:text-white">
+               font-black mt-2 italic tracking-tighter uppercase leading-[0.9] 
+               mb-2 sm:mb-6 text-black dark:text-white">
   {t.title}
   <span className="text-black dark:text-white">.</span>
 </h1>
 
-          <div className="h-[2px] w-8 sm:w-16 bg-black dark:bg-white mb-4 sm:mb-6"></div>
+          <div className="h-[2px] w-8 sm:w-16 bg-black dark:bg-white mb-1 sm:mb-6"></div>
 
-          <p className="text-[13px] sm:text-[20px] md:text-xl font-bold uppercase tracking-[0.3em] opacity-40 max-w-[250px] sm:max-w-none leading-relaxed">
+          {/* <p className="text-[13px] sm:text-[20px] md:text-xl font-bold uppercase  opacity-40 max-w-[250px] sm:max-w-none leading-relaxed">
             {t.subtitle}
-          </p>
+          </p> */}
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-10 sm:gap-x-8 sm:gap-y-20 lg:gap-x-12">

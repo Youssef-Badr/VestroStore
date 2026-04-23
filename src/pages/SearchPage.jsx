@@ -44,16 +44,16 @@ export default function SearchPage() {
 
   return (
     <div 
-      className={`min-h-screen pt-28 pb-20 transition-all duration-500 ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}
+      className={`min-h-screen pt-24 pb-14 transition-all duration-500 ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}
       dir={isRTL ? "rtl" : "ltr"}
     >
       <div className="container mx-auto px-4">
         
         {/* رأس الصفحة - عرض كلمة البحث */}
-        <div className="mb-12 border-b border-zinc-100 dark:border-zinc-800 pb-8">
-          <h1 className="text-xl md:text-5xl font-black uppercase tracking-tighter mb-2 mt-4">
+        <div className="mb-12 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+          <h1 className="text-xl md:text-5xl font-black uppercase tracking-tighter mb-2 mt-3">
             {isRTL ? "نتائج البحث عن:" : "Search Results for:"} 
-            <span className="text-red-700 ml-4 italic">"{searchTerm}"</span>
+            <span className="text-red-700 ml-4    ">"{searchTerm}"</span>
           </h1>
           <p className="text-gray-500 font-medium">
             {isRTL ? `تم العثور على ${totalResults} منتج` : `Found ${totalResults} products`}
@@ -62,7 +62,7 @@ export default function SearchPage() {
 
         {/* حالة التحميل */}
         {loading ? (
-          <div className="flex justify-center items-center h-64">
+          <div className="flex justify-center items-center h-52">
             <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : products.length > 0 ? (
@@ -81,7 +81,7 @@ export default function SearchPage() {
         ) : (
           // في حال عدم وجود نتائج
           <div className="text-center py-20">
-            <div className="text-6xl mb-6">🔍</div>
+            <div className="text-4xl mb-4">🔍</div>
             <h2 className="text-2xl font-bold mb-4">
               {isRTL ? "لم نجد أي منتج يطابق بحثك" : "No products match your search"}
             </h2>
