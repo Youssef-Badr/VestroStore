@@ -154,13 +154,7 @@ function ProductCard({ product }) {
 
   return (
     <div
-      // onMouseEnter={() => setIsHovering(true)}
-      // onMouseLeave={() => setIsHovering(false)}
-      // // ✅ الموبايل الحقيقي
-      // onTouchStart={() => setIsHovering(true)}
-      // onTouchEnd={() => setIsHovering(true)}
-      // // onTouchEnd={() => setIsHovering(false)}
-      // onTouchCancel={() => setIsHovering(false)}
+    
       onClick={(e) => {
         e.stopPropagation();
         if (showVariantSelector) return;
@@ -185,16 +179,7 @@ function ProductCard({ product }) {
   className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100"
 />
 
-          {/* الصورة اللي بعدها
-          {allImages.length > 1 && (
-            <img
-              src={allImages[(currentImageIndex + 1) % allImages.length]?.url}
-              alt="next"
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                isHovering ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          )} */}
+       
         </div>
 
         {/* ✅ بادجات الـ Sale */}
@@ -446,7 +431,7 @@ function ProductCard({ product }) {
              setIsDirectBuy(true);
 setShowVariantSelector(true);
             }}
-            className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase      tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
+            className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
           >
             <Zap size={14} className="fill-current" />
             {isRTL ? "اشتري الآن" : "Buy Now"}

@@ -15,10 +15,11 @@ import ProductCard from "../components/ProductCard";
 
 const MarqueeScroller = React.memo(({ products, direction = "right", darkMode }) => {
   const containerRef = useRef(null);
+  const scrollTimeout = useRef(null);
 
   const scrollItems = useMemo(() => {
     if (!products?.length) return [];
-    return [...products, ...products]; // كفاية مرتين
+    return [...products, ...products]; // مرتين كفاية
   }, [products]);
 
   const handleInfiniteLoop = () => {
@@ -26,20 +27,24 @@ const MarqueeScroller = React.memo(({ products, direction = "right", darkMode })
     if (!el) return;
 
     const half = el.scrollWidth / 2;
+    const buffer = 5;
 
-    if (el.scrollLeft >= half) {
-      el.scrollLeft -= half;
-    } else if (el.scrollLeft <= 0) {
-      el.scrollLeft += half;
+    if (el.scrollLeft >= half - buffer) {
+      el.scrollLeft = el.scrollLeft - half;
+    } else if (el.scrollLeft <= buffer) {
+      el.scrollLeft = el.scrollLeft + half;
     }
   };
 
-  // 🔥 مهم: نربط على scroll الطبيعي
+  // 🔥 نعمل loop بعد ما المستخدم يوقف سحب
   const onScroll = () => {
-    handleInfiniteLoop();
+    clearTimeout(scrollTimeout.current);
+
+    scrollTimeout.current = setTimeout(() => {
+      handleInfiniteLoop();
+    }, 120);
   };
 
-  // الأسهم
   const scrollManual = (dir) => {
     const el = containerRef.current;
     if (!el) return;
@@ -75,13 +80,15 @@ const MarqueeScroller = React.memo(({ products, direction = "right", darkMode })
         <ChevronRight size={22} />
       </button>
 
+      {/* السلايدر */}
       <div
         ref={containerRef}
         onScroll={onScroll}
         className="overflow-x-auto no-scrollbar flex gap-4 px-6 scroll-smooth"
         style={{
           scrollSnapType: "x mandatory",
-          WebkitOverflowScrolling: "touch", // 🔥 سلاسة iPhone
+          WebkitOverflowScrolling: "touch",
+          scrollBehavior: "smooth",
         }}
       >
         {scrollItems.map((product, index) => (
@@ -183,11 +190,11 @@ export default function Home() {
 
       {/* TEXT */}
 <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white -translate-y-8 md:-translate-y-12">
-        <h1 className="text-3xl md:text-7xl font-black    uppercase tracking-tighter mb-3 ">
+        <h1 className="text-3xl md:text-7xl font-black    uppercase  mb-3 ">
           {isRTL ? hero.titleAr : hero.titleEn}
         </h1>
 
-        <p className="text-xl md:text-xl font-medium max-w-2xl opacity-90 uppercase tracking-widest">
+        <p className="text-xl md:text-xl font-medium max-w-2xl opacity-90 uppercase ">
           {isRTL ? hero.subtitleAr : hero.subtitleEn}
         </p>
 
@@ -224,7 +231,7 @@ export default function Home() {
 {!loading && allProducts.length > 0 && (
   <div className="flex flex-col items-center w-full overflow-hidden">
     <div className="w-full flex justify-between items-end px-6 mb-1">
-      <h3 className="text-2xl font-black uppercase tracking-tighter   ">
+      <h3 className="text-2xl font-black uppercase   ">
         {isRTL ? "اكتشف مجموعتنا" : "Explore Collection"}
       </h3>
     </div>
@@ -241,7 +248,7 @@ export default function Home() {
       whileTap={{ scale: 0.95 }}
       // ... باقي الـ props زي ما هي
       onClick={() => navigate("/products")}
-      className={`mt-5 px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-lg transition-all duration-300
+      className={`mt-5 px-12 py-5 rounded-full font-black uppercase text-lg transition-all duration-300
         ${darkMode ? "text-black bg-white" : "bg-black text-white hover:bg-red-600"}`}
     >
       {isRTL ? "تسوق كل المنتجات" : "Shop All Products"}
@@ -253,7 +260,7 @@ export default function Home() {
 <div className="py-5">
 
   <div className="text-center mb-8">
-    <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
+    <h2 className="text-4xl md:text-6xl font-black uppercase">
       {isRTL ? "الأقسام" : "Categories"}
     </h2>
   </div>
@@ -294,7 +301,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center 
                           transition-colors duration-500 group-hover:bg-black/20 text-center">
 
-            <h3 className="text-white text-2xl md:text-4xl font-black uppercase    tracking-tighter drop-shadow-2xl text-center">
+            <h3 className="text-white text-2xl md:text-4xl font-black uppercase    drop-shadow-2xl text-center">
               {cat.name}
             </h3>
 
