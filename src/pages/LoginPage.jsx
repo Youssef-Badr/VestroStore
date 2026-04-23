@@ -103,12 +103,12 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-8 text-center border-t border-white/5 pt-6">
-          <p className="text-red-700 font-bold text-sm">
-            {isRTL ? "ليس لديك حساب؟" : "Don't have an account?"} {" "}
-            <Link to="/register" className="text-redd-700 hover:underline">
-              {isRTL ? "إنشاء حساب جديد" : "Create one now"}
-            </Link>
-          </p>
+         <p className="text-gray-500 font-bold text-sm">
+  {isRTL ? "ليس لديك حساب؟" : "Don't have an account?"}{" "}
+  <Link to="/register" className="text-redd-700 hover:underline">
+    {isRTL ? "إنشاء حساب جديد" : "Create one now"}
+  </Link>
+</p>
         </div>
       </div>
     </div>
