@@ -18,8 +18,8 @@ import { useLanguage } from "./contexts/LanguageContext"; // تأكد من ال�
 const Home = lazy(() => import("./pages/Home"));
 const Products = lazy(() => import(/* webpackPrefetch: true */ "./pages/Products"));
 const ProductDetails = lazy(() => import(/* webpackPrefetch: true */ "./pages/ProductDetails"));
-const Wishlist = lazy(() => import(/* webpackPrefetch: true */ "./pages/Wishlist"));
-const Offers = lazy(() => import(/* webpackPrefetch: true */ "./pages/Offers"));
+
+
 const LoginPage = lazy(() => import("./pages/LoginPage")); 
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
@@ -60,7 +60,7 @@ const handleCartOpen = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
-            <Route path="/offers" element={<Offers />} />
+            
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/products/category/:categoryId" element={<CategoryPage />} />
             <Route path="/bundles" element={<BundlesPage />} />
@@ -68,7 +68,6 @@ const handleCartOpen = () => {
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/thankyou" element={<ThankYou />} />
             <Route path="/thankyou/:orderId" element={<ThankYou />} />
-            <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
