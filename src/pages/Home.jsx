@@ -320,7 +320,7 @@ export default function Home() {
 </div>
         {/* Featured Section */}
         <div className="pb-7">
-           <h2 className="text-4xl md:text-7xl font-black uppercase mb-12   ">
+           <h2 className="text-2xl md:text-5xl font-black uppercase mb-10   ">
              {isRTL ? "منتجات مميزة" : "Featured Products"}
            </h2>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
