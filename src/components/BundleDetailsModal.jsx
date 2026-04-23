@@ -15,123 +15,116 @@ const BundleDetailsModal = ({ bundle, isOpen, onClose, onClaim, isAr, darkMode }
 
   return (
    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-xl bg-black/60">
-  <div className={`relative w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl transition-all 
-    ${darkMode 
-      ? 'bg-[#0F0F0F] text-white border border-white/10' 
-      : 'bg-white text-black border border-black/10'}`}>
+ <div className={`relative w-full max-w-sm rounded-2xl overflow-hidden transition-all 
+  ${darkMode 
+    ? 'bg-[#0F0F0F] text-white border border-white/10' 
+    : 'bg-white text-black border border-black/10'}`}>
 
-    {/* Header */}
-    <div className={`p-6 flex justify-between items-center border-b 
-      ${darkMode ? 'border-white/10' : 'border-black/10'}`}>
-      
-      <div className="flex items-center gap-2">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center 
-          ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-          <Zap size={16} />
-        </div>
-
-        <span className="font-black italic uppercase text-[18px] tracking-widest">
-          {isAr ? "تحليل الصفقة" : "Deal Analysis"}
-        </span>
+  {/* Header */}
+  <div className={`p-4 flex justify-between items-center border-b 
+    ${darkMode ? 'border-white/10' : 'border-black/10'}`}>
+    
+    <div className="flex items-center gap-2">
+      <div className={`w-6 h-6 rounded-full flex items-center justify-center 
+        ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+        <Zap size={14} />
       </div>
 
-      <button 
-        onClick={onClose} 
-        className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-all opacity-60 hover:opacity-100"
-      >
-        <X size={20} />
-      </button>
+      <span className="font-bold text-sm">
+        {isAr ? "تحليل الصفقة" : "Deal Analysis"}
+      </span>
     </div>
 
-    <div className="p-8">
-      <h2 className="text-2xl font-black italic uppercase mb-2 tracking-tighter">
-        {isAr ? "ليه العرض ده لقطة؟" : "Why is this a steal?"}
-      </h2>
+    <button 
+      onClick={onClose} 
+      className="p-1.5 rounded-full opacity-70 hover:opacity-100"
+    >
+      <X size={16} />
+    </button>
+  </div>
 
-      <p className="text-[15px] font-bold uppercase mb-8 leading-relaxed opacity-70">
-        {isAr 
-          ? `أنت هتمتلك ${bundle.items.length} قطع مختارة بعناية بتوفير حقيقي!` 
-          : `You're getting ${bundle.items.length} curated pieces with real savings!`}
-      </p>
+  <div className="p-5">
+    <h2 className="text-lg font-bold mb-2">
+      {isAr ? "ليه العرض كويس؟" : "Why it's a good deal"}
+    </h2>
 
-      {/* Breakdown */}
-      <div className="space-y-4 mb-8">
-        {bundle.items.map((item, idx) => (
-          <div 
-            key={idx}
-            onClick={() => handleProductClick(item.product._id)}
-            className={`flex justify-between items-center group cursor-pointer p-3 rounded-2xl transition-all 
-              ${darkMode ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
-          >
-            <div className="flex items-center gap-3">
-              <div className={`relative w-12 h-12 rounded-xl overflow-hidden 
-                ${darkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border`}>
-                
-                <img 
-                  src={item.product.images?.[0]?.url} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                  alt="" 
-                />
+    <p className="text-sm mb-6 opacity-70">
+      {isAr 
+        ? `هتاخد ${bundle.items.length} منتجات بتوفير حقيقي`
+        : `Get ${bundle.items.length} products with savings`}
+    </p>
 
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                  <Eye size={14} className="text-white" />
-                </div>
-              </div>
-
-              <div className="flex flex-col">
-                <span className="text-[15px] font-black uppercase truncate max-w-[150px] group-hover:opacity-70 transition">
-                  {item.product.name}
-                </span>
-                <span className="text-[12px] opacity-40 uppercase font-bold tracking-tighter">
-                  {isAr ? "اضغط لعرض التفاصيل" : "Click for details"}
-                </span>
-              </div>
+    {/* Breakdown */}
+    <div className="space-y-3 mb-6">
+      {bundle.items.map((item, idx) => (
+        <div 
+          key={idx}
+          onClick={() => handleProductClick(item.product._id)}
+          className={`flex justify-between items-center cursor-pointer p-2 rounded-lg 
+            ${darkMode ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
+        >
+          <div className="flex items-center gap-2">
+            <div className={`w-10 h-10 rounded-lg overflow-hidden border 
+              ${darkMode ? 'border-white/10' : 'border-black/10'}`}>
+              
+              <img 
+                src={item.product.images?.[0]?.url} 
+                loading="lazy"
+                className="w-full h-full object-cover" 
+                alt="" 
+              />
             </div>
 
-            <span className="text-[14px] font-black italic">
-              {item.product.salePrice || item.product.price} EGP
-            </span>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold truncate max-w-[120px]">
+                {item.product.name}
+              </span>
+              <span className="text-[11px] opacity-50">
+                {isAr ? "عرض التفاصيل" : "View details"}
+              </span>
+            </div>
           </div>
-        ))}
-      </div>
 
-      {/* Summary */}
-      <div className={`p-6 rounded-3xl border relative overflow-hidden 
-        ${darkMode ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.03] border-black/10'}`}>
-
-        <div className="flex justify-between items-center mb-2 opacity-60 font-bold text-[15px] uppercase">
-          <span>{isAr ? "مجموع القطع منفردة" : "Individual Items Total"}</span>
-          <span className="line-through">{bundle.originalPrice} EGP</span>
-        </div>
-
-        <div className="flex justify-between items-center mb-4 font-black text-xl">
-          <span className="italic uppercase tracking-tighter">
-            {isAr ? "سعر العرض الآن" : "Bundle Price Now"}
-          </span>
-          <span className=" text-red-600">{bundle.bundlePrice} EGP</span>
-        </div>
-
-        <div className="flex items-center gap-3 pt-4 border-t border-white/10 dark:border-white/10 text-sm font-black uppercase">
-          <span>
-            {isAr ? `وفرت ${savings} ج.م` : `You saved ${savings} EGP`}
+          <span className="text-sm font-bold">
+            {item.product.salePrice || item.product.price} EGP
           </span>
         </div>
-      </div>
+      ))}
     </div>
 
-    {/* CTA */}
-    <div className="p-6">
-      <button 
-        onClick={onClaim}
-        className={`w-full py-5 rounded-2xl font-black uppercase text-[18px] tracking-[0.2em] transition-all shadow-lg  bg-red-700
-          ${darkMode 
-            ? 'bg-white text-black hover:scale-[1.02] active:scale-95' 
-            : 'bg-black text-white hover:scale-[1.02] active:scale-95'}`}
-      >
-        {isAr ? "استفيد بالعرض الآن" : "Claim This Deal"}
-      </button>
+    {/* Summary */}
+    <div className={`p-4 rounded-xl border 
+      ${darkMode ? 'bg-white/[0.03] border-white/10' : 'bg-black/[0.03] border-black/10'}`}>
+
+      <div className="flex justify-between mb-1 text-sm opacity-60">
+        <span>{isAr ? "السعر الأصلي" : "Original"}</span>
+        <span className="line-through">{bundle.originalPrice} EGP</span>
+      </div>
+
+      <div className="flex justify-between font-bold text-base mb-2">
+        <span>{isAr ? "سعر الباكدج" : "Bundle Price"}</span>
+        <span className="text-red-600">{bundle.bundlePrice} EGP</span>
+      </div>
+
+      <div className="text-sm font-semibold">
+        {isAr 
+          ? `وفرت ${savings} ج.م`
+          : `Saved ${savings} EGP`}
+      </div>
     </div>
   </div>
+
+  {/* CTA */}
+  <div className="p-4">
+    <button 
+      onClick={onClaim}
+      className="w-full py-3 rounded-xl text-sm font-bold bg-red-700 text-white hover:scale-[1.02] active:scale-95 transition"
+    >
+      {isAr ? "استفد باللعرض الآن" : "Claim Deal Now"}
+    </button>
+  </div>
+
+</div>
 </div>
   );
 };
