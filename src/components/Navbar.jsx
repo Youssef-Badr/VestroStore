@@ -161,7 +161,7 @@ const [showSocial, setShowSocial] = useState(false);
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:hidden">
           <Link to="/" onClick={() => setMenuOpen(false)} className="group relative block">
             <img 
-              src="/logo.jpeg"
+              src="/logo3.jpeg"
               alt="Logo"
               className="h-9 w-9 md:h-12 md:w-12 object-contain rounded-full border-2 border-white/30 transition-transform duration-500 group-hover:scale-110"
             />
