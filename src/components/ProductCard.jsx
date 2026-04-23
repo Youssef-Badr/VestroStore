@@ -11,7 +11,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 import { toast } from "react-toastify";
 import { ShoppingBag, Zap, ChevronLeft } from "lucide-react";
-
+import { createPortal } from "react-dom";
 function ProductCard({ product }) {
   const { language } = useLanguage();
   const isRTL = language === "ar";
@@ -214,8 +214,8 @@ function ProductCard({ product }) {
         )}
 
        {/* ✅ Gorilla Style Variant Selector Modal */}
-{showVariantSelector && (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+{showVariantSelector && createPortal (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300">
     {/* Backdrop */}
     <div
       className="absolute inset-0 bg-black/60 backdrop-blur-sm"

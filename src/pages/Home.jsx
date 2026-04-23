@@ -198,13 +198,14 @@ export default function Home() {
           {isRTL ? hero.subtitleAr : hero.subtitleEn}
         </p>
 
+
       <button
   onClick={(e) => {
     e.stopPropagation();
     navigate("/products");
   }}
   className="
-    mt-6 px-7 py-3 
+    mt-6 px-5 py-3 
     font-black rounded-xl shadow-lg
     transition-all duration-300
     hover:scale-110 active:scale-95
@@ -278,7 +279,7 @@ export default function Home() {
             navigate(`/products/category/${cat.id || cat._id}`)
           }
           className={`
-            group relative h-32 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer 
+            group relative h-36 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer 
             border border-transparent hover:border-red-700
             transition-all duration-500 shadow-lg
 
