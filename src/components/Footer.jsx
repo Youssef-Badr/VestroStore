@@ -209,7 +209,7 @@ const [position, setPosition] = useState({
             <div className={`space-y-4 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"} ${!darkMode && "font-medium"}`}>
               <p>• يمكن إرجاع المنتجات في غضون 14 يومًا من استلام الشحنة.</p>
               <p>• يجب إثبات التلف أو النقص أثناء تواجد المندوب.</p>
-              <p className="bg-red-800 p-3 rounded-lg border-l-4 border-red-700">⚠️ يتم دفع مصاريف 65 ج.م فقط عند رفض الشحنة أثناء المعاينة.</p>
+              <p className="bg-red-800 p-3 rounded-lg border-l-4 border-red-700">⚠️ يتم دفع مصاريف الشحن 65 ج.م فقط عند رفض الشحنة أثناء المعاينة.</p>
               <p>• يجب أن يكون المنتج بحالته الأصلية وبغلافه الأصلي.</p>
             </div>
           </div>

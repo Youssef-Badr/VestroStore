@@ -194,8 +194,7 @@ const normalizePhone = (value) => {
           product: item.product || item._id, // تأكد من إرسال ID المنتج فقط
           quantity: item.qty|| item.quantity,
         })),
-        shippingPrice: shippingCost // مهم جداً لحساب الشحن المجاني في الباك إند
-      });
+shippingPrice: discountInfo?.freeShippingApplied ? 0 : shippingCost      });
 
       if (res.data.valid) {
       setDiscountInfo(res.data);
@@ -213,6 +212,10 @@ const normalizePhone = (value) => {
       // لو الكود جاي من المودال، اقفله بعد النجاح
       if (showDiscountModal) setShowDiscountModal(false);
     }
+
+    if (res.data.freeShippingApplied) {
+  setShippingCost(0);
+}
   } catch (err) {
     const msg = err.response?.data?.message || (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
     setDiscountInfo(null); 
@@ -338,7 +341,7 @@ const handleSubmit = async (e) => {
       },
       paymentMethod: formData.paymentMethod,
       orderItems: orderItems,
-      discountCode: (discountInfo && discountInfo.valid) ? formData.discountCode : null,
+      discountCode: discountInfo?.valid ? formData.discountCode : null,
       buildingNumber: formData.buildingNumber,
       floor: formData.floor,
       apartment: formData.apartment,
@@ -378,18 +381,35 @@ const handleSubmit = async (e) => {
   }
 };
 
+const isFreeShipping = !!discountInfo?.freeShippingApplied;
 
+const cartTotal = cart.reduce(
+  (acc, item) => acc + item.price * item.qty,
+  0
+);
 
-  // الحسابات النهائية
-  const cartTotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+const totalDiscountAmount = Math.round(discountInfo?.discountAmount || 0);
+
+const totalWithDiscount = Math.round(
+  cartTotal +
+  (isFreeShipping ? 0 : shippingCost) -
+  totalDiscountAmount
+);
+
+//   // الحسابات النهائية
+//   const cartTotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   
-  // إذا كان الخصم شحن مجاني، نجعل تكلفة الشحن الظاهرية 0
-  const effectiveShippingCost = discountInfo?.freeShippingApplied ? 0 : shippingCost;
+//   // إذا كان الخصم شحن مجاني، نجعل تكلفة الشحن الظاهرية 0
+//   const effectiveShippingCost = discountInfo?.freeShippingApplied ? 0 : shippingCost;
   
-  const totalDiscountAmount = Math.round(discountInfo?.discountAmount || 0);
+//   const totalDiscountAmount = Math.round(discountInfo?.discountAmount || 0);
   
  
-  const totalWithDiscount = Math.round(cartTotal + shippingCost - totalDiscountAmount);
+//  const totalWithDiscount = Math.round(
+//   cartTotal +
+//   (discountInfo?.freeShippingApplied ? 0 : shippingCost) -
+//   totalDiscountAmount
+// );
 
 return (
     <div dir={isRTL ? "rtl" : "ltr"} className="min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-500 pb-20">
