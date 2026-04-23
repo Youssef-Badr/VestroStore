@@ -5,3 +5,23 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.Toastify__toast--success {
+  background: #b91c1c !important; /* red-700 */
+  color: #fff !important;
+}
+
+.Toastify__toast--error {
+  background: #7f1d1d !important;
+  color: #fff !important;
+}
+
+.Toastify__toast--info {
+  background: #374151 !important;
+  color: #fff !important;
+}
+
+.Toastify__toast--warning {
+  background: #f59e0b !important;
+  color: #000 !important;
+}
