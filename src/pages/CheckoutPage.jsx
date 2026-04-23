@@ -1025,7 +1025,7 @@ return (
 
     let priceDisplay = (
       <span className="text-sm font-black text-slate-900 dark:text-white">
-        {item.price} EGP
+        {item.price * item.qty || item.quantity} EGP
       </span>
     );
 
@@ -1095,7 +1095,7 @@ return (
             </span>
 
             <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400  ">
-              QTY: {item.quantity}
+              QTY: {item.qty || item.quantity}
             </span>
           </div>
         </div>
