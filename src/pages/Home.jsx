@@ -15,139 +15,84 @@ import ProductCard from "../components/ProductCard";
 
 const MarqueeScroller = React.memo(({ products, direction = "right", darkMode }) => {
   const containerRef = useRef(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const rafRef = useRef(null);
-  const velocityRef = useRef(0);
-  const lastTouchX = useRef(0);
-  const lastTime = useRef(0);
-  const resumeTimeout = useRef(null);
 
-  // مضاعفة المنتجات لضمان اللانهاية
   const scrollItems = useMemo(() => {
     if (!products?.length) return [];
-    return [...products, ...products, ...products]; // 3 مرات لضمان تغطية السحب السريع
+    return [...products, ...products]; // كفاية مرتين
   }, [products]);
 
   const handleInfiniteLoop = () => {
     const el = containerRef.current;
     if (!el) return;
-    const half = el.scrollWidth / 3; // مقسوم على 3 لأننا كررنا المنتجات 3 مرات
 
-    if (el.scrollLeft >= half * 2) {
+    const half = el.scrollWidth / 2;
+
+    if (el.scrollLeft >= half) {
       el.scrollLeft -= half;
     } else if (el.scrollLeft <= 0) {
       el.scrollLeft += half;
     }
   };
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const baseSpeed = direction === "right" ? 0.7 : -0.7;
-
-    const animate = () => {
-      if (!isPaused) {
-        el.scrollLeft += baseSpeed + velocityRef.current;
-        velocityRef.current *= 0.95; // تباطؤ السحب (Friction)
-        handleInfiniteLoop();
-      }
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [isPaused, direction]);
-
-  const pause = () => { setIsPaused(true); clearTimeout(resumeTimeout.current); };
-  const resume = () => {
-    clearTimeout(resumeTimeout.current);
-    resumeTimeout.current = setTimeout(() => setIsPaused(false), 2000);
-  };
-
-  // --- التحكم بالسحب (Touch) ---
-  const onTouchStart = (e) => {
-    pause();
-    lastTouchX.current = e.touches[0].clientX;
-    lastTime.current = Date.now();
-  };
-
-  const onTouchMove = (e) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const x = e.touches[0].clientX;
-    const dx = lastTouchX.current - x; // المسافة اللي إيدك حركتها
-    
-    el.scrollLeft += dx; // تحريك فوري مع الإيد
+  // 🔥 مهم: نربط على scroll الطبيعي
+  const onScroll = () => {
     handleInfiniteLoop();
-
-    const now = Date.now();
-    const dt = now - lastTime.current;
-    if (dt > 0) velocityRef.current = dx / dt * 10; // قوة الدفعة بعد ما تشيل إيدك
-
-    lastTouchX.current = x;
-    lastTime.current = now;
   };
 
-  // --- التحكم بالأسهم (Card by Card) ---
+  // الأسهم
   const scrollManual = (dir) => {
-    pause();
     const el = containerRef.current;
     if (!el) return;
 
-    const cardWidth = el.querySelector('.product-card-container')?.offsetWidth || 300;
-    const gap = 16; // الـ gap-4 هي 16px
+    const cardWidth =
+      el.querySelector(".product-card-container")?.offsetWidth || 300;
+
+    const gap = 16;
     const offset = (cardWidth + gap) * (dir === "next" ? 1 : -1);
 
     el.scrollBy({ left: offset, behavior: "smooth" });
-    
-    setTimeout(() => {
-      handleInfiniteLoop();
-      resume();
-    }, 500);
   };
 
   if (!scrollItems.length) return null;
 
   return (
-    <div className="relative w-full py-5 group" dir="ltr">
-      {/* الأسهم - تظهر فقط عند الهوفر في الديسكتوب وتظهر دايماً في الموبايل */}
+    <div className="relative w-full py-5" dir="ltr">
+      
+      {/* الأسهم */}
       <button
         onClick={() => scrollManual("prev")}
-        className={`absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-2xl transition-all active:scale-90
-        ${darkMode ? "bg-zinc-900 text-white border border-white/10" : "bg-white text-black border border-black/5"}`}
+        className={`absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-xl active:scale-90
+        ${darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={22} />
       </button>
 
       <button
         onClick={() => scrollManual("next")}
-        className={`absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-2xl transition-all active:scale-90
-        ${darkMode ? "bg-zinc-900 text-white border border-white/10" : "bg-white text-black border border-black/5"}`}
+        className={`absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-xl active:scale-90
+        ${darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={22} />
       </button>
 
       <div
         ref={containerRef}
-        className="overflow-x-auto whitespace-nowrap no-scrollbar touch-pan-x"
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={resume}
-        style={{ scrollBehavior: 'auto' }} // auto عشان السحب بالإيد ميكونش "ثقيل"
+        onScroll={onScroll}
+        className="overflow-x-auto no-scrollbar flex gap-4 px-6 scroll-smooth"
+        style={{
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch", // 🔥 سلاسة iPhone
+        }}
       >
-        <div className="inline-flex gap-4 px-10">
-          {scrollItems.map((product, index) => (
-            <div
-              key={`${product._id}-${index}`}
-              className="product-card-container w-48 sm:w-72 md:w-80 flex-shrink-0 whitespace-normal"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
+        {scrollItems.map((product, index) => (
+          <div
+            key={`${product._id}-${index}`}
+            className="product-card-container flex-shrink-0 w-48 sm:w-72 md:w-80"
+            style={{ scrollSnapAlign: "start" }}
+          >
+            <ProductCard product={product} />
+          </div>
+        ))}
       </div>
     </div>
   );

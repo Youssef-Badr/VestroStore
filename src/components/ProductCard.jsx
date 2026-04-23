@@ -154,13 +154,13 @@ function ProductCard({ product }) {
 
   return (
     <div
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      // ✅ الموبايل الحقيقي
-      onTouchStart={() => setIsHovering(true)}
-      onTouchEnd={() => setIsHovering(true)}
-      // onTouchEnd={() => setIsHovering(false)}
-      onTouchCancel={() => setIsHovering(false)}
+      // onMouseEnter={() => setIsHovering(true)}
+      // onMouseLeave={() => setIsHovering(false)}
+      // // ✅ الموبايل الحقيقي
+      // onTouchStart={() => setIsHovering(true)}
+      // onTouchEnd={() => setIsHovering(true)}
+      // // onTouchEnd={() => setIsHovering(false)}
+      // onTouchCancel={() => setIsHovering(false)}
       onClick={(e) => {
         e.stopPropagation();
         if (showVariantSelector) return;
@@ -170,14 +170,7 @@ function ProductCard({ product }) {
     >
       <div className="relative w-full aspect-[3/3.5] rounded-[2.2rem] sm:rounded-[2.8rem] overflow-hidden bg-gray-100 dark:bg-[#0F0F0F] border border-slate-200/60 dark:border-white/5 group-hover:border-black dark:group-hover:border-white transition-all duration-500 shadow-sm group-hover:shadow-xl text-center">
         <div
-          onClick={(e) => {
-            e.stopPropagation();
-
-            // ✅ لو في مودال مفتوح متعملش navigation
-            if (showVariantSelector) return;
-
-            handleNavigate();
-          }}
+          
           className="relative w-full h-full cursor-pointer overflow-hidden"
         >
           {/* الصورة الحالية */}
@@ -192,7 +185,7 @@ function ProductCard({ product }) {
   className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100"
 />
 
-          {/* الصورة اللي بعدها */}
+          {/* الصورة اللي بعدها
           {allImages.length > 1 && (
             <img
               src={allImages[(currentImageIndex + 1) % allImages.length]?.url}
@@ -201,7 +194,7 @@ function ProductCard({ product }) {
                 isHovering ? "opacity-100" : "opacity-0"
               }`}
             />
-          )}
+          )} */}
         </div>
 
         {/* ✅ بادجات الـ Sale */}
@@ -225,13 +218,13 @@ function ProductCard({ product }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              e.preventDefault();
+              // e.preventDefault();
               setIsDirectBuy(false);
               setShowVariantSelector(true);
             }}
-            className="absolute bottom-6 right-6 w-12 h-12 sm:w-14 sm:h-14 bg-red-700  dark:text-black text-white rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-2xl translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-10 hover:scale-110"
+            className="absolute bottom-6 right-6 w-8 h-8 sm:w-14 sm:h-14 bg-red-700 dark:text-black text-white rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-2xl transition-all duration-300 z-10 hover:scale-110"
           >
-            <ShoppingBag size={22} strokeWidth={2.5} />
+            <ShoppingBag size={15} strokeWidth={2.5} />
           </button>
         )}
 
@@ -285,7 +278,8 @@ function ProductCard({ product }) {
         {/* Option Title & Back Button */}
         <div className="mb-4 flex justify-between items-center">
           <span className="text-[11px] font-black uppercase text-red-600">
-            {isRTL ? "اختر" : "Select"} {optionKeys[currentStep]}
+            {/* {isRTL ? "اختر" : "Select"}  */}
+            {optionKeys[currentStep]}
           </span>
 
           {currentStep > 0 && (
@@ -449,10 +443,8 @@ function ProductCard({ product }) {
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              setIsDirectBuy(true); // 🔥 مهم جدًا: نخلي الفتح في tick منفصل
-              setTimeout(() => {
-                setShowVariantSelector(true);
-              }, 0);
+             setIsDirectBuy(true);
+setShowVariantSelector(true);
             }}
             className="w-full mt-2 bg-slate-900 dark:bg-white text-white dark:text-black py-4 rounded-[1.2rem] text-[11px] font-black uppercase      tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-red-700 dark:hover:bg-red-700 transition-all shadow-lg active:scale-95"
           >
