@@ -1,8 +1,9 @@
 // ThankYou.jsx
 import { useNavigate, useParams } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
+
 import { useTheme } from "../contexts/ThemeContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "../../src/api/axiosInstance";
 import { MoveLeft, MoveRight, CheckCircle, Package, MessageCircle, Home, MapPin, ExternalLink } from "lucide-react";
 import { toast } from "react-toastify";
@@ -16,6 +17,7 @@ const ThankYou = () => {
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+const hasTrackedPurchase = useRef(false);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -33,6 +35,43 @@ const ThankYou = () => {
     if (orderId) fetchOrder();
   }, [orderId, isRTL]);
 
+
+useEffect(() => {
+  if (!order || hasTrackedPurchase.current) return;
+
+  hasTrackedPurchase.current = true;
+
+  const eventId = order._id;
+
+  const subtotal =
+    order?.orderItems?.reduce(
+      (acc, item) =>
+        acc + (Number(item.price) || 0) * (Number(item.quantity) || 0),
+      0
+    ) || 0;
+
+  const shipping = Number(order?.shippingFee) || 0;
+  const discount = order?.discount?.amount || 0;
+  const total = subtotal + shipping - discount;
+
+  if (window.fbq) {
+    window.fbq("track", "Purchase",
+      {
+        value: Number(order.totalPrice || total), // 🔥 خليه من الباك أفضل
+        currency: "EGP",
+        contents: order.orderItems.map((item) => ({
+          id: item.product || item.bundle,
+          quantity: item.quantity,
+          item_price: item.price,
+        })),
+        content_type: "product",
+      },
+      {
+        eventID: eventId, // 🔥 مهم جدًا
+      }
+    );
+  }
+}, [order]);
   const subtotal = order?.orderItems?.reduce(
     (acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0
   ) || 0;
