@@ -44,7 +44,7 @@ export default function SideCart() {
             <div className="p-6 border-b border-zinc-800/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShoppingBag size={24} className="text-black dark:text-white" />
-                <h2 className="text-xl font-black uppercase italic">
+                <h2 className="text-xl font-black uppercase    ">
                   {isRTL ? "سلة التسوق" : "Your Cart"}
                 </h2>
               </div>
@@ -67,7 +67,7 @@ export default function SideCart() {
                     <Link
                       to="/products"
                       onClick={() => setIsCartOpen(false)}
-                      className="flex items-center gap-2 text-black dark:text-white font-black uppercase italic text-xs border-b-2 border-red-800 pb-1 hover:opacity-70 transition-all mx-auto w-fit"
+                      className="flex items-center gap-2 text-black dark:text-white font-black uppercase     text-xs border-b-2 border-red-800 pb-1 hover:opacity-70 transition-all mx-auto w-fit"
                     >
                       {isRTL ? "اذهب للتسوق" : "Go Shopping"}
                       {isRTL ? <ArrowRight size={14} className="rotate-180" /> : <ArrowRight size={14} />}
@@ -108,13 +108,13 @@ export default function SideCart() {
                       </div>
 
                       {/* 📝 التفاصيل */}
-                      <div className="flex-1 space-y-1">
-                        <h3 className="font-black text-sm uppercase leading-tight truncate w-40">{item.name}</h3>
+                     <div className="flex gap-4 group animate-in fade-in slide-in-from-bottom-2 min-w-0">
+                        <h3 className="font-black text-sm uppercase leading-tight break-words whitespace-normal  w-40">{item.name}</h3>
                         
                         {item.isBundle ? (
                           <div className="space-y-0.5">
                              {item.bundleItems.map((b, i) => (
-                               <p key={i} className="text-[9px] text-zinc-500 font-bold truncate">
+                               <p key={i} className="text-[9px] text-zinc-500 font-bold break-words whitespace-normal">
                                  • {b.name} ({b.size})
                                </p>
                              ))}
