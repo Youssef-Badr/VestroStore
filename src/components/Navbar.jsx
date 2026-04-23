@@ -168,76 +168,15 @@ const [showSocial, setShowSocial] = useState(false);
           </Link>
         </div>
 
-        {/* LEFT */}
-        <div className="flex items-center gap-6">
-          <Link 
-            to="/" 
-            dir="ltr" 
-            className="font-black text-xl md:text-2xl flex items-center gap-1               "
-          >
-            <span className={darkMode ? "text-white" : "text-black"}>VESTRO </span>
-            {/* <span className="text-red-800">STORE</span> */}
-          </Link>
-
-          <div className="hidden lg:flex items-center gap-8">
-            {links.map((link) => (
-              <Link 
-                key={link.name} 
-                to={link.path} 
-                className={`text-[15px]  font-bold uppercase                 transition-all hover:text-red-700 ${
-                  darkMode ? "text-gray-400" : "text-black"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-
-            {/* DESKTOP CATEGORIES (زي ما هو) */}
-            <div className="relative" ref={catRef}>
-              <button 
-                onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-                className={`flex items-center gap-1 text-[15px]  font-bold uppercase                 transition-all hover:text-red-800 ${
-                  darkMode ? "text-gray-400" : "text-black"
-                }`}
-              >
-                {isRTL ? "الأقسام" : "Categories"}
-                <ChevronDown size={16} className={`transition-transform ${categoriesDropdownOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              <AnimatePresence>
-                {categoriesDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className={`absolute top-full mt-4 w-56 rounded-2xl shadow-2xl border p-2 z-[110] ${
-                      darkMode ? "bg-zinc-900 border-white/5" : "bg-white border-gray-100"
-                    }`}
-                  >
-                    {categories.map((cat) => (
-                      <Link
-                        key={cat.id}
-                        to={`/products/category/${cat.id}`}
-                        onClick={() => setCategoriesDropdownOpen(false)}
-                        className={`flex items-center gap-3 p-3 rounded-xl text-xs font-bold uppercase ${
-                          darkMode ? "hover:bg-white/5 text-gray-300" : "hover:bg-gray-50 text-black"
-                        }`}
-                      >
-                        {cat.image?.url && (
-                          <img src={cat.image.url} className="w-6 h-6 rounded-full object-cover" />
-                        )}
-                        {cat.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            
-          </div>
-        </div>
-
+       <Link 
+  to="/" 
+  dir="ltr" 
+  className={`font-black text-xl md:text-2xl flex items-center gap-1 transition-all duration-300 ${
+    isRTL ? "ml-4 md:ml-8" : "mr-4 md:mr-8"
+  }`}
+>
+  <span className={darkMode ? "text-white" : "text-black"}>VESTRO</span>
+</Link>
         {/* RIGHT */}
         <div className="flex items-center gap-1.5 sm:gap-4">
 
