@@ -9,4 +9,4 @@ Disallow: /auth
 Disallow: /checkout
 
 # Sitemap location
-Sitemap: https://Vestrostore.com/sitemap.xml
+Sitemap: https://vestro.net/sitemap.xml
