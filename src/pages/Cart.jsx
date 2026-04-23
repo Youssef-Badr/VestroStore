@@ -76,7 +76,7 @@ const CartPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 border-b border-white/5 pb-10">
           <div className="space-y-2">
-            <h1 className="text-5xl md:text-7xl text-center font-black italic tracking-tighter uppercase leading-none">
+            <h1 className="text-5xl md:text-7xl text-center font-black       tracking-tighter uppercase leading-none">
               {translations.cartTitle}
               <span className="text-black dark:text-white">.</span>
             </h1>
@@ -167,7 +167,7 @@ const CartPage = () => {
                     <div className="flex-1 flex flex-col justify-between h-full py-2 text-center sm:text-start w-full">
                       <div className="space-y-3">
                         {/* اسم المنتج */}
-                        <h3 className="text-xl font-black uppercase italic tracking-tighter leading-none">
+                        <h3 className="text-xl font-black uppercase       tracking-tighter leading-none">
                           {item.name}
                         </h3>
 
@@ -200,7 +200,7 @@ const CartPage = () => {
                       {/* السعر */}
                       <p className="text-2xl font-black text-black dark:text-white  mt-4">
                         {item.price.toLocaleString()} 
-                        <span className="text-[10px] not-italic font-bold opacity-40 uppercase ml-1">EGP</span>
+                        <span className="text-[10px] not-      font-bold opacity-40 uppercase ml-1">EGP</span>
                       </p>
                     </div>
 
@@ -252,11 +252,11 @@ const CartPage = () => {
                     <span>{cart.reduce((a, b) => a + b.qty, 0)}</span>
                   </div>
                   <div className="flex justify-between items-center pt-6 border-t border-white/5">
-                    <span className="text-lg font-black uppercase italic">
+                    <span className="text-lg font-black uppercase      ">
                       {translations.total}
                     </span>
                     <div className="text-right">
-                      <span className="text-3xl font-black text-black dark:text-white italic leading-none">
+                      <span className="text-3xl font-black text-black dark:text-white       leading-none">
                         {cartTotal.toLocaleString()}
                       </span>
                       <span className="block text-[13px] font-bold uppercase opacity-50">

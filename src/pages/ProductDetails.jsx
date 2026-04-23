@@ -740,7 +740,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       bg-white text-black 
       text-[10px] md:text-xs 
       font-black px-3 py-1.5 md:px-4 md:py-2 
-      rounded-full uppercase italic tracking-widest shadow-xl ring-2 ring-white/10">
+      rounded-full uppercase       tracking-widest shadow-xl ring-2 ring-white/10">
       -{product.salePercentage}%
     </div>
   )}
@@ -823,23 +823,23 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       <div className="md:w-1/2 flex flex-col p-2 sm:p-4">
         <div className="space-y-6">
           <div>
-            <h1 className="text-2xl sm:text-5xl font-black mb-3 tracking-tighter italic uppercase text-slate-900 dark:text-white leading-none">
+            <h1 className="text-2xl sm:text-5xl font-black mb-3 tracking-tighter       uppercase text-slate-900 dark:text-white leading-none">
               {product.name}
             </h1>
              {/* Pricing Section */}
           <div translate="no" className="py-6 border-y  border-slate-100 dark:border-white/5 flex flex-wrap items-baseline gap-4">
             {product.salePrice ? (
               <>
-                <span translate="no" className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-white">
-                  {product.salePrice} <span className="text-sm not-italic opacity-60 uppercase">{translations.currency}</span>
+                <span translate="no" className="text-4xl sm:text-5xl font-black       tracking-tighter text-slate-900 dark:text-white">
+                  {product.salePrice} <span className="text-sm not-      opacity-60 uppercase">{translations.currency}</span>
                 </span>
                 <span translate="no" className="text-xl font-bold line-through text-slate-300 dark:text-slate-600">
                   {product.originalPrice}
                 </span>
               </>
             ) : (
-              <span className="text-4xl sm:text-5xl font-black italic tracking-tighter text-slate-900 dark:text-white">
-                {product.originalPrice || product.price} <span className="text-sm not-italic opacity-60 uppercase">{translations.currency}</span>
+              <span className="text-4xl sm:text-5xl font-black       tracking-tighter text-slate-900 dark:text-white">
+                {product.originalPrice || product.price} <span className="text-sm not-      opacity-60 uppercase">{translations.currency}</span>
               </span>
             )}
           </div>
@@ -998,7 +998,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
           {/* ⭐ اسم اللون ثابت تحت الدائرة */}
           <span
-            className={`text-[10px] pt-2 md:text-xs font-black uppercase italic truncate max-w-[70px] transition-colors ${
+            className={`text-[10px] pt-2 md:text-xs font-black uppercase       truncate max-w-[70px] transition-colors ${
               isSelected
                 ? "text-black dark:text-white"
                 : "text-gray-500 dark:text-gray-400"
@@ -1034,7 +1034,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   </div>
 
   <div className="flex flex-col items-start">
-    <span className={`text-sm sm:text-base font-black leading-none text-black dark:text-white ${!isRTL ? "uppercase italic tracking-wider" : "font-bold"}`}>
+    <span className={`text-sm sm:text-base font-black leading-none text-black dark:text-white ${!isRTL ? "uppercase       tracking-wider" : "font-bold"}`}>
       {isRTL ? "جدول المقاسات" : "Size Guide"}
     </span>
     
@@ -1060,7 +1060,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   key={index}
   disabled={isOutOfStock}
   onClick={() => setSelectedOptions(prev => ({ ...prev, Size: sizeValue }))}
-  className={`min-w-[60px] h-12 px-4 rounded-2xl border-2 font-black italic transition-all relative ${
+  className={`min-w-[60px] h-12 px-4 rounded-2xl border-2 font-black       transition-all relative ${
     isSelected
       ? "bg-red-700 text-black border-black shadow-lg shadow-[#86FE05]/20"
       : isOutOfStock
@@ -1099,7 +1099,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           type="number"
           readOnly
           value={selectedQty}
-          className="bg-transparent text-center w-12 font-black italic outline-none"
+          className="bg-transparent text-center w-12 font-black       outline-none"
         />
         <button
           onClick={() => {
@@ -1136,7 +1136,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     ease: "easeInOut"
   }}
   whileTap={{ scale: 0.92 }}
-  className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase italic transition-all flex items-center justify-center gap-3 dark:bg-red-700 dark:text-black ${
+  className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase       transition-all flex items-center justify-center gap-3 dark:bg-red-700 dark:text-black ${
     isSoldOut
       ? "bg-gray-200 text-gray-400 cursor-not-allowed"
       : "bg-red-700 text-white "
@@ -1196,7 +1196,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
  <button
   disabled={isSoldOut}
   onClick={handleAddToCart}
-  className={`w-full h-13 rounded-xl font-black uppercase italic tracking-widest transition-all duration-300 flex items-center justify-center gap-2 shadow-xl ${
+  className={`w-full h-13 rounded-xl font-black uppercase       tracking-widest transition-all duration-300 flex items-center justify-center gap-2 shadow-xl ${
     isSoldOut
       ? "bg-slate-100 dark:bg-white/5 text-slate-400 cursor-not-allowed"
       : !selectedOptions.Color || !selectedOptions.Size
@@ -1238,8 +1238,8 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       {/* الرأس (Header) */}
       <div className={`flex items-center justify-between p-6 sm:p-8 border-b border-black/5 dark:border-white/5 ${isRTL ? "flex-row-reverse" : "flex-row"}`}>
         <div className={isRTL ? "text-right" : "text-left"}>
-          {/* تم تكبير العنوان وإلغاء الـ italic في العربي لضمان الظهور */}
-          <h2 className={`text-2xl sm:text-3xl font-black text-black dark:text-white ${!isRTL ? "uppercase italic tracking-tighter" : ""}`}>
+          {/* تم تكبير العنوان وإلغاء الـ       في العربي لضمان الظهور */}
+          <h2 className={`text-2xl sm:text-3xl font-black text-black dark:text-white ${!isRTL ? "uppercase       tracking-tighter" : ""}`}>
             {isRTL ? "جدول المقاسات" : "Size Guide"}
           </h2>
           <p className={`text-xs sm:text-sm font-bold mt-2 ${isRTL ? "text-slate-500" : "uppercase tracking-[0.1em] text-slate-400"}`}>
@@ -1266,7 +1266,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
       {/* التذييل (Footer) - كلام واضح وحجم مريح */}
       <div className="p-5 bg-black dark:bg-[#e1ffad] text-center">
-         <p className="text-[11px] sm:text-xs font-black uppercase italic tracking-[0.2em] text-[#e1ffad] dark:text-black">
+         <p className="text-[11px] sm:text-xs font-black uppercase       tracking-[0.2em] text-[#e1ffad] dark:text-black">
             Vestro International Standard Sizes
          </p>
       </div>
@@ -1341,7 +1341,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     {/* Reviews Section */}
     <div className="mt-32 border-t border-slate-100 dark:border-white/5 pt-16 max-w-4xl mx-auto">
       <div className="flex flex-col items-center mb-12 space-y-4">
-        <h2 className="text-3xl font-black italic uppercase tracking-tighter">
+        <h2 className="text-3xl font-black       uppercase tracking-tighter">
           {translations.reviewsSection} <span className="text-red-800">({reviews.length})</span>
         </h2>
         {!hasReviewed && (
@@ -1386,26 +1386,26 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
           <button
             type="submit"
             disabled={isSubmittingReview}
-            className="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-2xl font-black uppercase italic tracking-widest hover:scale-[1.01] transition-all disabled:opacity-50"
+            className="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-2xl font-black uppercase       tracking-widest hover:scale-[1.01] transition-all disabled:opacity-50"
           >
             {isSubmittingReview ? <Loader2 className="animate-spin mx-auto" /> : translations.submitReview}
           </button>
         </form>
       ) : (
-        <div className="bg-[#86FE05]/10 border border-[#86FE05]/20 text-red-800 p-6 rounded-2xl mb-16 text-center font-black uppercase italic tracking-widest text-xs">
+        <div className="bg-[#86FE05]/10 border border-[#86FE05]/20 text-red-800 p-6 rounded-2xl mb-16 text-center font-black uppercase       tracking-widest text-xs">
           {translations.alreadyReviewed}
         </div>
       )}
 
       <div className="space-y-6">
         {reviews.length === 0 ? (
-          <p className="text-center text-slate-400 italic py-10">{translations.noReviews}</p>
+          <p className="text-center text-slate-400       py-10">{translations.noReviews}</p>
         ) : (
           reviews.map((review, index) => (
             <div key={review._id || index} className="p-6 bg-slate-50 dark:bg-[#111111] rounded-[2rem] border border-slate-100 dark:border-white/5 transition-all hover:border-red-800">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="font-black italic uppercase tracking-tighter text-slate-900 dark:text-white">{review.name}</p>
+                  <p className="font-black       uppercase tracking-tighter text-slate-900 dark:text-white">{review.name}</p>
                   <p className="text-[10px] text-slate-400 uppercase font-black mt-1">
                     {new Date(review.createdAt).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
                   </p>
@@ -1425,7 +1425,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
                bg-black dark:bg-[#e1ffad] text-white dark:text-black 
                px-10 py-8 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.5)] 
                dark:shadow-[0_20px_60px_rgba(225,255,173,0.15)]
-               z-[9999] font-black uppercase italic tracking-[0.15em] text-center
+               z-[9999] font-black uppercase       tracking-[0.15em] text-center
                text-sm sm:text-base min-w-[300px]
                animate-in fade-in zoom-in duration-500
                flex flex-col items-center gap-5 border border-white/5 dark:border-black/5"

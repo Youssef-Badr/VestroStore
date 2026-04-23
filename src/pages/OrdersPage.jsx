@@ -127,7 +127,7 @@ const OrdersPage = () => {
         {orders.length === 0 ? (
           <div className={`text-center py-24 border-2 border-dashed rounded-[40px] px-4 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-gray-200 bg-white shadow-sm'}`}>
             <Package size={50} className={`mx-auto mb-6 ${darkMode ? 'text-gray-800' : 'text-gray-200'}`} />
-            <h2 className="text-xl md:text-2xl font-black mb-2 uppercase italic">{isRTL ? "السجل فارغ" : "Empty Vault"}</h2>
+            <h2 className="text-xl md:text-2xl font-black mb-2 uppercase      ">{isRTL ? "السجل فارغ" : "Empty Vault"}</h2>
             <Link to="/products" className="mt-6 inline-flex items-center gap-3 bg-red-700 text-black px-8 py-4 rounded-2xl font-black uppercase text-[10px] hover:scale-105 transition-all shadow-xl shadow-[#86FE05]/20">
               {isRTL ? "تسوق الآن" : "Go Shopping"} <ArrowUpRight size={16}/>
             </Link>
@@ -181,7 +181,7 @@ const OrdersPage = () => {
                     {/* Summary & View Button */}
                     <div className={`lg:ml-auto rtl:lg:mr-auto flex flex-row items-center justify-between lg:justify-end w-full lg:w-auto gap-8 pt-6 lg:pt-0 border-t lg:border-0 ${darkMode ? 'border-white/5' : 'border-gray-100'}`}>
                       <div className="text-left rtl:text-right">
-                        <p className={`text-[8px] font-black uppercase tracking-widest italic mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Final Invoice</p>
+                        <p className={`text-[8px] font-black uppercase tracking-widest       mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Final Invoice</p>
                         <p className="text-2xl md:text-3xl font-black text-black dark:text-white tracking-tighter">
                           {order.totalPrice} <span className={`text-xs ${darkMode ? 'text-white' : 'text-black'}`}>EGP</span>
                         </p>
@@ -211,7 +211,7 @@ const StatCard = ({ icon, label, value, color, darkMode }) => (
       {icon}
     </div>
     <div className="min-w-0 text-center sm:text-start">
-      <p className={`text-[7px] md:text-[10px] font-black uppercase tracking-[0.1em] mb-1 italic ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>{label}</p>
+      <p className={`text-[7px] md:text-[10px] font-black uppercase tracking-[0.1em] mb-1       ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>{label}</p>
       <p className="text-sm md:text-xl font-black truncate tracking-tighter">{value}</p>
     </div>
   </div>

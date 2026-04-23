@@ -84,7 +84,7 @@ useEffect(() => {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
         <div className="w-12 h-12 border-4 border-red-800 border-t-red-700 rounded-full animate-spin mb-4"></div>
-        <p className="font-black italic uppercase tracking-widest text-[10px]">Loading Success...</p>
+        <p className="font-black       uppercase tracking-widest text-[10px]">Loading Success...</p>
       </div>
     );
   }
@@ -122,7 +122,7 @@ useEffect(() => {
               <CheckCircle size={40} className="text-black stroke-[3px]" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter mb-2">
+              <h1 className="text-3xl md:text-5xl font-black       uppercase tracking-tighter mb-2">
                 {isRTL ? "تم بنجاح!" : "Order Placed!"}
               </h1>
               <p className="text-[11px] font-bold opacity-60 uppercase tracking-[0.3em]">
@@ -140,7 +140,7 @@ useEffect(() => {
             
            {/* Products List */}
 <div className={`rounded-[35px] border p-6 md:p-8 ${darkMode ? 'bg-[#0A0A0A] border-white/5' : 'bg-white border-gray-100 shadow-sm'}`}>
-  <h2 className="text-[18px] font-black italic uppercase mb-6 flex items-center gap-3 tracking-[0.2em] text-black dark:text-white">
+  <h2 className="text-[18px] font-black       uppercase mb-6 flex items-center gap-3 tracking-[0.2em] text-black dark:text-white">
     <Package size={18} /> {isRTL ? "محتويات الحقيبة" : "Bag Contents"}
   </h2>
   <div className="space-y-8">
@@ -173,7 +173,7 @@ useEffect(() => {
                   {item.size} — {item.color}
                 </p>
               )}
-              <span className="text-[10px] font-black opacity-60 italic">QTY: {item.quantity}</span>
+              <span className="text-[10px] font-black opacity-60      ">QTY: {item.quantity}</span>
             </div>
           </div>
         </div>
@@ -200,7 +200,7 @@ useEffect(() => {
             </div>
           </div>
           {/* سعر القطعة الأصلي */}
-          <span className="text-[10px] font-bold opacity-40 italic">
+          <span className="text-[10px] font-bold opacity-40      ">
             {subItem.price} EGP
           </span>
         </div>
@@ -219,7 +219,7 @@ useEffect(() => {
         <span className="text-red-700 uppercase tracking-tighter text-[15px]">
           {isRTL ? "سعر العرض الحالي:" : "Final Bundle Price:"}
         </span>
-        <span className="text-red-700 italic animate-pulse text-[15px]">
+        <span className="text-red-700       animate-pulse text-[15px]">
           {item.price * item.quantity} EGP
         </span>
       </div>
@@ -234,7 +234,7 @@ useEffect(() => {
 
             {/* Delivery Details */}
             <div className={`rounded-[35px] border p-6 ${darkMode ? 'bg-[#0A0A0A] border-white/5' : 'bg-white border-gray-100 shadow-sm'}`}>
-               <h2 className="text-[13px] font-black italic uppercase mb-4 flex items-center gap-3 tracking-[0.2em] text-black dark:text-white">
+               <h2 className="text-[13px] font-black       uppercase mb-4 flex items-center gap-3 tracking-[0.2em] text-black dark:text-white">
                  <MapPin size={18}/> {isRTL ? "وجهة التوصيل" : "Delivery Destination"}
                </h2>
                <div className="flex flex-col gap-1 text-[12px] font-bold uppercase leading-relaxed">
@@ -254,16 +254,16 @@ useEffect(() => {
               <div className="space-y-4 font-bold text-[13px]">
                 <div className="flex justify-between items-center opacity">
                   <span className="uppercase tracking-widest text-[15px]">{isRTL ? "المجموع الفرعي" : "Subtotal"}</span>
-                  <span className="font-black italic">{subtotal} EGP</span>
+                  <span className="font-black      ">{subtotal} EGP</span>
                 </div>
                 <div className="flex justify-between items-center ">
                   <span className="uppercase tracking-widest text-[15px]">{isRTL ? "رسوم الشحن" : "Shipping"}</span>
-                  <span className="font-black italic">+{shipping} EGP</span>
+                  <span className="font-black      ">+{shipping} EGP</span>
                 </div>
                 {discount > 0 && (
                   <div className={`flex justify-between items-center ${darkMode ? 'text-red-600' : 'text-red-400'}`}>
                     <span className="uppercase tracking-widest text-[9px]">{isRTL ? "الخصم" : "Discount"}</span>
-                    <span className="font-black italic">-{Math.round(discount)} EGP</span>
+                    <span className="font-black      ">-{Math.round(discount)} EGP</span>
                   </div>
                 )}
                 
@@ -272,7 +272,7 @@ useEffect(() => {
                       <p className="text-[15px] uppercase tracking-[0.3em] opacity mb-1">{isRTL ? "الإجمالي النهائي" : "Total Amount"}</p>
                       <p className="text-[11px] uppercase font-black px-2 py-1 bg-black/5 rounded-md inline-block">{order.paymentMethod}</p>
                   </div>
-                  <span className="text-4xl tracking-tighter leading-none font-black italic">{Math.round(total)}<span className="text-sm ml-1">EGP</span></span>
+                  <span className="text-4xl tracking-tighter leading-none font-black      ">{Math.round(total)}<span className="text-sm ml-1">EGP</span></span>
                 </div>
               </div>
             </div>

@@ -73,7 +73,7 @@ export default function RegisterPage() {
           <div className="w-16 h-16 bg-red-700 rounded-2xl flex items-center justify-center mx-auto mb-4 -rotate-3 ">
             <UserPlus size={30} className="text-black" />
           </div>
-          <h1 className="text-3xl font-black uppercase italic tracking-tighter">
+          <h1 className="text-3xl font-black uppercase       tracking-tighter">
             {isRTL ? "إنشاء" : "Create"} <span className="text-red-600">{isRTL ? "حساب" : "Account"}</span>
           </h1>
         </div>

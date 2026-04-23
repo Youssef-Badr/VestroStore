@@ -105,10 +105,10 @@ export default function ProfilePage() {
               <User size={48} className="text-black" />
             </div>
             <div>
-              <h1 className="text-4xl font-black uppercase italic tracking-tighter">
+              <h1 className="text-4xl font-black uppercase       tracking-tighter">
                 {profileData.firstName} <span className="text-red-700">{profileData.lastName}</span>
               </h1>
-              <p className="text-gray-500 font-bold flex items-center gap-2 mt-1 italic tracking-tight"> {profileData.email}</p>
+              <p className="text-gray-500 font-bold flex items-center gap-2 mt-1       tracking-tight"> {profileData.email}</p>
             </div>
           </div>
           <button 
@@ -168,7 +168,7 @@ export default function ProfilePage() {
                 <X size={24}/>
               </button>
               
-              <h2 className="text-2xl font-black uppercase italic mb-8 flex items-center gap-3">
+              <h2 className="text-2xl font-black uppercase       mb-8 flex items-center gap-3">
                 <Lock className="text-red-700" /> {isRTL ? "تحديث الأمان" : "Update Security"}
               </h2>
 

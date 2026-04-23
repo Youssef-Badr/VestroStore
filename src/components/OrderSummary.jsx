@@ -19,7 +19,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
           }`}>
             <ShoppingBag size={48} className={darkMode ? "text-red-800" : "text-slate-300"} />
           </div>
-          <h3 className="text-xl font-black uppercase italic mb-2 tracking-tight">
+          <h3 className="text-xl font-black uppercase       mb-2 tracking-tight">
             {isRTL ? "سلتك فارغة تماماً" : "Your cart is empty"}
           </h3>
           <p className="text-sm font-bold text-slate-500 dark:text-slate-400 mb-8 max-w-[280px] text-center leading-relaxed">
@@ -27,7 +27,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
           </p>
           <button
             onClick={() => navigate("/products")}
-            className={`group relative flex items-center gap-3 px-10 py-4 rounded-2xl font-black uppercase italic tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl ${
+            className={`group relative flex items-center gap-3 px-10 py-4 rounded-2xl font-black uppercase       tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl ${
               darkMode ? "bg-red-700 text-black " : "bg-black text-white shadow-black/20"
             }`}
           >
@@ -61,7 +61,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
               <Package size={20} />
             </div>
             <div className={isRTL ? "text-right" : "text-left"}>
-              <h3 className={`text-[13px] font-black uppercase italic tracking-tight ${darkMode ? "text-white" : "text-slate-900"}`}>
+              <h3 className={`text-[13px] font-black uppercase       tracking-tight ${darkMode ? "text-white" : "text-slate-900"}`}>
                 {isRTL ? "ملخص الطلب" : "Order Summary"}
               </h3>
               <p className="text-[10px] font-bold text-red-600 uppercase tracking-widest mt-0.5">
@@ -108,7 +108,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                       <img src={item.image} className="w-full h-full object-cover" alt="" />
                     )}
                     {item.isBundle && (
-                      <div className="absolute top-0 inset-x-0 bg-white dark:bg-black dark:text-white text-black text-[10px] font-black py-0.5 text-center uppercase italic shadow-sm">
+                      <div className="absolute top-0 inset-x-0 bg-white dark:bg-black dark:text-white text-black text-[10px] font-black py-0.5 text-center uppercase       shadow-sm">
                         Bundle
                       </div>
                     )}
@@ -117,7 +117,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                   {/* تفاصيل المنتج المحدثة */}
                   <div className="flex-1 flex flex-col min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <h4 className={`text-[12px] font-black uppercase italic truncate ${darkMode ? "text-white" : "text-slate-900"}`}>
+                      <h4 className={`text-[12px] font-black uppercase       truncate ${darkMode ? "text-white" : "text-slate-900"}`}>
                         {item.name}
                       </h4>
                       <button 
@@ -134,7 +134,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
                       {item.isBundle ? (
                         item.bundleItems?.map((bi, idx) => (
                           <div key={idx} className="flex items-center gap-2 overflow-hidden">
-                            <span className={`text-[9px] font-black uppercase italic truncate shrink ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
+                            <span className={`text-[9px] font-black uppercase       truncate shrink ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
                               {bi.name} :
                             </span>
                             <div className="flex gap-1 shrink-0">
@@ -161,7 +161,7 @@ const OrderSummary = ({ cart, isRTL, removeFromCart, updateQty, cartTotal }) => 
 
                     {/* السعر والتحكم */}
                     <div className="mt-auto pt-3 flex items-center justify-between">
-                      <span className="text-sm font-black text-black dark:text-white italic">
+                      <span className="text-sm font-black text-black dark:text-white      ">
                         {(item.price * item.qty).toLocaleString()} <span className="text-[9px] ms-1">{isRTL ? "ج.م" : "EGP"}</span>
                       </span>
 

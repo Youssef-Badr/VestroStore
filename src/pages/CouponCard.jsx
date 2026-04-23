@@ -57,7 +57,7 @@ ${darkMode
     </div>
 
     {/* Title */}
-    <h3 className="text-2xl font-black italic uppercase text-center tracking-tight">
+    <h3 className="text-2xl font-black       uppercase text-center tracking-tight">
       {getDiscountTitle()}
     </h3>
 
@@ -171,7 +171,7 @@ ${darkMode
   {/* Copy Button */}
   <button 
     onClick={() => copyToClipboard(discount.code)} 
-    className={`w-full py-4 rounded-2xl font-black text-sm transition-all border flex items-center justify-center gap-2 uppercase italic
+    className={`w-full py-4 rounded-2xl font-black text-sm transition-all border flex items-center justify-center gap-2 uppercase      
       ${copied 
         ? "bg-red-800 text-black border-transparent" 
         : darkMode 

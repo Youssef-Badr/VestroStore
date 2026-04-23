@@ -107,7 +107,7 @@ const CategoryPage = () => {
               <ShoppingBag size={64} className="opacity-20" />
             </div>
 
-            <h3 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter mb-4">
+            <h3 className="text-3xl md:text-4xl font-black       uppercase tracking-tighter mb-4">
               {isRTL ? "قريباً في فسترو" : "Dropping Soon at Vestro"}
             </h3>
             

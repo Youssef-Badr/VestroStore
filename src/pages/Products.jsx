@@ -72,7 +72,7 @@ export default function Products() {
   }, [t.error]);
 
   if (error) return (
-    <div className="min-h-screen flex items-center justify-center text-[#86FE05] font-black italic uppercase tracking-[0.2em] px-4 text-center">
+    <div className="min-h-screen flex items-center justify-center text-[#86FE05] font-black      uppercase tracking-[0.2em] px-4 text-center">
       {error}
     </div>
   );
@@ -109,7 +109,7 @@ export default function Products() {
         <header className="flex flex-col items-center mb-8 sm:mb-24 text-center">
         <h1 className=" sm:pt-12 md:pt-16 
                text-[8vw] sm:text-5xl md:text-6xl lg:text-7xl 
-               font-black mt-2 italic tracking-tighter uppercase leading-[0.9] 
+               font-black mt-2      tracking-tighter uppercase leading-[0.9] 
                mb-2 sm:mb-6 text-black dark:text-white">
   {t.title}
   <span className="text-black dark:text-white">.</span>
@@ -131,7 +131,7 @@ export default function Products() {
                 
                 {product.discount > 0 && (
                   <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-20">
-                    {/* <span className="bg-[#86FE05] text-black text-[8px] sm:text-[10px] font-black px-2 py-1 rounded-full italic uppercase">
+                    {/* <span className="bg-[#86FE05] text-black text-[8px] sm:text-[10px] font-black px-2 py-1 rounded-full      uppercase">
                       -{product.discount}%
                     </span> */}
                   </div>
