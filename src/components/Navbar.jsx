@@ -420,7 +420,7 @@ const [showSocial, setShowSocial] = useState(false);
   <div className="mt-4 px-1">
     <button
       onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
-      className="flex items-center justify-between w-full text-2xl font-black  uppercase mb-3"
+      className="flex items-center justify-between w-full text-xl font-black  uppercase mb-3"
     >
       <span>{isRTL ? "الأقسام" : "Categories"}</span>
       <ChevronDown
