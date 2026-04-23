@@ -173,8 +173,8 @@ const [showSocial, setShowSocial] = useState(false);
           <Link 
   to="/" 
   dir="ltr"
-  className={`font-black text-xl md:text-2xl flex items-center gap-1 transition-transform duration-300 ${
-    isRTL ? "-translate-x-5" : "translate-x-5"
+  className={`font-black text-2xl md:text-2xl flex items-center gap-1 transition-transform duration-300 ${
+    isRTL ? "-translate-x-4" : "translate-x-4"
   }`}
 >
             <span className={darkMode ? "text-white" : "text-black"}>VESTRO </span>
