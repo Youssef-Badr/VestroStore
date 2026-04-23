@@ -37,7 +37,7 @@ export default function Policy() {
         <div className="flex items-start gap-3 p-4 rounded-2xl border border-red-500/40 bg-red-50 dark:bg-red-500/10">
           <AlertTriangle className="text-red-500" />
           <p className="text-sm leading-6 font-bold text-red-600 dark:text-red-400">
-            يتم دفع <span className="text-black dark:text-white">65 ج.م</span> فقط عند رفض الشحنة أثناء المعاينة.
+            يتم دفع <span className="text-black dark:text-white"></span> فقط عند رفض الشحنة أثناء المعاينة.
           </p>
         </div>
 

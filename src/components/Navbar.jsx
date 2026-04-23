@@ -542,17 +542,25 @@ const [showSocial, setShowSocial] = useState(false);
   <div className="p-6 border-t border-white/10 space-y-4">
    <div className="grid grid-cols-3 gap-3 mt-4 text-[13px] font-bold uppercase opacity-80 text-center">
 
-  <Link to="/terms" onClick={() => setMenuOpen(false)}>
+  <Link to="/terms" onClick={() => setMenuOpen(false)}
+  className="hover:text-red-700 transition-colors" // اختياري لإضافة لمسة جمالية
+>
     {isRTL ? "الشروط" : "Terms"}
   </Link>
 
-  <Link to="/privacy" onClick={() => setMenuOpen(false)}>
+  <Link to="/privacy"onClick={() => setMenuOpen(false)}
+  className="hover:text-red-700 transition-colors" // اختياري لإضافة لمسة جمالية
+>
     {isRTL ? "الخصوصية" : "Privacy"}
   </Link>
 
-  <Link to="/policy" onClick={() => setMenuOpen(false)}>
-    {isRTL ? "سياسات الإسترجاع" : " "}
-  </Link>
+ <Link 
+  to="/policy" 
+  onClick={() => setMenuOpen(false)}
+  className="hover:text-red-700 transition-colors" // اختياري لإضافة لمسة جمالية
+>
+  {isRTL ? "سياسة الإسترجاع" : "Return Policy"}
+</Link>
 
 </div>
   
