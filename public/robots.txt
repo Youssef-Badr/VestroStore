@@ -6,7 +6,7 @@ Allow: /
 Disallow: /admin
 Disallow: /api
 Disallow: /auth
-Disallow: /checkout
+Disallow: /thankyou
 
 # Sitemap location
 Sitemap: https://vestro.net/sitemap.xml

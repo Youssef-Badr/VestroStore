@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { ShoppingBag, CreditCard, ChevronRight, Info } from 'lucide-react';
 import { useLanguage } from "../contexts/LanguageContext";
@@ -52,7 +50,7 @@ const handleClaimFromDetails = () => {
         
         {/* Badge الخصم - رجعناه لوحده فوق الصورة بشكل كلاسيك */}
         <div className={`absolute top-5 ${isAr ? "right-5" : "left-5"} z-20`}>
-          <div className="bg-black  text-white dark:bg-white dark:text-black text-[15px] font-black px-3 py-1.5 rounded-xl shadow-lg uppercase italic">
+          <div className="  text-white bg-red-700 dark:text-black text-[15px] font-black px-3 py-1.5 rounded-xl shadow-lg uppercase   ">
             {isAr ? `وفر ${discount}%` : `Save ${discount}%`}
           </div>
         </div>
@@ -76,7 +74,7 @@ const handleClaimFromDetails = () => {
           <div className="mb-6">
             {/* السطر ده هو اللي فيه التعديل: العنوان والتفاصيل في سطر واحد */}
             <div className="flex justify-between items-start gap-4 mb-2">
-              <h3 className={`text-xl font-black uppercase italic tracking-tighter leading-tight ${darkMode ? "text-white" : "text-slate-900"}`}>
+              <h3 className={`text-xl font-black uppercase  leading-tight ${darkMode ? "text-white" : "text-slate-900"}`}>
                 {bundle.name}<span className="text-red-800">.</span>
               </h3>
               
@@ -88,7 +86,7 @@ const handleClaimFromDetails = () => {
                     : "bg-black/5 border-black/5 text-gray-600 hover:text-black hover:border-black/20 hover:bg-black/5"
                 }`}
               >
-                <span className="text-[17px] font-black uppercase tracking-widest whitespace-nowrap">
+                <span className="text-[15px] font-black uppercase  whitespace-nowrap">
                   {isAr ? "تفاصيل العرض" : "Offer Details"}
                 </span>
                 <Info size={17} />
@@ -96,7 +94,7 @@ const handleClaimFromDetails = () => {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-black text-black dark:text-white italic">
+              <span className="text-2xl font-black text-black dark:text-white   ">
                 {bundle.bundlePrice.toLocaleString()} <span className="text-[10px] uppercase">{isAr ? 'ج.م' : 'EGP'}</span>
               </span>
               <span className="text-[14px] font-bold text-red-500 line-through opacity-60">
@@ -108,10 +106,10 @@ const handleClaimFromDetails = () => {
           <div className="flex flex-col gap-3">
             <button
               onClick={() => handleAction('add_to_cart')}
-              className={`w-full py-4 rounded-2xl font-black text-[18px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all border bg-red-700 ${
+              className={`w-full py-4 rounded-2xl font-black text-[18px] uppercase  flex items-center justify-center gap-2 transition-all border bg-red-700 ${
                 darkMode 
-                  ? "border-white/10 text-white hover:bg-red-600 hover:text-black" 
-                  : "border-black/10 text-black hover:bg-red-600 hover:text-white"
+                  ? "border-white/10 text-black hover:bg-red-600 hover:text-black" 
+                  : "border-black/10 text-white hover:bg-red-600 hover:text-white"
               }`}
             >
               <ShoppingBag size={16} />
@@ -120,7 +118,7 @@ const handleClaimFromDetails = () => {
 
             <button
               onClick={() => handleAction('buy_now')}
-              className="w-full py-4 rounded-2xl font-black text-[18px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all bg-black text-white dark:text-black dark:bg-white hover:scale-[1.02] active:scale-95"
+              className="w-full py-4 rounded-2xl font-black text-[16px] uppercase  flex items-center justify-center gap-2 transition-all bg-black text-white dark:text-black dark:bg-white hover:scale-[1.02] active:scale-95"
             >
               <CreditCard size={16} />
               {isAr ? 'اشتري الآن (دفع مباشر)' : 'Buy Now (Checkout)'}

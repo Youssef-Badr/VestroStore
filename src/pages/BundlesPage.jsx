@@ -81,7 +81,7 @@ const BundlesPage = () => {
              active:scale-95
              transition-all duration-300"
 >
-  <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/60 dark:bg-black/40 group-hover:rotate-[-10deg] transition">
+  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/60 dark:bg-black/40 group-hover:rotate-[-10deg] transition">
     <ArrowLeft
       size={16}
       className={isRTL ? "rotate-180" : ""}
@@ -93,20 +93,20 @@ const BundlesPage = () => {
   </span>
 </button>
         {/* Header Section */}
-        <div className="flex flex-col items-center text-center mb-20">
+        <div className="flex flex-col items-center text-center mb-10">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 bg-black/5 dark:bg-white text-black dark:text-black px-6 py-2.5 rounded-full mb-6 text-[17px] font-black uppercase tracking-[0.2em] border border-black/5 dark:border-[#86FE05]/20 shadow-sm"
+            className="inline-flex items-center gap-2 bg-black/5 dark:bg-white text-black dark:text-black px-6 py-2.5 rounded-full mb-6 text-[14px] font-black uppercase tracking-[0.2em] border border-black/5 dark:border-[#86FE05]/20 shadow-sm"
           >
-            <LayoutGrid size={14} />
+            <LayoutGrid size={10} />
             {isRTL ? 'عروض فيسترو الحصرية' : 'Vestro Limited Offers'}
           </motion.div>
           
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black text-black dark:text-white mb-6 tracking-tighter uppercase"
+            className="text-xl md:text-7xl font-black text-black dark:text-white mb-3 tracking-tighter uppercase"
           >
             {isRTL ? 'باقات توفير فسترو' : 'Vestro Savings Bundles'}
           </motion.h1>
@@ -114,7 +114,7 @@ const BundlesPage = () => {
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-gray-500 dark:text-gray-400 max-w-2xl text-xl font-medium leading-relaxed px-4"
+            className="text-gray-500 dark:text-gray-400 max-w-2xl text-sm font-medium leading-relaxed px-4"
           >
             {isRTL 
               ? 'وفر أكتر لما تشتري باقاتنا المنسقة بعناية. خامات ممتازة وأسعار مفيش زيها.' 
@@ -122,7 +122,7 @@ const BundlesPage = () => {
           </motion.p>
 
           {/* Decorative Neon Line */}
-          <div className="w-24 h-1.5 bg-black dark:bg-slate-200 mt-10 rounded-full " />
+          <div className="w-24 h-1.5 bg-black dark:bg-slate-200 mt-7 rounded-full " />
         </div>
 
         {/* Bundles Grid */}

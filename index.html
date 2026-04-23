@@ -4,89 +4,70 @@
     <meta charset="UTF-8" />
 
     <meta name="google" content="notranslate" />
+    <meta name="facebook-domain-verification" content="h9z75k3zom08mfwmv5qyqxiel8uabj" />
 
-    <meta
-      name="facebook-domain-verification"
-      content="h9z75k3zom08mfwmv5qyqxiel8uabj"
-    />
-
+    <!-- VIEWPORT (مرة واحدة فقط) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vestro Store</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Vestro Store | أفضل متجر ملابس رياضية في مصر</title>
+    <!-- TITLE -->
+    <title>Vestro Store | أفضل متجر ملابس رياضية في مصر</title>
 
-<!-- SEO -->
-<meta
-  name="description"
-  content="Vestro Store - تسوق أفضل الملابس الرياضية في مصر بأعلى جودة وأفضل سعر. شحن سريع لجميع المحافظات ودفع عند الاستلام أو فيزا."
-/>
+    <!-- SEO -->
+    <meta name="description" content="Vestro Store - تسوق أفضل الملابس الرياضية في مصر بأعلى جودة وأفضل سعر. شحن سريع لجميع المحافظات ودفع عند الاستلام أو فيزا." />
+    <meta name="keywords" content="ملابس رياضية, ملابس جيم, vestro store, تسوق مصر, sportswear egypt, ملابس رجالي, ملابس حريمي" />
+    <meta name="author" content="Vestro Store" />
+    <meta name="robots" content="index, follow" />
 
-<meta
-  name="keywords"
-  content="ملابس رياضية, ملابس جيم, تسوق أونلاين مصر, vestro store, sportswear egypt, ملابس رجالي, ملابس حريمي, متجر ملابس"
-/>
+    <!-- CANONICAL (مهم جدًا للـ SEO) -->
+    <link rel="canonical" href="https://vestro.net" />
 
-<meta name="author" content="Vestro Store" />
-<meta name="robots" content="index, follow" />
+    <!-- OPEN GRAPH -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Vestro Store | ملابس رياضية بجودة عالية" />
+    <meta property="og:description" content="تسوق أحدث الملابس الرياضية بأفضل الأسعار والشحن السريع في مصر" />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:url" content="https://vestro.net" />
+    <meta property="og:site_name" content="Vestro Store" />
 
-<!-- Open Graph (Facebook / WhatsApp) -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Vestro Store | ملابس رياضية بجودة عالية" />
-<meta
-  property="og:description"
-  content="تسوق أحدث الملابس الرياضية بأفضل الأسعار والشحن السريع في مصر"
-/>
-<meta property="og:image" content="/logo.png" />
-<meta property="og:url" content="https://vestro.net" />
-<meta property="og:site_name" content="Vestro Store" />
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vestro Store" />
+    <meta name="twitter:description" content="أفضل متجر ملابس رياضية في مصر" />
+    <meta name="twitter:image" content="/logo.png" />
 
-<!-- Twitter Cards -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Vestro Store" />
-<meta
-  name="twitter:description"
-  content="أفضل متجر ملابس رياضية في مصر"
-/>
-<meta name="twitter:image" content="/logo.png" />
+    <!-- FAVICON -->
+    <link rel="icon" href="/logo2.jpeg" type="image/jpeg" />
 
-<!-- WhatsApp Preview Optimization -->
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+    <!-- FACEBOOK PIXEL -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = true;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = true;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
 
-<!-- Favicon (اختياري لكن مهم) -->
-<link rel="icon" href="logo.jpeg" type="image/jpeg" />
+      fbq("init", "1670963710255895");
+      fbq("track", "PageView");
+    </script>
+  </head>
 
-   <script>
-  !(function (f, b, e, v, n, t, s) {
-    if (f.fbq) return;
-    n = f.fbq = function () {
-      n.callMethod
-        ? n.callMethod.apply(n, arguments)
-        : n.queue.push(arguments);
-    };
-    if (!f._fbq) f._fbq = n;
-    n.push = n;
-    n.loaded = true;
-    n.version = "2.0";
-    n.queue = [];
-    t = b.createElement(e);
-    t.async = true;
-    t.src = v;
-    s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
-  })(
-    window,
-    document,
-    "script",
-    "https://connect.facebook.net/en_US/fbevents.js"
-  );
+  <body>
+    <div id="root"></div>
 
-  fbq("init", "1670963710255895");
-  fbq("track", "PageView");
-</script>
-
-    <!-- NoScript fallback -->
+    <!-- NoScript fallback (مكانه صح داخل body) -->
     <noscript>
       <img
         height="1"
@@ -95,12 +76,6 @@
         src="https://www.facebook.com/tr?id=1670963710255895&ev=PageView&noscript=1"
       />
     </noscript>
-
-    <link rel="preload" as="style" href="/src/index.css" />
-  </head>
-
-  <body>
-    <div id="root"></div>
 
     <script type="module" src="/src/main.jsx"></script>
 

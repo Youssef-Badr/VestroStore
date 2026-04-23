@@ -14,7 +14,6 @@ export default function Layout({ children, onCartClick  }) {
        <Navbar onCartClick={onCartClick} />
       </header>
 
-      {/* 2. إضافة السلة الجانبية هنا */}
       {/* هتظهر فوق كل حاجة لما isCartOpen تبقى true */}
       <SideCart />
 

@@ -27,8 +27,6 @@ export default function AnnouncementBar() {
     fetchAnnouncements();
   }, []);
 
-  // 🔥 لازم يبقى فوق أي return
-  // const speed = 150;
 
   const marqueeItems = useMemo(() => {
     if (!announcements.length) return [];
