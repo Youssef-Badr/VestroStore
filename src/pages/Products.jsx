@@ -109,7 +109,7 @@ export default function Products() {
         <header className="flex flex-col items-center mb-8 sm:mb-24 text-center">
         <h1 className=" sm:pt-12 md:pt-16 
                text-[8vw] sm:text-5xl md:text-6xl lg:text-7xl 
-               font-black mt-2      tracking-tighter uppercase leading-[0.9] 
+               font-black mt-2     uppercase leading-[0.9] 
                mb-2 sm:mb-6 text-black dark:text-white">
   {t.title}
   <span className="text-black dark:text-white">.</span>

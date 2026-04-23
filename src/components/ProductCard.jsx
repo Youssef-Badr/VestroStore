@@ -191,7 +191,7 @@ function ProductCard({ product }) {
               </div>
             </div>
             <div className="absolute top-4 right-4 z-20">
-              <div className="bg-red-700 dark:bg-white backdrop-blur-md border border-red-700  dark:text-slate-950 text-white text-[8px] sm:text-[11px] font-black px-1 py-1.5 rounded-full uppercase tracking-wider">
+              <div className="bg-red-700 dark:bg-white backdrop-blur-md border border-red-700  dark:text-slate-950 text-white text-[8px] sm:text-[11px] font-black px-1 py-1.5 rounded-full uppercase                 ">
                 {isRTL ? "تخفيض" : "SALE"}
               </div>
             </div>
@@ -229,10 +229,10 @@ createPortal (
       {/* Header */}
       <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-white/5">
         <div className="flex flex-col">
-          <h4 className="text-lg md:text-xl font-[900] text-red-600 uppercase tracking-tighter">
+          <h4 className="text-lg md:text-xl font-[900] text-red-600 uppercase                 ">
             {isRTL ? "تخصيص الطلب" : "Customize"}
           </h4>
-          <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate max-w-[180px]">
+          <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase                  truncate max-w-[180px]">
             {product.name}
           </p>
         </div>
@@ -280,7 +280,7 @@ createPortal (
                 });
                 setCurrentStep(currentStep - 1);
               }}
-              className="text-[14px] font-bold text-red-800 underline uppercase tracking-tighter"
+              className="text-[14px] font-bold text-red-800 underline uppercase                 "
             >
               {isRTL ? "الرجوع" : "Go Back"}
             </button>
@@ -367,7 +367,7 @@ createPortal (
       <div className="p-4 bg-gray-50 dark:bg-white/5">
         <button
           onClick={resetSelector}
-          className="w-full py-3 text-[14px] font-black uppercase tracking-[0.2em] text-red-700 dark:hover:text-white transition-colors"
+          className="w-full py-3 text-[14px] font-black uppercase                  text-red-700 dark:hover:text-white transition-colors"
         >
           {isRTL ? "إلغاء العملية" : "Cancel Process"}
         </button>
@@ -379,7 +379,7 @@ createPortal (
 
         {isSoldOut && (
           <div className="absolute inset-0 bg-white/60 dark:bg-black/40 backdrop-blur-[2px] flex items-center justify-center z-20 pointer-events-none">
-            <div className="bg-slate-900 dark:bg-black text-white dark:text-red-800 border border-white/10 px-6 py-2 rounded-full text-[15px] bold font-black uppercase tracking-[0.3em] -rotate-12">
+            <div className="bg-slate-900 dark:bg-black text-white dark:text-red-800 border border-white/10 px-6 py-2 rounded-full text-[15px] bold font-black uppercase                  -rotate-12">
               {language === "ar" ? "نفذت الكمية" : "SOLD OUT"}
             </div>{" "}
           </div>
@@ -389,7 +389,7 @@ createPortal (
       <div className="pt-5 px-1 flex flex-col items-center text-center gap-3">
         <h3
           onClick={handleNavigate}
-          className="text-[14px] sm:text-[16px] font-black uppercase tracking-tight text-black dark:text-white      truncate max-w-full cursor-pointer hover:text-red-800"
+          className="text-[14px] sm:text-[16px] font-black uppercase  text-black dark:text-white      truncate max-w-full cursor-pointer hover:text-red-800"
         >
           {product.name}
         </h3>
@@ -398,7 +398,7 @@ createPortal (
           className={`flex items-center gap-4 ${isRTL ? "flex-row-reverse" : "flex-row"} justify-center`}
         >
           <div className="flex items-baseline gap-1">
-            <span className="text-black dark:text- font-black text-3xl sm:text-4xl      tracking-tighter leading-none">
+            <span className="text-black dark:text- font-black text-3xl sm:text-4xl                       leading-none">
               {product.price}
             </span>
             <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 ">

@@ -105,10 +105,10 @@ export default function ProfilePage() {
               <User size={48} className="text-black" />
             </div>
             <div>
-              <h1 className="text-4xl font-black uppercase       tracking-tighter">
+              <h1 className="text-4xl font-black uppercase   ">
                 {profileData.firstName} <span className="text-red-700">{profileData.lastName}</span>
               </h1>
-              <p className="text-gray-500 font-bold flex items-center gap-2 mt-1       tracking-tight"> {profileData.email}</p>
+              <p className="text-gray-500 font-bold flex items-center gap-2 mt-1  "> {profileData.email}</p>
             </div>
           </div>
           <button 

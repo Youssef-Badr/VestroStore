@@ -90,7 +90,7 @@ const OrdersPage = () => {
           <div className={`w-12 h-12 md:w-16 md:h-16 border-2 rounded-full ${darkMode ? 'border-red-800' : 'border-gray-100'}`}></div>
           <div className="absolute top-0 w-12 h-12 md:w-16 md:h-16 border-t-2 border-red-700 rounded-full animate-spin"></div>
         </div>
-        <p className="text-red-800 font-black tracking-widest text-[10px] uppercase animate-pulse">Vestro Orders</p>
+        <p className="text-red-800 font-black text-[10px] uppercase animate-pulse">Vestro Orders</p>
       </div>
     );
   }
@@ -106,10 +106,10 @@ const OrdersPage = () => {
               <ShoppingBag size={28} className="text-black -rotate-2" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-5xl font-black  tracking-tighter uppercase leading-none">
+              <h1 className="text-3xl md:text-5xl font-black   uppercase leading-none">
                 {isRTL ? "طلباتي" : "My Orders"}
               </h1>
-              <p className={`font-bold mt-2 text-[15px] uppercase tracking-[0.2em] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              <p className={`font-bold mt-2 text-[15px] uppercase  ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                 {isRTL ? "تتبع وإدارة مشترياتك" : "Track and manage your history"}
               </p>
             </div>
@@ -151,10 +151,10 @@ const OrdersPage = () => {
                         </h3> */}
                       </div>
                       <div className={`text-end lg:text-start lg:mt-4 space-y-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                        <p className="text-[10px] font-bold flex items-center lg:justify-start justify-end gap-2 uppercase tracking-tighter">
+                        <p className="text-[10px] font-bold flex items-center lg:justify-start justify-end gap-2 uppercase ">
                           <Calendar size={12} className="text-black dar:text-white"/> {day}
                         </p>
-                        <p className="text-[10px] font-bold flex items-center lg:justify-start justify-end gap-2 uppercase tracking-tighter">
+                        <p className="text-[10px] font-bold flex items-center lg:justify-start justify-end gap-2 uppercase ">
                           <Clock size={12} className="text-black dar:text-white"/> {time}
                         </p>
                       </div>
@@ -181,8 +181,8 @@ const OrdersPage = () => {
                     {/* Summary & View Button */}
                     <div className={`lg:ml-auto rtl:lg:mr-auto flex flex-row items-center justify-between lg:justify-end w-full lg:w-auto gap-8 pt-6 lg:pt-0 border-t lg:border-0 ${darkMode ? 'border-white/5' : 'border-gray-100'}`}>
                       <div className="text-left rtl:text-right">
-                        <p className={`text-[8px] font-black uppercase tracking-widest       mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Final Invoice</p>
-                        <p className="text-2xl md:text-3xl font-black text-black dark:text-white tracking-tighter">
+                        <p className={`text-[8px] font-black uppercase       mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Final Invoice</p>
+                        <p className="text-2xl md:text-3xl font-black text-black dark:text-white ">
                           {order.totalPrice} <span className={`text-xs ${darkMode ? 'text-white' : 'text-black'}`}>EGP</span>
                         </p>
                       </div>
@@ -211,8 +211,8 @@ const StatCard = ({ icon, label, value, color, darkMode }) => (
       {icon}
     </div>
     <div className="min-w-0 text-center sm:text-start">
-      <p className={`text-[7px] md:text-[10px] font-black uppercase tracking-[0.1em] mb-1       ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>{label}</p>
-      <p className="text-sm md:text-xl font-black truncate tracking-tighter">{value}</p>
+      <p className={`text-[7px] md:text-[10px] font-black uppercase  mb-1       ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>{label}</p>
+      <p className="text-sm md:text-xl font-black truncate ">{value}</p>
     </div>
   </div>
 );

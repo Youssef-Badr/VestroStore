@@ -173,7 +173,7 @@ const [showSocial, setShowSocial] = useState(false);
           <Link 
             to="/" 
             dir="ltr" 
-            className="font-black text-xl md:text-2xl flex items-center gap-1 tracking-tighter"
+            className="font-black text-xl md:text-2xl flex items-center gap-1               "
           >
             <span className={darkMode ? "text-white" : "text-black"}>VESTRO STORE</span>
             {/* <span className="text-red-800">STORE</span> */}
@@ -184,7 +184,7 @@ const [showSocial, setShowSocial] = useState(false);
               <Link 
                 key={link.name} 
                 to={link.path} 
-                className={`text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-red-700 ${
+                className={`text-[15px]  font-bold uppercase                 transition-all hover:text-red-700 ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -196,7 +196,7 @@ const [showSocial, setShowSocial] = useState(false);
             <div className="relative" ref={catRef}>
               <button 
                 onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-                className={`flex items-center gap-1 text-[15px]  font-bold uppercase tracking-[0.2em] transition-all hover:text-red-800 ${
+                className={`flex items-center gap-1 text-[15px]  font-bold uppercase                 transition-all hover:text-red-800 ${
                   darkMode ? "text-gray-400" : "text-black"
                 }`}
               >
@@ -649,7 +649,7 @@ const [showSocial, setShowSocial] = useState(false);
   
   {/* العمود الأول: الكلمات الدليلة Keywords */}
   <div>
-    <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6">
+    <h3 className="text-[10px] font-black uppercase                 text-gray-500 mb-6">
       {isRTL ? "كلمات دليلة" : "Popular Tags"}
     </h3>
     <div className="flex flex-wrap gap-2">
@@ -669,7 +669,7 @@ const [showSocial, setShowSocial] = useState(false);
 
   {/* العمود الثاني: المنتجات المقترحة Products */}
   <div>
-    <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6">
+    <h3 className="text-[10px] font-black uppercase                 text-gray-500 mb-6">
       {isRTL ? "منتجات مقترحة" : "Suggested Products"}
     </h3>
     <div className="space-y-3">

@@ -75,7 +75,7 @@ export default function Privacy() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mt-8">
+          <h1 className="text-5xl md:text-7xl font-black uppercase  mt-8">
             {isRTL ? "سياسة الخصوصية" : "Privacy Policy"}
           </h1>
           <div className="w-24 h-1 bg-red-700 mx-auto mt-6 rounded-full" />

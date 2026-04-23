@@ -59,7 +59,7 @@ export default function LoginPage() {
           <div className="w-16 h-16 bg-red-700 rounded-2xl flex items-center justify-center mx-auto mb-4 rotate-3 ">
             <LogIn size={30} className="text-black" />
           </div>
-          <h1 className="text-3xl font-black uppercase       tracking-tighter">
+          <h1 className="text-3xl font-black uppercase      ">
             {isRTL ? "تسجيل" : "Client"} <span className="text-red-700">{isRTL ? "الدخول" : "Login"}</span>
           </h1>
           <p className="text-gray-500 font-bold mt-2 text-sm">{isRTL ? "ادخل لمتابعة تسوقك في VESTRO" : "Enter your details to continue"}</p>

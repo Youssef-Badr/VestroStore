@@ -517,7 +517,7 @@ return (
               </button>
 
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <h1 className="text-base sm:text-lg font-black uppercase   tracking-[0.1em] text-slate-900 dark:text-white pointer-events-auto">
+                <h1 className="text-base sm:text-lg font-black uppercase    text-slate-900 dark:text-white pointer-events-auto">
                   {isRTL ? "إتمام الطلب" : "Checkout"}
                 </h1>
               </div>
@@ -527,7 +527,7 @@ return (
 
           {/* 📍 Section 1: Personal Info */}
           <section className="space-y-4">
-            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
+            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase  px-1">
               {isRTL ? "المعلومات الشخصية" : "Personal Information"}
             </h2>
             <div className="grid grid-cols-1 gap-4">
@@ -582,7 +582,7 @@ return (
     value={formData.phone} 
     onChange={handleChange}
     placeholder={isRTL ? "رقم الهاتف" : "Phone Number"}
-    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
+    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black  text-slate-900 dark:text-white`}
   />
 </div>
 
@@ -598,7 +598,7 @@ return (
     value={formData.secondaryPhone || ''} 
     onChange={handleChange}
     placeholder={isRTL ? "رقم هاتف إضافي (اختياري)" : "Secondary Phone (Optional)"}
-    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black tracking-widest text-slate-900 dark:text-white`}
+    className={`w-full ${isRTL ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-4 bg-slate-50 dark:bg-[#111111] border border-transparent dark:border-white/5 rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-black  text-slate-900 dark:text-white`}
   />
 </div>
 
@@ -616,7 +616,7 @@ return (
 
           {/* 🚚 Section 2: Shipping */}
           <section className="space-y-4">
-            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
+            <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase  px-1">
               {isRTL ? "عنوان الشحن" : "Shipping Address"}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -661,7 +661,7 @@ return (
           {/* 🏷️ Discount Section */}
           <section className="space-y-3">
             <div className="flex justify-between items-center px-1">
-              <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em]">
+              <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase ">
                 {isRTL ? "كود الخصم" : "Discount Code"}
               </h2>
               <button
@@ -735,7 +735,7 @@ return (
             {isRTL ? "فيسترو أوفيرز" : "Vestro Offers"}
           </h3>
 
-          <p className="text-[10px] font-bold text-black/40 dark:text-white/40 uppercase tracking-[0.2em]">
+          <p className="text-[10px] font-bold text-black/40 dark:text-white/40 uppercase ">
             {isRTL ? "وفر أكتر مع طلبك النهاردة" : "Save more on your order"}
           </p>
         </div>
@@ -775,14 +775,14 @@ return (
                 <div className="flex justify-between items-start mb-4">
 
                   <div>
-                    <span className="text-2xl font-black   text-black dark:text-white uppercase tracking-tighter">
+                    <span className="text-2xl font-black   text-black dark:text-white uppercase ">
                       {disc.code}
                     </span>
 
                     <div className="flex items-center gap-2 mt-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
 
-                      <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 tracking-widest">
+                      <span className="text-[10px] font-black uppercase text-black/50 dark:text-white/50 ">
                         {isFreeShipping
                           ? (isRTL ? "شحن مجاني" : "FREE SHIPPING")
                           : isPercentage
@@ -887,7 +887,7 @@ return (
 
        {/* 💳 Payment Method */}
 <section className="space-y-4">
-  <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-[0.3em] px-1">
+  <h2 className="text-[15px] font-black text-slate-900 dark:text-white uppercase  px-1">
     {isRTL ? "طريقة الدفع" : "Payment Method"}
   </h2>
 
@@ -996,7 +996,7 @@ return (
             <span className="text-[10px] text-red-500 font-black uppercase  ">
               Get Unit
             </span>
-            <span className="text-sm font-black bg-emerald-500 dark:bg-red-700 text-white dark:text-black px-2 rounded-md tracking-tighter">
+            <span className="text-sm font-black bg-emerald-500 dark:bg-red-700 text-white dark:text-black px-2 rounded-md ">
               FREE / DISCOUNTED
             </span>
           </div>
@@ -1056,10 +1056,10 @@ return (
     {/* Total Savings: الواجهة القوية */}
     <div className="mt-8 p-5 bg-black rounded-[2rem] flex justify-between items-center border-2 ">
       <div>
-        <p className="text-white text-[15px] font-black uppercase tracking-widest mb-1">
+        <p className="text-white text-[15px] font-black uppercase  mb-1">
           {isRTL ? "إجمالي التوفير" : "TOTAL SAVINGS"}
         </p>
-        <h3 className="text-white text-3xl font-black   tracking-tighter">
+        <h3 className="text-white text-3xl font-black  ">
           -{Math.round(discountInfo.discountAmount)} <span className="text-sm not-  uppercase">EGP</span>
         </h3>
       </div>
@@ -1081,7 +1081,7 @@ return (
 <div className="bg-white dark:bg-black rounded-[2.5rem] p-8 text-slate-900 dark:text-white space-y-5 shadow-2xl relative border border-slate-100 dark:border-white/10 transition-all">
 
   {/* Subtotal */}
-  <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
+  <div className="flex justify-between items-center text-[15px] font-black uppercase ">
     <span>{isRTL ? "قيمة المشتريات" : "Subtotal"}</span>
     <span className="text-slate-900 dark:text-white">
       {Math.round(cartTotal)} EGP
@@ -1089,7 +1089,7 @@ return (
   </div>
 
   {/* Shipping */}
-  <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
+  <div className="flex justify-between items-center text-[15px] font-black uppercase ">
     <span>{isRTL ? "تكلفة الشحن" : "Shipping"}</span>
 
     <span
@@ -1113,7 +1113,7 @@ return (
 
   {/* Discount */}
   {discountInfo && (
-    <div className="flex justify-between items-center text-[15px] font-black uppercase tracking-[0.2em]">
+    <div className="flex justify-between items-center text-[15px] font-black uppercase ">
       <span>{isRTL ? "الخصم" : "Discount"}</span>
       <span className="text-red-700 ">
         -{Math.round(discountInfo.discountAmount)} EGP
@@ -1125,11 +1125,11 @@ return (
   <div className="pt-6 border-t border-slate-200 dark:border-white/10 flex justify-between items-end">
     
     <div>
-      <span className="text-[12px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] mb-1 block">
+      <span className="text-[12px] font-black text-slate-500 dark:text-slate-400 uppercase mb-1 block">
         {isRTL ? "المبلغ الإجمالي" : "Grand Total"}
       </span>
 
-      <div className="text-4xl font-black   leading-none tracking-tighter text-red-600">
+      <div className="text-4xl font-black   leading-none  text-red-600">
         {totalWithDiscount}
         <small className="text-xs not-  opacity-40 font-bold ml-1">
           EGP
@@ -1148,7 +1148,7 @@ return (
           {/* 🚀 Submit Button */}
           <button
             type="submit" disabled={loading}
-            className={`w-full py-6 rounded-[2rem] font-black uppercase   tracking-[0.2em] transition-all shadow-2xl relative overflow-hidden group
+            className={`w-full py-6 rounded-[2rem] font-black uppercase    transition-all shadow-2xl relative overflow-hidden group
               ${loading ? 'bg-slate-800 cursor-wait' : 'bg-black text-white dark:text-black dark:bg-white hover:scale-[1.02] active:scale-95 '}
             `}
           >

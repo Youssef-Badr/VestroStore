@@ -57,12 +57,12 @@ ${darkMode
     </div>
 
     {/* Title */}
-    <h3 className="text-2xl font-black       uppercase text-center tracking-tight">
+    <h3 className="text-2xl font-black       uppercase text-center">
       {getDiscountTitle()}
     </h3>
 
     {/* Sub */}
-    <p className="text-[10px] mt-2 font-bold opacity-50 uppercase tracking-widest text-center">
+    <p className="text-[10px] mt-2 font-bold opacity-50 uppercase  text-center">
       {discount.discountType === "free_shipping" 
         ? (isRTL ? `للطلبات فوق ${discount.minOrderAmount} ج.م` : `On orders above ${discount.minOrderAmount} EGP`)
         : (isRTL ? "كود خصم حصري" : "Exclusive Code")}
@@ -76,7 +76,7 @@ ${darkMode
   {discount.appliesToAll ? (
     
     /* 🔥 حالة: جميع المنتجات */
-    <div className={`text-center py-4 px-3 rounded-2xl border text-sm font-black uppercase tracking-wider
+    <div className={`text-center py-4 px-3 rounded-2xl border text-sm font-black uppercase 
       ${darkMode 
         ? "bg-white/5 border-white/10 text-white" 
         : "bg-black/5 border-black/10 text-black"}`}>
@@ -163,7 +163,7 @@ ${darkMode
       {isRTL ? " الكود" : " CODE"}
     </span>
 
-    <span className="text-lg font-black tracking-tighter text-red-800">
+    <span className="text-lg font-black  text-red-800">
       {discount.code}
     </span>
   </div>

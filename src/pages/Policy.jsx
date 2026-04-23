@@ -6,7 +6,7 @@ export default function Policy() {
       
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight">
+        <h1 className="text-3xl md:text-4xl font-black uppercase ">
           سياسة الإرجاع والاستبدال
         </h1>
         <p className="text-xs mt-3 opacity-60">

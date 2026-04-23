@@ -42,7 +42,7 @@ const [showInfo, setShowInfo] = useState(false);
               className={`fixed top-0 ${isRTL ? "left-0" : "right-0"} h-full w-full max-w-md z-[90] shadow-2xl p-8 overflow-y-auto ${darkMode ? "bg-[#0a0a0a] text-white" : "bg-white text-black"}`}
             >
               <div className="flex justify-between items-center mb-2 border-b border-zinc-800 pb-2 pt-24">
-                <h2 className="text-3xl font-black       uppercase tracking-tighter flex items-center gap-2">
+                <h2 className="text-3xl font-black       uppercase  flex items-center gap-2">
                   <FiGift className="text-red-800" /> {isRTL ? "عروض حصرية" : "Exclusive"}
                 </h2>
 <button
@@ -68,7 +68,7 @@ const [showInfo, setShowInfo] = useState(false);
   {/* النص */}
   <div className="flex items-center gap-3">
     <FiGift className="text-xl group-hover:scale-110 transition-transform" />
-    <span className="text-sm md:text-base font-black tracking-wide ">
+    <span className="text-sm md:text-base font-black  ">
       {isRTL ? "ازاي تستفيد من العروض وتوفر فلوسك؟" : "How to save more with offers?"}
     </span>
   </div>
@@ -82,7 +82,7 @@ const [showInfo, setShowInfo] = useState(false);
 
               <div className="space-y-8">
                 {loading ? (
-<div className="text-red-800 font-bold animate-pulse text-center mt-20 uppercase tracking-widest">
+<div className="text-red-800 font-bold animate-pulse text-center mt-20 uppercase ">
   {isRTL ? "جارٍ تحميل العروض..." : "Loading Deals..."}
 </div>                ) : discounts.map((d) => (
                   <CouponCard 

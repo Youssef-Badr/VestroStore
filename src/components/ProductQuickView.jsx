@@ -85,7 +85,7 @@ const ProductQuickView = ({ product, isOpen, onClose, darkMode, language }) => {
             <div className="p-8">
               {/* Product Header */}
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-[1000] uppercase       tracking-tighter mb-2 leading-tight">
+                <h3 className="text-2xl font-[1000] uppercase    mb-2 leading-tight">
                   {fullProduct?.name || product.name}
                 </h3>
                 <p className="text-black dark:text-white text-xl font-black      ">
@@ -152,7 +152,7 @@ const ProductQuickView = ({ product, isOpen, onClose, darkMode, language }) => {
                 className="w-full bg-white text-black py-5 rounded-[1.5rem] flex items-center justify-center gap-3 hover:bg-red-700 transition-all active:scale-95 disabled:opacity-20 disabled:grayscale"
               >
                 <FiZap className="fill-current" />
-                <span className="font-[1000] uppercase       tracking-widest text-sm border-1">
+                <span className="font-[1000] uppercase   text-sm border-1">
                   {isRTL ? "تأكيد وإضافة للسلة" : "Confirm & Add"}
                 </span>
               </button>

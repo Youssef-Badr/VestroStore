@@ -88,7 +88,7 @@ const BundlesPage = () => {
     />
   </span>
 
-  <span className="font-black uppercase tracking-wider text-sm">
+  <span className="font-black uppercase  text-sm">
     {isRTL ? "رجوع" : "Back"}
   </span>
 </button>
@@ -106,7 +106,7 @@ const BundlesPage = () => {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-xl md:text-7xl font-black text-black dark:text-white mb-3 tracking-tighter uppercase"
+            className="text-xl md:text-7xl font-black text-black dark:text-white mb-3  uppercase"
           >
             {isRTL ? 'باقات توفير فسترو' : 'Vestro Savings Bundles'}
           </motion.h1>
@@ -148,7 +148,7 @@ const BundlesPage = () => {
         {/* Empty State */}
         {!loading && bundles.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-400 font-bold text-xl uppercase tracking-widest">
+            <p className="text-gray-400 font-bold text-xl uppercase ">
               {isRTL ? 'لا توجد عروض متاحة حالياً' : 'No Bundles Available Right Now'}
             </p>
           </div>

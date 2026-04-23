@@ -80,11 +80,11 @@ const CategoryPage = () => {
           <motion.span 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
-            className="text-black  dark:text-white font-black text-xl tracking-[0.3em] uppercase mb-2 block"
+            className="text-black  dark:text-white font-black text-xl  uppercase mb-2 block"
           >
             {/* {isRTL ? "قسم" : "Collection"} */}
           </motion.span>
-          <h1 className="text-2xl md:text-6xl  font-black  uppercase tracking-tighter">
+          <h1 className="text-2xl md:text-6xl  font-black  uppercase">
             {categoryData?.name || (isRTL ? "القسم" : "Category")}
           </h1>
         </header>
@@ -107,7 +107,7 @@ const CategoryPage = () => {
               <ShoppingBag size={64} className="opacity-20" />
             </div>
 
-            <h3 className="text-3xl md:text-4xl font-black       uppercase tracking-tighter mb-4">
+            <h3 className="text-3xl md:text-4xl font-black       uppercase  mb-4">
               {isRTL ? "قريباً في فسترو" : "Dropping Soon at Vestro"}
             </h3>
             
@@ -121,7 +121,7 @@ const CategoryPage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/')}
-              className="bg-red-70 text-black px-12 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg hover:shadow-red-700 transition-all"
+              className="bg-red-70 text-black px-12 py-4 rounded-2xl font-black uppercase text-xs  shadow-lg hover:shadow-red-700 transition-all"
             >
               {isRTL ? "استكشف المجموعات الأخرى" : "Explore Other Drops"}
             </motion.button>

@@ -97,7 +97,7 @@ const [position, setPosition] = useState({
                   {f.icon}
                 </div>
                 <div>
-                  <h4 className="font-black text-lg uppercase tracking-tight">{f.title}</h4>
+                  <h4 className="font-black text-lg uppercase ">{f.title}</h4>
                   <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600 font-medium"}`}>{f.desc}</p>
                 </div>
               </div>
@@ -110,14 +110,14 @@ const [position, setPosition] = useState({
             
             {/* Brand Info */}
             <div className="md:col-span-5 space-y-8">
-              <Link to="/" className="text-5xl font-black tracking-tighter    uppercase">
+              <Link to="/" className="text-5xl font-black                 uppercase">
                 VESTRO <span className="text-red-700"> STORE</span>
               </Link>
               <p className={`text-base leading-relaxed max-w-md ${darkMode ? "text-gray-300" : "text-black font-semibold"}`}>
                 {t.aboutDesc}
               </p>
               
-              <button onClick={() => setShowPolicyModal(true)} className="flex items-center gap-2 text-black dark:text-white text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform bg-red-700 px-4 py-2 rounded-full">
+              <button onClick={() => setShowPolicyModal(true)} className="flex items-center gap-2 text-black dark:text-white text-xl font-black uppercase               hover:scale-105 transition-transform bg-red-700 px-4 py-2 rounded-full">
                 <FiInfo size={18} /> {isRTL ? "سياسات المتجر" : "Store Policies"}
               </button>
 
@@ -136,7 +136,7 @@ const [position, setPosition] = useState({
 
             {/* Quick Links */}
             <div className="md:col-span-3 space-y-8">
-              <h3 className="text-xs font-black uppercase tracking-[0.1em] text-black dark:text-white   ">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
+              <h3 className="text-xs font-black uppercase               text-black dark:text-white   ">{isRTL ? "اكتشف المزيد" : "Explore"}</h3>
           <ul className="space-y-5">
   {[
     {
@@ -191,7 +191,7 @@ const [position, setPosition] = useState({
             </div>
           </div>
 
-          <div className={`mt-24 pt-10 border-t-2 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-black uppercase tracking-widest ${darkMode ? "border-white/5 text-gray-500" : "border-gray-200 text-black"}`}>
+          <div className={`mt-24 pt-10 border-t-2 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-black uppercase               ${darkMode ? "border-white/5 text-gray-500" : "border-gray-200 text-black"}`}>
             <p>{t.rights}</p>
             <div className="flex gap-8">
               <Link to="/privacy" className="hover:text-red-700 transition-colors">{isRTL ? "الخصوصية" : "Privacy"}</Link>

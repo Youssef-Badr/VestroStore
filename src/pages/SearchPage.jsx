@@ -51,7 +51,7 @@ export default function SearchPage() {
         
         {/* رأس الصفحة - عرض كلمة البحث */}
         <div className="mb-12 border-b border-zinc-100 dark:border-zinc-800 pb-4">
-          <h1 className="text-xl md:text-5xl font-black uppercase tracking-tighter mb-2 mt-3">
+          <h1 className="text-xl md:text-5xl font-black uppercase  mb-2 mt-3">
             {isRTL ? "نتائج البحث عن:" : "Search Results for:"} 
             <span className="text-red-700 ml-4    ">"{searchTerm}"</span>
           </h1>

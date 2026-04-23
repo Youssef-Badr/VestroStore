@@ -76,17 +76,17 @@ const CartPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 border-b border-white/5 pb-10">
           <div className="space-y-2">
-            <h1 className="text-5xl md:text-7xl text-center font-black       tracking-tighter uppercase leading-none">
+            <h1 className="text-5xl md:text-7xl text-center font-black        uppercase leading-none">
               {translations.cartTitle}
               <span className="text-black dark:text-white">.</span>
             </h1>
-            <p className="text-[15px] font-bold uppercase tracking-[0.4em] opacity-40">
+            <p className="text-[15px] font-bold uppercase  opacity-40">
               {cart.length} {isRTL ? "منتجات في سلتك" : "Items in your bag"}
             </p>
           </div>
           <Link
             to="/products"
-            className="flex items-center gap-2 text-[15px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-all group"
+            className="flex items-center gap-2 text-[15px] font-black uppercase opacity-60 hover:opacity-100 transition-all group"
           >
             {isRTL ? (
               <ArrowRight size={16} className="group-hover:translate-x-1" />
@@ -102,12 +102,12 @@ const CartPage = () => {
             <div className="mb-8 opacity-20">
               <ShoppingBag size={80} strokeWidth={1} />
             </div>
-            <p className="text-xl font-black uppercase  tracking-widest opacity-40 mb-10">
+            <p className="text-xl font-black uppercase   opacity-40 mb-10">
               {translations.emptyCart}
             </p>
             <Link
               to="/products"
-              className={`px-12 py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all ${neonButton}`}
+              className={`px-12 py-5 rounded-2xl font-black uppercase text-xs  transition-all ${neonButton}`}
             >
               {translations.continueShopping}
             </Link>
@@ -157,7 +157,7 @@ const CartPage = () => {
 
                       {/* شارة الباندل */}
                       {item.isBundle && (
-                        <div className="absolute top-2 left-2 z-10 bg-red-700  text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-xl">
+                        <div className="absolute top-2 left-2 z-10 bg-red-700  text-[7px] font-black px-2 py-0.5 rounded-full uppercase  shadow-xl">
                           Bundle
                         </div>
                       )}
@@ -167,7 +167,7 @@ const CartPage = () => {
                     <div className="flex-1 flex flex-col justify-between h-full py-2 text-center sm:text-start w-full">
                       <div className="space-y-3">
                         {/* اسم المنتج */}
-                        <h3 className="text-xl font-black uppercase       tracking-tighter leading-none">
+                        <h3 className="text-xl font-black uppercase      leading-none">
                           {item.name}
                         </h3>
 
@@ -178,7 +178,7 @@ const CartPage = () => {
                               {item.bundleItems.map((bItem, i) => (
                                 <div key={i} className="flex items-center gap-2 group/item">
                                   <span className="w-1 h-1 rounded-full bg-red-700 group-hover/item:scale-150 transition-transform"></span>
-                                  <p className="text-[10px] font-bold uppercase tracking-tight text-gray-500 dark:text-gray-400">
+                                  <p className="text-[10px] font-bold uppercase  text-gray-500 dark:text-gray-400">
                                     {bItem.name}: <span className="text-gray-900 dark:text-white">{bItem.color}</span> / <span className="text-black dark:text-white">{bItem.size}</span>
                                   </p>
                                 </div>
@@ -186,10 +186,10 @@ const CartPage = () => {
                             </div>
                           ) : (
                             <div className="flex gap-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/5 opacity-60">
+                              <span className="text-[10px] font-black uppercase px-3 py-1 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/5 opacity-60">
                                 {isRTL ? "المقاس" : "SIZE"}: {item.size || "N/A"}
                               </span>
-                              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/5 opacity-60">
+                              <span className="text-[10px] font-black uppercase  px-3 py-1 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/5 opacity-60">
                                 {isRTL ? "اللون" : "COLOR"}: {item.color || "N/A"}
                               </span>
                             </div>
@@ -242,12 +242,12 @@ const CartPage = () => {
               <div
                 className={`${cardBg} border p-10 rounded-[2.5rem] sticky top-32 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.5)]`}
               >
-                <h2 className="text-xl font-black  uppercase tracking-widest mb-10 border-b border-white/5 pb-6">
+                <h2 className="text-xl font-black  uppercase  mb-10 border-b border-white/5 pb-6">
                   {isRTL ? "ملخص الحساب" : "Checkout"}
                 </h2>
 
                 <div className="space-y-6 mb-10">
-                  <div className="flex justify-between text-[15px] font-bold uppercase tracking-widest opacity-40">
+                  <div className="flex justify-between text-[15px] font-bold uppercase  opacity-40">
                     <span>{isRTL ? "القطع" : "Items"}</span>
                     <span>{cart.reduce((a, b) => a + b.qty, 0)}</span>
                   </div>
@@ -269,7 +269,7 @@ const CartPage = () => {
                 <div className="space-y-4">
                   <Link
                     to="/checkout"
-                    className={`w-full flex items-center bg-red-700 justify-center gap-3 py-6 rounded-[1.5rem] font-black uppercase text-xs tracking-widest transition-all ${neonButton}`}
+                    className={`w-full flex items-center bg-red-700 justify-center gap-3 py-6 rounded-[1.5rem] font-black uppercase text-xs  transition-all ${neonButton}`}
                   >
                     <Zap size={18} fill="currentColor" />{" "}
                     {translations.checkout}
@@ -289,7 +289,7 @@ const CartPage = () => {
                     <div className="w-8 h-5 bg-white/20 rounded-sm"></div>
                     <div className="w-8 h-5 bg-white/20 rounded-sm"></div>
                   </div>
-                  <p className="text-[8px] font-bold uppercase tracking-tighter opacity-30">
+                  <p className="text-[8px] font-bold uppercase  opacity-30">
                     {isRTL ? "دفع آمن 100%" : "100% Secure Checkout"}
                   </p>
                 </div>
