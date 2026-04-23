@@ -158,7 +158,7 @@ const [showSocial, setShowSocial] = useState(false);
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 h-16 md:h-20 flex items-center justify-between relative">
 
         {/* Logo */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:hidden">
+        <div className="absolute left-1/2 top-1/2 -translate-x- -translate-y-1/2 lg:hidden">
           <Link to="/" onClick={() => setMenuOpen(false)} className="group relative block">
             <img 
               src="/logo3.jpeg"
@@ -174,7 +174,7 @@ const [showSocial, setShowSocial] = useState(false);
   to="/" 
   dir="ltr"
   className={`font-black text-xl md:text-2xl flex items-center gap-1 transition-transform duration-300 ${
-    isRTL ? "translate-x-2" : "-translate-x-2"
+    isRTL ? "-translate-x-5" : "translate-x-5"
   }`}
 >
             <span className={darkMode ? "text-white" : "text-black"}>VESTRO </span>
