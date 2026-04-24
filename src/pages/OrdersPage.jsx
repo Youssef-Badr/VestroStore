@@ -6,6 +6,15 @@ import { Package, Clock, ShoppingBag, CheckCircle, CreditCard, ArrowUpRight, Cal
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { toast } from "react-toastify";
+const getImage = (url, size = 120) => {
+  if (!url) return "";
+  if (!url.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -164,11 +173,15 @@ const OrdersPage = () => {
                     <div className="flex items-center -space-x-3 md:-space-x-5 rtl:space-x-reverse overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
                       {order.orderItems.map((item, idx) => (
                         <div key={idx} className="relative shrink-0 transition-transform group-hover:translate-x-1">
-                          <img 
-                            src={item.image || item.product?.image} 
-                            className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-[28px] object-cover border-4 shadow-2xl ${darkMode ? 'border-[#080808]' : 'border-white'}`}
-                            alt="item"
-                          />
+                         <img 
+  src={getImage(item.image || item.product?.image, 200)}
+  loading="lazy"
+  decoding="async"
+  className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-[28px] object-cover border-4 shadow-2xl ${
+    darkMode ? "border-[#080808]" : "border-white"
+  }`}
+  alt={item.product?.name || "product image"}
+/>
                           {(item.qty > 1 || item.quantity > 1) && (
                             <span className="absolute -top-2 -right-2 bg-red-700 text-black text-[9px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black z-10 shadow-lg">
                               {item.qty || item.quantity}

@@ -32,6 +32,16 @@ import api from "../api/axiosInstance";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
 
+const getImage = (url, size = 120) => {
+  if (!url) return "";
+  if (!url.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
+
 export default function Navbar({onCartClick }) {
   const { darkMode, setDarkMode } = useTheme();
   const { language, setLanguage } = useLanguage();
@@ -725,11 +735,13 @@ useEffect(() => {
             darkMode ? "bg-zinc-900/50 hover:bg-zinc-800" : "bg-gray-50 hover:bg-gray-100"
           }`}
         >
-          <img 
-            src={p.images?.[0]?.url || p.image?.url} 
-            className="w-12 h-12 rounded-xl object-cover bg-white" 
-            alt={p.name} 
-          />
+         <img 
+  src={getImage(p.images?.[0]?.url || p.image?.url, 120)}
+  loading="lazy"
+  decoding="async"
+  className="w-12 h-12 rounded-xl object-cover bg-white"
+  alt={p.name || "product"}
+/>
           <div className={isRTL ? "text-right" : "text-left"}>
             <p className="font-black text-xs uppercase line-clamp-1">{p.name}</p>
             <p className="text-red-800 font-black text-[10px]">{p.price} EGP</p>

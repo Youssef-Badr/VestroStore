@@ -1,18 +1,36 @@
  
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FiCopy, FiCheck, FiPlus, FiTruck, FiTag, FiZap } from "react-icons/fi";
+ const getImage = (url, size = 120) => {
+  if (!url) return "";
+  if (!url.includes("cloudinary")) return url;
 
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
 const CouponCard = ({ discount, darkMode, language, onProductClick, onAddToCart }) => {
   const [copied, setCopied] = useState(false);
   const [previewProduct, setPreviewProduct] = useState(null);
 const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const isRTL = language === "ar";
 
+ useEffect(() => {
+  if (!previewProduct?.images?.length) return;
+
+  previewProduct.images.forEach((img) => {
+    const pre = new Image();
+    pre.src = getImage(img.url, 800);
+  });
+}, [previewProduct]);
+
   const copyToClipboard = (code) => {
     navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+ 
 
   // وظيفة لتحديد النص الرئيسي للخصم (العنوان)
   const getDiscountTitle = () => {
@@ -105,10 +123,12 @@ ${darkMode
               className="flex items-center gap-3 cursor-pointer group flex-1"
               onClick={() => onProductClick(product)}
             >
-              <img 
-                src={product.images?.[0]?.url || product.image} 
-                className="w-10 h-10 rounded-xl object-cover border border-black/10" 
-              />
+             <img 
+  src={getImage(product.images?.[0]?.url || product.image, 120)}
+  loading="lazy"
+  decoding="async"
+  className="w-10 h-10 rounded-xl object-cover border border-black/10"
+/>
               <span className="text-[11px] font-black uppercase truncate max-w-[100px] group-hover:opacity-70">
                 {product.name}
               </span>
@@ -229,8 +249,11 @@ ${darkMode
 
     {/* Image */}
     <img
-      src={previewProduct.images?.[currentImgIndex]?.url}
-      className="max-h-[85vh] max-w-[90vw] object-contain rounded-xl"
+      src={getImage(previewProduct.images?.[currentImgIndex]?.url, 800)}
+      loading="eager"
+decoding="async"
+      className="max-h-[85vh] max-w-[90vw] object-contain rounded-xl blur-sm scale-105 transition-all duration-200"
+onLoad={(e) => e.currentTarget.classList.remove("blur-sm", "scale-105")}
       onClick={(e) => e.stopPropagation()}
     />
 

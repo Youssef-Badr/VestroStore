@@ -25,6 +25,20 @@ import api from "../../src/api/axiosInstance";
 import ProductBundlesSection from "../components/ProductBundlesSection";
 import { toast } from "react-toastify"; // ✅ إضافة toast
 
+const optimizeImage = (url, width = 1200) => {
+  if (!url) return "";
+
+  // لو Cloudinary
+  if (url.includes("res.cloudinary.com")) {
+    return url.replace(
+      "/upload/",
+      `/upload/f_auto,q_auto,w_${width}/`
+    );
+  }
+
+  return url;
+};
+
 export default function ProductDetails() {
   const { id } = useParams();
   const { darkMode } = useTheme();
@@ -160,19 +174,7 @@ const allProductImages = useMemo(() => {
   return Array.from(new Map(combined.map(img => [img.url, img])).values());
 }, [product]);
 
-const optimizeImage = (url, width = 1200) => {
-  if (!url) return "";
 
-  // لو Cloudinary
-  if (url.includes("res.cloudinary.com")) {
-    return url.replace(
-      "/upload/",
-      `/upload/f_auto,q_auto,w_${width}/`
-    );
-  }
-
-  return url;
-};
 
   const { language } = useLanguage();
   useTheme();

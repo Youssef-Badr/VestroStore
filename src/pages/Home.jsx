@@ -351,11 +351,6 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import api from "../../src/api/axiosInstance";
 
-// Lazy Product Card
-const ProductCard = lazy(() => import("../components/ProductCard"));
-
-/* -------------------- Helpers -------------------- */
-
 const optimizeImage = (url, width = 800) => {
   if (!url) return "";
   if (!url.includes("cloudinary")) return url;
@@ -365,6 +360,13 @@ const optimizeImage = (url, width = 800) => {
     `/upload/f_auto,q_auto,w_${width},c_fill/`
   );
 };
+
+
+// Lazy Product Card
+const ProductCard = lazy(() => import("../components/ProductCard"));
+
+/* -------------------- Helpers -------------------- */
+
 
 const HomeSkeleton = ({ darkMode }) => (
   <div className="space-y-6">

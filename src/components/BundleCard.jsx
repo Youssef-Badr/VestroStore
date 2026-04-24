@@ -6,6 +6,15 @@ import { useNavigate } from "react-router-dom";
 import BundleSelectionModal from "./BundleSelectionModal";
 import BundleDetailsModal from "./BundleDetailsModal";
 
+const getThumb = (url, size = 300) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
+
 const BundleCard = ({ bundle }) => {
   const { language } = useLanguage();
   const { darkMode } = useTheme();
@@ -37,14 +46,7 @@ const handleClaimFromDetails = () => {
   setIsModalOpen(true); 
 };
 
-const getThumb = (url, size = 300) => {
-  if (!url?.includes("cloudinary")) return url;
 
-  return url.replace(
-    "/upload/",
-    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
-  );
-};
   return (
     <>
       <div 

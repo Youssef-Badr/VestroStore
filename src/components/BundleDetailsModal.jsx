@@ -3,6 +3,16 @@ import React from 'react';
 import { X, Zap, CheckCircle2, TrendingDown, Eye, ArrowRight, ArrowLeft } from 'lucide-react'; // ضفت أيقونات سهم للجمال
 import { useNavigate } from 'react-router-dom';
 
+const getImage = (url, size = 120) => {
+  if (!url) return "";
+  if (!url.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
+
 const BundleDetailsModal = ({ bundle, isOpen, onClose, onClaim, isAr, darkMode }) => { // 👈 ضفنا onClaim هنا
   const navigate = useNavigate();
   if (!isOpen) return null;
@@ -67,12 +77,13 @@ const BundleDetailsModal = ({ bundle, isOpen, onClose, onClaim, isAr, darkMode }
             <div className={`w-10 h-10 rounded-lg overflow-hidden border 
               ${darkMode ? 'border-white/10' : 'border-black/10'}`}>
               
-              <img 
-                src={item.product.images?.[0]?.url} 
-                loading="lazy"
-                className="w-full h-full object-cover" 
-                alt="" 
-              />
+            <img 
+  src={getImage(item.product.images?.[0]?.url, 300)}
+  loading="lazy"
+  decoding="async"
+  alt={item.product.name || "product image"}
+  className="w-full h-full object-cover"
+/>
             </div>
 
             <div className="flex flex-col">

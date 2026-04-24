@@ -12,6 +12,15 @@ import { useCart } from "../contexts/CartContext";
 import { toast } from "react-toastify";
 import { ShoppingBag, Zap, ChevronLeft } from "lucide-react";
 import { createPortal } from "react-dom";
+
+const getColorImage = (url) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    "/upload/w_80,h_80,c_fill,f_auto,q_auto/"
+  );
+};
 function ProductCard({ product }) {
   const { language } = useLanguage();
   const isRTL = language === "ar";
@@ -297,14 +306,7 @@ createPortal (
       return matchesCurrent && matchesPrev && v.stock > 0;
     });
 
-const getColorImage = (url) => {
-  if (!url?.includes("cloudinary")) return url;
 
-  return url.replace(
-    "/upload/",
-    "/upload/w_80,h_80,c_fill,f_auto,q_auto/"
-  );
-};
             // جلب بيانات اللون والسعر
             const colorVariant = product.variants.find(v => v.options.Color === val);
            const colorImage =
@@ -337,6 +339,8 @@ const getColorImage = (url) => {
                       <div className="w-12 h-12 rounded-full overflow-hidden border border-black/10 shadow-sm">
                         <img
                           src={colorImage}
+                           loading="lazy"
+  decoding="async"
                           className="w-full h-full object-cover"
                           alt={val}
                         />

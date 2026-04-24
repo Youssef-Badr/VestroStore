@@ -3,6 +3,14 @@ import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useCart } from '../../src/contexts/CartContext';
 import { useTheme } from '../contexts/ThemeContext'; // تأكد من المسار الصحيح للثيم
+ const getThumb = (url, size = 60) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
  
 const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
   const { addBundleToCart } = useCart();
@@ -46,14 +54,7 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
     onClose();
   };
 
-  const getThumb = (url, size = 60) => {
-  if (!url?.includes("cloudinary")) return url;
-
-  return url.replace(
-    "/upload/",
-    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
-  );
-};
+ 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md" dir={isAr ? 'rtl' : 'ltr'}>

@@ -218,10 +218,6 @@ import {
 import { useTheme } from "../contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 
-/* =========================
-   Helpers
-========================= */
-
 const getImage = (url, size = 240) => {
   if (!url) return "";
   if (!url.includes("cloudinary")) return url;
@@ -231,6 +227,12 @@ const getImage = (url, size = 240) => {
     `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
   );
 };
+
+/* =========================
+   Helpers
+========================= */
+
+
 
 /* =========================
    Single Cart Item

@@ -5,8 +5,6 @@ import { FiX, FiZap } from "react-icons/fi";
 import { useCart } from "../contexts/CartContext";
 import api from "../api/axiosInstance";
 
-const productCache = new Map();
-
 const getImage = (url, size = 120) => {
   if (!url) return "";
   if (!url.includes("cloudinary")) return url;
@@ -16,6 +14,9 @@ const getImage = (url, size = 120) => {
     `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
   );
 };
+const productCache = new Map();
+
+
 
 const ProductQuickView = ({
   product,
@@ -112,7 +113,7 @@ const ProductQuickView = ({
       img.src = getImage(
         variant?.images?.[0]?.url ||
           product?.images?.[0]?.url,
-        120
+        300
       );
     });
   }, [isOpen, colors, fullProduct, product]);
@@ -227,7 +228,7 @@ const ProductQuickView = ({
                           }`}
                         >
                           <img
-                            src={colorImage}
+                            src={getImage(colorImage, 200)}
                             alt={color}
                             loading="lazy"
                             decoding="async"
