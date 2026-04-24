@@ -132,7 +132,7 @@ const handleStepClick = (val) => {
 
     allImages.forEach((img) => {
       const image = new Image();
-      image.src = img.url;
+      image.src = img.url.replace("/upload/", "/upload/f_auto,q_auto,w_500/");
     });
   }, [allImages]);
 
@@ -171,7 +171,7 @@ const handleStepClick = (val) => {
       ?.replace("/upload/", "/upload/f_auto,q_auto,w_800/")
   }
   alt={product.name}
-  loading="eager"
+  loading="lazy"
   decoding="async"
   className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100"
 />
@@ -297,9 +297,19 @@ createPortal (
       return matchesCurrent && matchesPrev && v.stock > 0;
     });
 
+const getColorImage = (url) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    "/upload/w_80,h_80,c_fill,f_auto,q_auto/"
+  );
+};
             // جلب بيانات اللون والسعر
             const colorVariant = product.variants.find(v => v.options.Color === val);
-            const colorImage = colorVariant?.images?.[0]?.url || product.images?.[0]?.url;
+           const colorImage =
+  getColorImage(colorVariant?.images?.[0]?.url) ||
+  getColorImage(product.images?.[0]?.url);
 
             // حساب أقل سعر متاح لهذا الخيار
             const prices = product.variants

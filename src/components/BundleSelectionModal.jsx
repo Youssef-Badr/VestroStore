@@ -3,57 +3,7 @@ import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useCart } from '../../src/contexts/CartContext';
 import { useTheme } from '../contexts/ThemeContext'; // تأكد من المسار الصحيح للثيم
- const colorMap = {
-     // --- الأبيض والأسود ---
-  "أبيض": "#FFFFFF", "ابيض": "#FFFFFF", "وايت": "#FFFFFF", "white": "#FFFFFF", "اوف وايت": "#FAF9F6", "أوف وايت": "#FAF9F6", "off-white": "#FAF9F6",
-  "أسود": "#121212", "اسود": "#121212", "بلاك": "#121212", "black": "#121212", "فحمي": "#374151", "charcoal": "#374151",
-
-  // --- الرماديات ---
-  "رمادي": "#6b7280", "رصاصي": "#6b7280", "جراي": "#6b7280", "gray": "#6b7280", "grey": "#6b7280",
-  "فضي": "#d1d5db", "سيلفر": "#d1d5db", "silver": "#d1d5db",
-
-  // --- الأحمر والنبيتي ---
-  "أحمر": "#e11d48", "احمر": "#e11d48", "red": "#e11d48",
-  "نبيتي": "#7f1d1d", "مارون": "#7f1d1d", "maroon": "#7f1d1d", "بورجوندي": "#800020",
-  "طوبي": "#991b1b", "brick": "#991b1b",
-
-  // --- الأزرق والكحلي ---
-  "أزرق": "#2563eb", "ازرق": "#2563eb", "blue": "#2563eb",
-  "كحلي": "#1e3a8a", "نيفي": "#1e3a8a", "navy": "#1e3a8a",
-  "سماوي": "#0ea5e9", "لبني": "#7dd3fc", "sky blue": "#7dd3fc",
-  "بترولي": "#005F69", "petrol": "#005F69",
-
-  // --- الأخضر والزيتي ---
-  "أخضر": "#16a34a", "اخضر": "#16a34a", "green": "#16a34a",
-  "زيتي": "#3f6212", "زيتوني": "#3f6212", "olive": "#3f6212",
-  "فسفوري": "#86FE05", "فوسفوري": "#86FE05", "neon": "#86FE05",
-  "منت": "#a7f3d0", "مينت": "#a7f3d0", "mint": "#a7f3d0",
-
-  // --- الأصفر والبرتقالي ---
-  "أصفر": "#facc15", "اصفر": "#facc15", "yellow": "#facc15",
-  "برتقالي": "#ea580c", "أورنج": "#ea580c", "اورنج": "#ea580c", "orange": "#ea580c",
-  "مستردة": "#ca8a04", "خردلي": "#ca8a04", "mustard": "#ca8a04",
-  "ذهبي": "#d4af37", "جولد": "#d4af37", "gold": "#d4af37",
-
-  // --- البنيات والبيج ---
-  "بني": "#451a03", "brown": "#451a03", "شوكلت": "#451a03",
-  "بيج": "#f5f5dc", "beige": "#f5f5dc",
-  "كريمي": "#fffdd0", "cream": "#fffdd0",
-  "هافان": "#92400e", "جملي": "#b45309", "camel": "#b45309",
-  "كافيه": "#6F4E37", "خاكي": "#bdb76b", "khaki": "#bdb76b",
-
-  // --- الموف والوردي ---
-  "بنفسجي": "#7c3aed", "موف": "#7c3aed", "purple": "#7c3aed",
-  "أرجواني": "#7c3aed", "ارجواني": "#7c3aed",
-  "وردي": "#db2777", "بينك": "#db2777", "pink": "#db2777",
-  "بمبي": "#ff69b4", "فوشيا": "#ff00ff", "fuchsia": "#ff00ff",
-  "سيمون": "#FF8C69", "salmon": "#FF8C69",
-
-  // --- ألوان الموضة (Trendy) ---
-  "فيروزي": "#06b6d4", "تركواز": "#06b6d4", "turquoise": "#06b6d4",
-  "تيفاني": "#0ABAB5", "tiffany": "#0ABAB5",
-  "ليموني": "#bef264", "lime": "#bef264"
-  };
+ 
 const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
   const { addBundleToCart } = useCart();
   const { darkMode } = useTheme();
@@ -95,6 +45,15 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
     addBundleToCart(bundle, selections, 1);
     onClose();
   };
+
+  const getThumb = (url, size = 60) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md" dir={isAr ? 'rtl' : 'ltr'}>
@@ -172,9 +131,12 @@ const BundleSelectionModal = ({ bundle, isOpen, onClose, isAr }) => {
                   <div className="w-7 h-7 rounded-full overflow-hidden border border-black/10 dark:border-white/10">
                     <img
                       src={
-                        variants?.find(v => v.images?.[0]?.url)?.images?.[0]?.url ||
-                        item.product.images?.[0]?.url
-                      }
+  getThumb(
+    variants?.find(v => v.images?.[0]?.url)?.images?.[0]?.url ||
+    item.product.images?.[0]?.url,
+    80
+  )
+}
                       className="w-full h-full object-cover"
                       alt={colorName}
                     />
