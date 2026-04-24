@@ -62,21 +62,43 @@ const [showSocial, setShowSocial] = useState(false);
   const userRef = useRef(null);
   const catRef = useRef(null);
   const debounceRef = useRef(null);
+useEffect(() => {
+  const storedClient = localStorage.getItem("client");
+  if (storedClient) setClient(JSON.parse(storedClient));
 
-  useEffect(() => {
-    const storedClient = localStorage.getItem("client");
-    if (storedClient) setClient(JSON.parse(storedClient));
-    
-    const fetchCats = async () => {
-      try {
+  const fetchCats = async () => {
+    try {
+      const cached = localStorage.getItem("categories");
+
+      if (cached) {
+        setCategories(JSON.parse(cached));
+      } else {
         const res = await api.get("/categories");
         setCategories(res.data);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
+        localStorage.setItem("categories", JSON.stringify(res.data));
       }
-    };
-    fetchCats();
-  }, []);
+
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
+
+  fetchCats();
+}, []);
+  // useEffect(() => {
+  //   const storedClient = localStorage.getItem("client");
+  //   if (storedClient) setClient(JSON.parse(storedClient));
+    
+  //   const fetchCats = async () => {
+  //     try {
+  //       const res = await api.get("/categories");
+  //       setCategories(res.data);
+  //     } catch (err) {
+  //       console.error("Error fetching categories:", err);
+  //     }
+  //   };
+  //   fetchCats();
+  // }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -90,6 +112,12 @@ const [showSocial, setShowSocial] = useState(false);
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+  return () => {
+    clearTimeout(debounceRef.current);
+  };
+}, []);
 
   const fetchSuggestions = async (value) => {
   if (!value || value.length < 2) {
@@ -218,15 +246,18 @@ const [showSocial, setShowSocial] = useState(false);
                   >
                     {categories.map((cat) => (
                       <Link
-                        key={cat.id}
-                        to={`/products/category/${cat.id}`}
+                        key={cat.id || cat._id}
+                        to={`/products/category/${cat.id || cat._id}`}
                         onClick={() => setCategoriesDropdownOpen(false)}
                         className={`flex items-center gap-3 p-3 rounded-xl text-xs font-bold uppercase ${
                           darkMode ? "hover:bg-white/5 text-gray-300" : "hover:bg-gray-50 text-black"
                         }`}
                       >
                         {cat.image?.url && (
-                          <img src={cat.image.url} className="w-6 h-6 rounded-full object-cover" />
+                          <img   src={cat.image?.url?.replace("/upload/", "/upload/f_auto,q_auto,w_120/")}
+  loading="lazy"
+  decoding="async"
+  alt={cat.name} className="w-6 h-6 rounded-full object-cover" />
                         )}
                         {cat.name}
                       </Link>
@@ -432,14 +463,17 @@ const [showSocial, setShowSocial] = useState(false);
     {mobileCategoriesOpen && (
       <div className="grid grid-cols-3 gap-2">
         {categories.map((cat) => (
-          <motion.div key={cat.id}>
+          <motion.div key={cat.id || cat._id}>
             <Link
-              to={`/products/category/${cat.id}`}
+              to={`/products/category/${cat.id || cat._id}`}
               onClick={() => setMenuOpen(false)}
               className="relative block rounded-xl overflow-hidden aspect-square"
             >
               <img
-                src={cat.image?.url}
+                 src={cat.image?.url?.replace("/upload/", "/upload/f_auto,q_auto,w_120/")}
+  loading="lazy"
+  decoding="async"
+  alt={cat.name}
                 className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/40" />
@@ -685,7 +719,7 @@ const [showSocial, setShowSocial] = useState(false);
     <div className="space-y-3">
       {suggestions?.products?.map((p) => (
         <div 
-          key={p._id} 
+          key={p._id || p.id} 
           onClick={() => executeSearch(p.name)} 
           className={`flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all ${
             darkMode ? "bg-zinc-900/50 hover:bg-zinc-800" : "bg-gray-50 hover:bg-gray-100"
