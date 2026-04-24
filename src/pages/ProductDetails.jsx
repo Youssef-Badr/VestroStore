@@ -39,7 +39,7 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const { cart, addToCart } = useContext(CartContext);
   const [showSizeChart, setShowSizeChart] = useState(false);
-  // const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+ 
   const thumbnailsContainerRef = useRef(null); // ✅ هنا عرفنا الريف
 const [selectedOptions, setSelectedOptions] = useState({ Color: "", Size: "" });
   const [showToast, setShowToast] = useState(false);
@@ -159,6 +159,20 @@ const allProductImages = useMemo(() => {
   // التأكد إن مفيش صورة متكررة بناءً على الـ URL
   return Array.from(new Map(combined.map(img => [img.url, img])).values());
 }, [product]);
+
+const optimizeImage = (url, width = 1200) => {
+  if (!url) return "";
+
+  // لو Cloudinary
+  if (url.includes("res.cloudinary.com")) {
+    return url.replace(
+      "/upload/",
+      `/upload/f_auto,q_auto,w_${width}/`
+    );
+  }
+
+  return url;
+};
 
   const { language } = useLanguage();
   useTheme();
@@ -715,18 +729,21 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   border border-black/5 dark:border-white/5 group">
   
   {selectedImage ? (
-    <img
-      onClick={() =>
-        openLightbox(
-          { url: selectedImage },
-          product.images
-        )
-      }
-     src={galleryImages[galleryIndex]?.url || selectedImage}
-      alt={product.name}
-      /* object-top بتخلي التركيز على التيشرت أو الموديل من فوق في الشاشات الصغيرة */
-      className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110 cursor-zoom-in"
-    />
+   <img
+  onClick={() =>
+    openLightbox(
+      { url: selectedImage },
+      product.images
+    )
+  }
+  src={optimizeImage(galleryImages[galleryIndex]?.url || selectedImage, 1200)}
+  alt={product.name}
+  loading="eager"
+  decoding="async"
+  fetchpriority="high"
+  className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110 cursor-zoom-in opacity-0"
+  onLoad={(e) => e.target.classList.remove("opacity-0")}
+/>
   ) : (
     <div className="flex items-center justify-center h-full text-slate-400">
       {translations.noImage}
@@ -802,12 +819,17 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
             }`}
           >
             <img
-              src={img.url}
-              alt="thumbnail"
-              className={`w-full h-full object-cover transition-all duration-300 ${
-                isSelected ? "" : "grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100"
-              }`}
-            />
+  src={optimizeImage(img.url, 300)}
+  alt="thumbnail"
+  loading="lazy"
+  decoding="async"
+  className={`w-full h-full object-cover transition-all duration-300 ${
+    isSelected
+      ? ""
+      : "grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100"
+  } opacity-0`}
+  onLoad={(e) => e.target.classList.remove("opacity-0")}
+/>
             {/* Overlay خفيف للصور غير المختارة */}
             {!isSelected && (
               <div className="absolute inset-0 bg-black/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -894,8 +916,8 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     mt-2
     px-4 py-2
     rounded-lg
-    bg-red-800 text-white
-    hover:bg-red-700
+    bg-red-700 text-white
+    hover:bg-red-800
     active:bg-red-900
     transition-all duration-200
     font-semibold
@@ -983,11 +1005,14 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
                 : "border-black/10 dark:border-white/20 hover:scale-110"
             }`}
           >
-            <img
-              src={colorImage}
-              alt={colorValue}
-              className="w-full h-full object-cover"
-            />
+           <img
+  src={optimizeImage(colorImage, 600)}
+  alt={colorValue}
+  loading="lazy"
+  decoding="async"
+  className="w-full h-full object-cover transition-opacity duration-300 opacity-0"
+  onLoad={(e) => e.target.classList.remove("opacity-0")}
+/>
 
             {isOutOfStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -1062,7 +1087,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   onClick={() => setSelectedOptions(prev => ({ ...prev, Size: sizeValue }))}
   className={`min-w-[60px] h-12 px-4 rounded-2xl border-2 font-black       transition-all relative ${
     isSelected
-      ? "bg-red-700 text-black border-black shadow-lg shadow-[#86FE05]/20"
+      ? "bg-red-600 text-black border-black shadow-lg"
       : isOutOfStock
       ? "bg-slate-50 dark:bg-white/5 border-black dark:border-white text-slate-300 dark:text-slate-700 cursor-not-allowed opacity-50"
       : "bg-slate-50 dark:bg-[#111111] border-black dark:border-white text-slate-900 dark:text-white hover:border-slate-400 dark:hover:border-white"
@@ -1257,11 +1282,14 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
       {/* منطقة الصورة */}
       <div className="p-2 sm:p-4 max-h-[65vh] overflow-y-auto no-scrollbar bg-slate-50 dark:bg-black/40">
-        <img
-          src={product.sizeChart.url}
-          alt="Size Chart"
-          className="w-full h-auto rounded-xl"
-        />
+       <img
+  src={optimizeImage(product.sizeChart.url, 800)}
+  alt="Size Chart"
+  loading="lazy"
+  decoding="async"
+  className="w-full h-auto rounded-xl transition-opacity duration-300 opacity-0"
+  onLoad={(e) => e.target.classList.remove("opacity-0")}
+/>
       </div>
 
       {/* التذييل (Footer) - كلام واضح وحجم مريح */}
@@ -1305,8 +1333,9 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   shadow-2xl z-[110] transition-all"
 >
   <span className="text-3xl font-bold">‹</span>
-</button>        <img
-          src={lightboxImages[lightboxIndex]?.url}
+</button>
+        <img
+          src={optimizeImage(lightboxImages[lightboxIndex]?.url, 1400)}
           alt="Preview"
           className="max-h-[85vh] max-w-[90vw] object-contain rounded-xl z-[105]"
           onClick={(e) => e.stopPropagation()}
