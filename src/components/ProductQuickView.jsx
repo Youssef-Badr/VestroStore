@@ -101,7 +101,19 @@ const ProductQuickView = ({ product, isOpen, onClose, darkMode, language }) => {
                 <div className="flex gap-4 flex-wrap justify-center">
                   {colors.map((color) => {
                     const variant = fullProduct?.variants?.find(v => v.options?.Color === color);
-                    const colorImage = variant?.images?.[0]?.url || product.images?.[0]?.url;
+                    const getImage = (url, size = 100) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
+
+                  const colorImage = getImage(
+  variant?.images?.[0]?.url || product.images?.[0]?.url,
+  120
+);
 
                     return (
                       <div
