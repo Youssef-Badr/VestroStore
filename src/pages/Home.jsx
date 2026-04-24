@@ -611,46 +611,61 @@ export default function Home() {
                 {isRTL ? hero.subtitleAr : hero.subtitleEn}
               </p>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/products");
-                }}
-                className="mt-6 px-6 py-3 rounded-xl bg-white text-black font-black hover:scale-105 transition"
-              >
-                {isRTL ? "تسوق الآن" : "Shop Now"}
-              </button>
+            <button
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate("/products");
+  }}
+  className="
+    mt-6 px-3 py-3 
+    font-black rounded-xl shadow-lg
+    transition-all duration-300
+    hover:scale-110 active:scale-95
+    animate-bounce
+
+    bg-white text-black
+    dark:bg-black dark:text-white
+
+    hover:bg-red-700
+  "
+>
+  <span className="inline-flex items-center gap-2">
+    {isRTL ? " تسوق المنتجات الآن" : " Shop All Products"}
+  </span>
+ </button>
             </div>
           </div>
         )}
 
         {/* COLLECTION */}
 
-        {allProducts.length > 0 && (
-          <section>
-            <h2 className="text-2xl md:text-4xl font-black uppercase mb-4">
-              {isRTL ? "اكتشف مجموعتنا" : "Explore Collection"}
-            </h2>
+       {allProducts.length > 0 && (
+  <section className="flex flex-col items-center text-center">
+    
+    <h2 className="text-2xl md:text-4xl font-black uppercase mb-4">
+      {isRTL ? "اكتشف مجموعتنا" : "Explore Collection"}
+    </h2>
 
-            <MarqueeScroller
-              products={allProducts}
-              darkMode={darkMode}
-            />
+    <div className="w-full flex justify-center">
+      <MarqueeScroller
+        products={allProducts}
+        darkMode={darkMode}
+      />
+    </div>
 
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => navigate("/products")}
-              className={`mt-5 px-10 py-4 rounded-full font-black uppercase ${
-                darkMode
-                  ? "bg-white text-black"
-                  : "bg-black text-white"
-              }`}
-            >
-              {isRTL ? "كل المنتجات" : "Shop All"}
-            </motion.button>
-          </section>
-        )}
+    <motion.button
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.96 }}
+      onClick={() => navigate("/products")}
+      className={`mt-5 px-10 py-4 rounded-full font-black uppercase hover:bg-red-700 ${
+        darkMode ? "bg-white text-black" : "bg-black text-white"
+      }`}
+    >
+      {isRTL ? "كل المنتجات" : "Shop All"}
+    </motion.button>
+
+  </section>
+)}
 
         {/* CATEGORIES */}
 
