@@ -37,6 +37,14 @@ const handleClaimFromDetails = () => {
   setIsModalOpen(true); 
 };
 
+const getThumb = (url, size = 300) => {
+  if (!url?.includes("cloudinary")) return url;
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${size},h_${size},c_fill,f_auto,q_auto/`
+  );
+};
   return (
     <>
       <div 
@@ -60,7 +68,7 @@ const handleClaimFromDetails = () => {
           {bundle.items.map((item, index) => (
             <div key={index} className="relative flex-1 h-full transition-all duration-700 hover:flex-[2.5] border-r last:border-0 border-white/10 group/img">
               <img 
-                src={item?.product?.images?.[0]?.url} 
+                src={getThumb(item?.product?.images?.[0]?.url, 400)}
                 className="w-full h-full object-cover grayscale-[20%] group-hover/img:grayscale-0 transition-all duration-500"
                 alt=""
               />
