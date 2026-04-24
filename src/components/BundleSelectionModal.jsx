@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useCart } from '../../src/contexts/CartContext';
