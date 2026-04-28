@@ -351,9 +351,11 @@ export default function Home() {
 
                 return (
                   <div
+
+                 
                     key={cat._id}
                     onClick={() =>
-                      navigate(`/products/category/${cat._id}`)
+                      navigate(`/products/category/${cat.id || cat._id}`)
                     }
                     className={`relative h-36 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer group ${
                       isLastOdd ? "col-span-2 md:col-span-1" : ""

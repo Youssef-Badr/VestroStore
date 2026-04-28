@@ -29,7 +29,8 @@ const [nameError, setNameError] = useState("");
 const [cityError, setCityError] = useState("");
 const [districtError, setDistrictError] = useState("");
 const shippingSectionRef = useRef(null); // عشان السكرول
-const [baseShippingCost, setBaseShippingCost] = useState(0);  
+const [baseShippingCost, setBaseShippingCost] = useState(0); 
+ 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
