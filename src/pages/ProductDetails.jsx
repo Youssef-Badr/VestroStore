@@ -545,7 +545,7 @@ const scrollToThumbnail = (imgUrl) => {
   const index = allProductImages.findIndex(i => i.url === img.url);
 
   if (index !== -1) {
-    setGalleryIndex(index); // 🔥 ده المهم
+  setSelectedImage(img.url);// 🔥 ده المهم
   }
 
   // 👇 2. خلي selectedImage sync برضه (اختياري بس حلو)
@@ -604,7 +604,7 @@ const nextImage = () => {
   const nextImg = galleryImages[nextIndex];
 
   // 👇 نفس اللي بيحصل لما تدوس thumbnail
-  handleThumbnailClick(nextImg);
+  setSelectedImage(nextImg.url);
 };
 
 const prevImage = () => {
@@ -618,7 +618,7 @@ const prevImage = () => {
   const prevImg = galleryImages[prevIndex];
 
   // 👇 نفس behavior
-  handleThumbnailClick(prevImg);
+  setSelectedImage(prevImg.url);
 };
 
 
@@ -738,7 +738,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
       product.images
     )
   }
-  src={optimizeImage(galleryImages[galleryIndex]?.url || selectedImage, 1200)}
+  src={optimizeImage(selectedImage || product.images?.[0]?.url, 1200)}
   alt={product.name}
   loading="eager"
   decoding="async"
@@ -1179,16 +1179,21 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   )}
 </motion.button>
 
-  {/* Checkout - وميض سريع (Strobe effect) */}
-<motion.button
-  disabled={!cartHasItems}
-  onClick={() => navigate("/checkout")}
+ <motion.button
+  onClick={() => {
+    if (!cartHasItems) {
+      handleAddToCart(); // نفس منطق الإضافة + الرسالة
+      return;
+    }
+
+    navigate("/checkout");
+  }}
   animate={
     cartHasItems
       ? {
           backgroundColor: darkMode
-            ? ["#ffffff", "#eaeaea", "#ffffff"] // 🌙 دارك = أبيض
-            : ["#000000", "#111111", "#000000"], // ☀️ لايت = أسود
+            ? ["#ffffff", "#eaeaea", "#ffffff"]
+            : ["#000000", "#111111", "#000000"],
           scale: [1, 1.04, 1],
         }
       : {}
@@ -1202,12 +1207,12 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
   className={`flex-1 py-5 text-lg rounded-[2rem] font-black uppercase transition-all ${
     cartHasItems
       ? darkMode
-        ? "bg-white text-black border border-black/10" // 👈 دارك
-        : "bg-black text-white" // 👈 لايت
-      : "bg-slate-600 text-black cursor-not-allowed"
+        ? "bg-white text-black border border-black/10"
+        : "bg-black text-white"
+      : "bg-black text-white hover:scale-105"
   }`}
 >
-  {isRTL ? "إتمام الشراء" : "Checkout"}
+  {isRTL ? "اشتري الآن" : "Buy Now"}
 </motion.button>
 </div>
 
