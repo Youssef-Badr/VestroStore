@@ -584,69 +584,130 @@ useEffect(() => {
 
 {/* CONTACT BUTTON */}
 <button
-  onClick={() => setShowContact(!showContact)}
+  onClick={() => setShowContact(true)}
   className="mt-4 w-full py-3 rounded-2xl border text-[15px] font-black uppercase flex items-center justify-center gap-2"
 >
   📞 {isRTL ? "تواصل معنا" : "Contact Us"}
 </button>
 
+{/* CONTACT POPUP / MOBILE FIRST */}
 <AnimatePresence>
   {showContact && (
-    <motion.div
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
-      exit={{ opacity: 0, height: 0 }}
-      className={`mt-3 p-4 rounded-2xl border space-y-3 overflow-hidden ${
-        darkMode
-          ? "border-white/10 bg-white/5"
-          : "border-black/10 bg-gray-50"
-      }`}
-    >
-      {/* Address */}
-      <div className="text-[13px] font-semibold leading-relaxed">
-        <span className="font-black">
-          {isRTL ? "العنوان: " : "Address: "}
-        </span>
+    <>
+      {/* Overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={() => setShowContact(false)}
+        className="fixed inset-0 z-[250] bg-black/70 backdrop-blur-sm"
+      />
 
-        {isRTL
-          ? "الغردقة – شارع الشيراتون، بجوار بنك أبوظبي"
-          : "Hurghada – Sheraton Street, beside Abu Dhabi Bank"}
-      </div>
+      {/* Popup */}
+      <motion.div
+        initial={{ y: "100%", opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: "100%", opacity: 0 }}
+        transition={{
+          type: "spring",
+          damping: 24,
+          stiffness: 220,
+        }}
+        className={`fixed z-[260] bottom-0 left-0 right-0 w-full
+        rounded-t-[2rem] md:rounded-[2rem]
+        md:bottom-1/2 md:left-1/2 md:right-auto
+        md:-translate-x-1/2 md:translate-y-1/2
+        md:w-[92%] md:max-w-lg
+        max-h-[88vh] overflow-y-auto p-5 sm:p-6 shadow-2xl ${
+          darkMode
+            ? "bg-[#0b0b0b] border border-white/10 text-white"
+            : "bg-white border border-black/10 text-black"
+        }`}
+      >
+        {/* Drag Handle للموبايل */}
+        <div className="w-14 h-1.5 rounded-full bg-gray-400/40 mx-auto mb-5 md:hidden" />
 
-      {/* Phone + WhatsApp */}
-      <div className="flex items-center gap-2 flex-wrap text-[13px] font-semibold">
-        <span className="font-black">
-          {isRTL ? "الهاتف: " : "Phone: "}
-        </span>
-
-        <a href="tel:01120587886" className="text-red-700 font-bold">
-          01120587886
-        </a>
-
-        <a
-          href="https://wa.me/201120587886"
-          target="_blank"
-          rel="noreferrer"
-          className="px-3 py-1 rounded-full bg-[#25D366] text-white text-[11px] font-black"
+        {/* Close */}
+        <button
+          onClick={() => setShowContact(false)}
+          className="absolute top-4 right-4 w-9 h-9 rounded-full border flex items-center justify-center text-lg"
         >
-          WhatsApp
-        </a>
-      </div>
+          ✕
+        </button>
 
-      {/* Email */}
-      <div className="text-[13px] font-semibold break-all">
-        <span className="font-black">
-          {isRTL ? "الإيميل: " : "Email: "}
-        </span>
+        {/* Title */}
+        <h2 className="text-center text-lg sm:text-xl font-black uppercase mb-6">
+          {isRTL ? "تواصل معنا" : "Contact Us"}
+        </h2>
 
-        <a
-          href="mailto:vestrosportswear@gmail.com"
-          className="text-red-700"
+        {/* Address */}
+        <div
+          className={`mb-4 rounded-2xl p-4 ${
+            darkMode ? "bg-white/5" : "bg-gray-50"
+          }`}
         >
-          vestrosportswear@gmail.com
-        </a>
-      </div>
-    </motion.div>
+          <p className="text-[11px] font-black uppercase opacity-60 mb-1">
+            {isRTL ? "العنوان" : "Address"}
+          </p>
+
+          <p className="text-[14px] sm:text-[15px] font-semibold leading-relaxed">
+            {isRTL
+              ? "الغردقة – شارع الشيراتون، بجوار بنك أبوظبي"
+              : "Hurghada – Sheraton Street, beside Abu Dhabi Bank"}
+          </p>
+        </div>
+
+        {/* Phone */}
+        <div
+          className={`mb-4 rounded-2xl p-4 ${
+            darkMode ? "bg-white/5" : "bg-gray-50"
+          }`}
+        >
+          <p className="text-[11px] font-black uppercase opacity-60 mb-2">
+            {isRTL ? "الهاتف" : "Phone"}
+          </p>
+
+          <div className="flex flex-wrap gap-2 items-center">
+            <a
+              href="tel:01120587886"
+              className="px-3 py-2 rounded-xl bg-red-700 text-white text-[14px] font-black"
+            >
+              01120587886
+            </a>
+
+            <a
+              href="https://wa.me/201120587886"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-2 rounded-xl bg-[#25D366] text-white text-[13px] font-black"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        {/* Email */}
+        <div
+          className={`rounded-2xl p-4 ${
+            darkMode ? "bg-white/5" : "bg-gray-50"
+          }`}
+        >
+          <p className="text-[11px] font-black uppercase opacity-60 mb-2">
+            Email
+          </p>
+
+          <a
+            href="mailto:vestrosportswear@gmail.com"
+            className="text-red-700 font-bold text-[13px] sm:text-[14px] break-all"
+          >
+            vestrosportswear@gmail.com
+          </a>
+        </div>
+
+        {/* Bottom Space */}
+        <div className="h-2" />
+      </motion.div>
+    </>
   )}
 </AnimatePresence>
 
