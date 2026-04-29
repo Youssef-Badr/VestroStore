@@ -175,30 +175,36 @@ const [position, setPosition] = useState({
 </ul>
             </div>
 
-            {/* Contact Info */}
+         {/* Contact Info */}
 <div className="md:col-span-2 space-y-8">
   <h3 className="text-lg font-black uppercase text-black dark:text-white">
-    {isRTL ? "تواصل معنا" : "Contact"}
+    {isRTL ? "تواصل معنا" : "Contact Us"}
   </h3>
 
-  <div className={`space-y-4 text-sm leading-relaxed ${
-    darkMode ? "text-gray-300" : "text-black font-semibold"
-  }`}>
-
+  <div
+    className={`space-y-5 text-sm leading-relaxed ${
+      darkMode ? "text-gray-300" : "text-black font-semibold"
+    }`}
+  >
+    {/* Address */}
     <div>
-      <p className="font-black uppercase">
+      <p className="font-black uppercase mb-1">
         {isRTL ? "العنوان" : "Address"}
       </p>
+
       <p>
-        Hurghada – Sheraton Street,<br />
-        beside Abu Dhabi Bank
+        {isRTL
+          ? "الغردقة – شارع الشيراتون، بجوار بنك أبوظبي"
+          : "Hurghada – Sheraton Street, beside Abu Dhabi Bank"}
       </p>
     </div>
 
+    {/* Phone */}
     <div>
-      <p className="font-black uppercase">
-        {isRTL ? "الهاتف" : "Phone"}
+      <p className="font-black uppercase mb-1">
+        {isRTL ? "رقم الهاتف" : "Phone"}
       </p>
+
       <a
         href="tel:01120587886"
         className="hover:text-red-700 transition-colors"
@@ -207,10 +213,12 @@ const [position, setPosition] = useState({
       </a>
     </div>
 
+    {/* Email */}
     <div>
-      <p className="font-black uppercase">
-        Email
+      <p className="font-black uppercase mb-1">
+        {isRTL ? "البريد الإلكتروني" : "Email"}
       </p>
+
       <a
         href="mailto:vestrosportswear@gmail.com"
         className="hover:text-red-700 transition-colors break-all"
@@ -218,10 +226,8 @@ const [position, setPosition] = useState({
         vestrosportswear@gmail.com
       </a>
     </div>
-
   </div>
 </div>
-
             {/* Payment */}
            <div className="md:col-span-3 space-y-10">
               <div className="space-y-5">
