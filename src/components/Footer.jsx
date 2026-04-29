@@ -175,8 +175,55 @@ const [position, setPosition] = useState({
 </ul>
             </div>
 
+            {/* Contact Info */}
+<div className="md:col-span-2 space-y-8">
+  <h3 className="text-lg font-black uppercase text-black dark:text-white">
+    {isRTL ? "تواصل معنا" : "Contact"}
+  </h3>
+
+  <div className={`space-y-4 text-sm leading-relaxed ${
+    darkMode ? "text-gray-300" : "text-black font-semibold"
+  }`}>
+
+    <div>
+      <p className="font-black uppercase">
+        {isRTL ? "العنوان" : "Address"}
+      </p>
+      <p>
+        Hurghada – Sheraton Street,<br />
+        beside Abu Dhabi Bank
+      </p>
+    </div>
+
+    <div>
+      <p className="font-black uppercase">
+        {isRTL ? "الهاتف" : "Phone"}
+      </p>
+      <a
+        href="tel:01120587886"
+        className="hover:text-red-700 transition-colors"
+      >
+        01120587886
+      </a>
+    </div>
+
+    <div>
+      <p className="font-black uppercase">
+        Email
+      </p>
+      <a
+        href="mailto:vestrosportswear@gmail.com"
+        className="hover:text-red-700 transition-colors break-all"
+      >
+        vestrosportswear@gmail.com
+      </a>
+    </div>
+
+  </div>
+</div>
+
             {/* Payment */}
-            <div className="md:col-span-4 space-y-10">
+           <div className="md:col-span-3 space-y-10">
               <div className="space-y-5">
                 <h3 className="text-lg font-black uppercase  text-black dark:text-white   ">{isRTL ? "طرق الدفع" : "Payments"}</h3>
                 <div className="flex flex-wrap gap-5 items-center">
@@ -189,6 +236,8 @@ const [position, setPosition] = useState({
                 </div>
               </div>
             </div>
+
+
           </div>
 
           <div className={`mt-24 pt-10 border-t-2 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-black uppercase               ${darkMode ? "border-white/5 text-gray-500" : "border-gray-200 text-black"}`}>
