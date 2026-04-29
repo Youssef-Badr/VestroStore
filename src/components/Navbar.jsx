@@ -63,7 +63,7 @@ const [showSocial, setShowSocial] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState({ products: [], keywords: [] });
   const [searchLoading, setSearchLoading] = useState(false);
-
+const [showContact, setShowContact] = useState(false);
   const fullName =
   client?.firstName || client?.lastName
     ? `${client?.firstName || ""} ${client?.lastName || ""}`.trim()
@@ -581,6 +581,74 @@ useEffect(() => {
 
  
 </div>
+
+{/* CONTACT BUTTON */}
+<button
+  onClick={() => setShowContact(!showContact)}
+  className="mt-4 w-full py-3 rounded-2xl border text-[15px] font-black uppercase flex items-center justify-center gap-2"
+>
+  📞 {isRTL ? "تواصل معنا" : "Contact Us"}
+</button>
+
+<AnimatePresence>
+  {showContact && (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className={`mt-3 p-4 rounded-2xl border space-y-3 overflow-hidden ${
+        darkMode
+          ? "border-white/10 bg-white/5"
+          : "border-black/10 bg-gray-50"
+      }`}
+    >
+      {/* Address */}
+      <div className="text-[13px] font-semibold leading-relaxed">
+        <span className="font-black">
+          {isRTL ? "العنوان: " : "Address: "}
+        </span>
+
+        {isRTL
+          ? "الغردقة – شارع الشيراتون، بجوار بنك أبوظبي"
+          : "Hurghada – Sheraton Street, beside Abu Dhabi Bank"}
+      </div>
+
+      {/* Phone + WhatsApp */}
+      <div className="flex items-center gap-2 flex-wrap text-[13px] font-semibold">
+        <span className="font-black">
+          {isRTL ? "الهاتف: " : "Phone: "}
+        </span>
+
+        <a href="tel:01120587886" className="text-red-700 font-bold">
+          01120587886
+        </a>
+
+        <a
+          href="https://wa.me/201120587886"
+          target="_blank"
+          rel="noreferrer"
+          className="px-3 py-1 rounded-full bg-[#25D366] text-white text-[11px] font-black"
+        >
+          WhatsApp
+        </a>
+      </div>
+
+      {/* Email */}
+      <div className="text-[13px] font-semibold break-all">
+        <span className="font-black">
+          {isRTL ? "الإيميل: " : "Email: "}
+        </span>
+
+        <a
+          href="mailto:vestrosportswear@gmail.com"
+          className="text-red-700"
+        >
+          vestrosportswear@gmail.com
+        </a>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
   {/* 🔥 BOTTOM FIXED SECTION */}
   <div className="p-6 border-t border-white/10 space-y-4">
