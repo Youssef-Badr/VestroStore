@@ -320,12 +320,182 @@ const scrollToError = () => {
     }
   }, 150); // زودنا الوقت شوية لـ 150ms للتأكيد
 };
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   setLoading(true);
+
+//   try {
+//     if (cart.length === 0) {
+//       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
+//       setLoading(false);
+//       return;
+//     }
+
+//     const nameParts = formData.name.trim().split(/\s+/);
+//     if (nameParts.length < 2) {
+//       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
+//       setLoading(false);
+//       scrollToError();
+//       return;
+//     }
+
+//     const phoneRegex = /^(010|011|012|015)\d{8}$/;
+//     if (!formData.phone || !phoneRegex.test(formData.phone)) {
+//       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
+//       setLoading(false);
+//       scrollToError();
+//       return;
+//     }
+
+//     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
+//       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
+//       setLoading(false);
+//       scrollToError();
+//       return;
+//     }
+
+//     if (!formData.city || !formData.bostaDistrictId || !formData.address) {
+//       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
+//       setLoading(false);
+//       scrollToError();
+//       return;
+//     }
+
+//     let hasError = false;
+
+//   if (!formData.city) {
+//     setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
+//     hasError = true;
+//   }
+
+//   if (!formData.bostaDistrictId) {
+//     setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
+//     hasError = true;
+//   }
+
+//   if (hasError) {
+//     // السكرول اللي بيطلع العميل لمكان المشكلة
+//     shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+//     return;
+//   }
+
+//     // =========================
+//     // ORDER ITEMS
+//     // =========================
+//     const orderItems = cart.map((item) => {
+//       const actualId = item.bundle || item.product || item._id || item.id;
+
+//       return item.isBundle
+//         ? {
+//             bundle: actualId,
+//             isBundle: true,
+//             quantity: item.qty,
+//             bundleItems: item.bundleItems.map((bi) => ({
+//               product: bi.productId || bi.product || bi._id,
+//               variantId: bi.variantId,
+//               name: bi.name,
+//               size: bi.size,
+//               color: bi.color,
+//             })),
+//           }
+//         : {
+//             product: actualId,
+//             variantId: item.variantId,
+//             quantity: item.qty,
+//             color: item.color,
+//             size: item.size,
+//             price: item.price,
+//           };
+//     });
+
+//     const token = localStorage.getItem("token");
+
+//     const commonData = {
+//       name: formData.name,
+//       email: formData.email,
+//       phone: formData.phone,
+//       secondaryPhone: formData.secondaryPhone,
+
+//       shippingAddress: {
+//         city: formData.city,
+//         cityName: selectedCityObj
+//           ? isRTL
+//             ? selectedCityObj.cityAr
+//             : selectedCityObj.cityEn
+//           : "",
+//         district: formData.district,
+//         address: formData.address,
+//         buildingNumber: formData.buildingNumber,
+//         floor: formData.floor,
+//         apartment: formData.apartment,
+//         country: "Egypt",
+//         bostaCityId: selectedCityObj?.bostaCityId || "",
+//         bostaDistrictId: formData.bostaDistrictId,
+//       },
+
+//       paymentMethod: formData.paymentMethod,
+//       orderItems,
+//       discountCode: discountInfo?.valid ? formData.discountCode : null,
+//       buildingNumber: formData.buildingNumber,
+//       floor: formData.floor,
+//       apartment: formData.apartment,
+//     };
+
+//     let res;
+
+//     if (formData.paymentMethod === "card") {
+//       res = await api.post("/orders", commonData, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       if (res.data.paymentURL) {
+//         clearCart();
+//         window.location.href = res.data.paymentURL;
+//       }
+//     } else {
+//       const payload = new FormData();
+
+//       Object.keys(commonData).forEach((key) => {
+//         if (key === "shippingAddress" || key === "orderItems") {
+//           payload.append(key, JSON.stringify(commonData[key]));
+//         } else if (commonData[key]) {
+//           payload.append(key, commonData[key]);
+//         }
+//       });
+
+//       res = await api.post("/orders", payload, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       clearCart();
+//       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
+//       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
+//     }
+
+//   } catch (error) {
+//     toast.error(
+//       error.response?.data?.message ||
+//         (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
+//     );
+//     scrollToError();
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
 
+  console.log("🚀 Submit Started");
+  console.log("🛒 Cart:", cart);
+  console.log("📦 Form Data:", formData);
+
   try {
     if (cart.length === 0) {
+      console.warn("❌ Cart is empty");
       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
       setLoading(false);
       return;
@@ -333,6 +503,7 @@ const handleSubmit = async (e) => {
 
     const nameParts = formData.name.trim().split(/\s+/);
     if (nameParts.length < 2) {
+      console.warn("❌ Invalid Name:", formData.name);
       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
       setLoading(false);
       scrollToError();
@@ -340,7 +511,9 @@ const handleSubmit = async (e) => {
     }
 
     const phoneRegex = /^(010|011|012|015)\d{8}$/;
+
     if (!formData.phone || !phoneRegex.test(formData.phone)) {
+      console.warn("❌ Invalid Phone:", formData.phone);
       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
       setLoading(false);
       scrollToError();
@@ -348,6 +521,7 @@ const handleSubmit = async (e) => {
     }
 
     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
+      console.warn("❌ Invalid Secondary Phone:", formData.secondaryPhone);
       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
       setLoading(false);
       scrollToError();
@@ -355,6 +529,7 @@ const handleSubmit = async (e) => {
     }
 
     if (!formData.city || !formData.bostaDistrictId || !formData.address) {
+      console.warn("❌ Missing Address Data", formData);
       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
       setLoading(false);
       scrollToError();
@@ -363,40 +538,53 @@ const handleSubmit = async (e) => {
 
     let hasError = false;
 
-  if (!formData.city) {
-    setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
-    hasError = true;
-  }
+    if (!formData.city) {
+      setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
+      hasError = true;
+    }
 
-  if (!formData.bostaDistrictId) {
-    setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
-    hasError = true;
-  }
+    if (!formData.bostaDistrictId) {
+      setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
+      hasError = true;
+    }
 
-  if (hasError) {
-    // السكرول اللي بيطلع العميل لمكان المشكلة
-    shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
+    if (hasError) {
+      console.warn("❌ Address validation failed");
+      shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
 
     // =========================
     // ORDER ITEMS
     // =========================
-    const orderItems = cart.map((item) => {
+    const orderItems = cart.map((item, index) => {
       const actualId = item.bundle || item.product || item._id || item.id;
+
+      console.log(`🧩 Cart Item ${index}:`, item);
+
+      if (!item.isBundle) {
+        console.log("➡️ PRODUCT ITEM");
+        console.log("product:", actualId);
+        console.log("variantId:", item.variantId);
+        console.log("color:", item.color);
+        console.log("size:", item.size);
+      }
 
       return item.isBundle
         ? {
             bundle: actualId,
             isBundle: true,
             quantity: item.qty,
-            bundleItems: item.bundleItems.map((bi) => ({
-              product: bi.productId || bi.product || bi._id,
-              variantId: bi.variantId,
-              name: bi.name,
-              size: bi.size,
-              color: bi.color,
-            })),
+            bundleItems: item.bundleItems.map((bi, i) => {
+              console.log(`📦 Bundle Item ${i}:`, bi);
+              return {
+                product: bi.productId || bi.product || bi._id,
+                variantId: bi.variantId,
+                name: bi.name,
+                size: bi.size,
+                color: bi.color,
+              };
+            }),
           }
         : {
             product: actualId,
@@ -408,14 +596,16 @@ const handleSubmit = async (e) => {
           };
     });
 
+    console.log("📤 Final orderItems:", orderItems);
+
     const token = localStorage.getItem("token");
+    console.log("🔑 Token:", token);
 
     const commonData = {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
       secondaryPhone: formData.secondaryPhone,
-
       shippingAddress: {
         city: formData.city,
         cityName: selectedCityObj
@@ -432,7 +622,6 @@ const handleSubmit = async (e) => {
         bostaCityId: selectedCityObj?.bostaCityId || "",
         bostaDistrictId: formData.bostaDistrictId,
       },
-
       paymentMethod: formData.paymentMethod,
       orderItems,
       discountCode: discountInfo?.valid ? formData.discountCode : null,
@@ -441,18 +630,26 @@ const handleSubmit = async (e) => {
       apartment: formData.apartment,
     };
 
+    console.log("📦 Payload before sending:", commonData);
+
     let res;
 
     if (formData.paymentMethod === "card") {
+      console.log("💳 Payment: CARD");
+
       res = await api.post("/orders", commonData, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      console.log("✅ Response:", res.data);
 
       if (res.data.paymentURL) {
         clearCart();
         window.location.href = res.data.paymentURL;
       }
     } else {
+      console.log("💵 Payment: CASH / OTHER");
+
       const payload = new FormData();
 
       Object.keys(commonData).forEach((key) => {
@@ -463,6 +660,8 @@ const handleSubmit = async (e) => {
         }
       });
 
+      console.log("📤 FormData prepared");
+
       res = await api.post("/orders", payload, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -470,22 +669,31 @@ const handleSubmit = async (e) => {
         },
       });
 
+      console.log("✅ Response:", res.data);
+
       clearCart();
       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
+
+      console.log("➡️ Redirecting to Thank You page");
+
       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
     }
 
   } catch (error) {
+    console.error("🔥 ERROR:", error);
+    console.error("📛 Server Message:", error.response?.data);
+
     toast.error(
       error.response?.data?.message ||
-        (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
+      (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
     );
+
     scrollToError();
   } finally {
+    console.log("🏁 Submit Ended");
     setLoading(false);
   }
 };
-
 const isFreeShipping = shippingCost === 0 && discountInfo?.freeShippingApplied;
 
 const cartTotal = cart.reduce(
