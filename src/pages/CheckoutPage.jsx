@@ -48,6 +48,7 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   });
 
   const [discountInfo, setDiscountInfo] = useState(null);
+  
   const trackInitiateCheckout = (cart) => {
   if (!window.fbq) return;
 
