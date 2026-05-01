@@ -71,10 +71,7 @@ useEffect(() => {
       }
     );
   }
-
-  
 }, [order]);
-
 
   const subtotal = order?.orderItems?.reduce(
     (acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0
