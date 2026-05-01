@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // ThankYou.jsx
 import { useNavigate, useParams } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -54,23 +55,21 @@ useEffect(() => {
   const discount = order?.discount?.amount || 0;
   const total = subtotal + shipping - discount;
 
-  if (window.fbq) {
-    window.fbq("track", "Purchase",
-      {
-        value: Number(order.totalPrice || total), // 🔥 خليه من الباك أفضل
-        currency: "EGP",
-        contents: order.orderItems.map((item) => ({
-          id: item.product || item.bundle,
-          quantity: item.quantity,
-          item_price: item.price,
-        })),
-        content_type: "product",
-      },
-      {
-        eventID: eventId, // 🔥 مهم جدًا
-      }
-    );
+ window.fbq("track", "Purchase",
+  {
+    value: Number(order.totalPrice || total),
+    currency: "EGP",
+    contents: order.orderItems.map((item) => ({
+      id: item.product || item.bundle,
+      quantity: item.quantity,
+      item_price: item.price,
+    })),
+    content_type: "product",
+  },
+  {
+    eventID: order._id // 🔥 مهم جدًا
   }
+);
 }, [order]);
 
   const subtotal = order?.orderItems?.reduce(
