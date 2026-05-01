@@ -41,7 +41,6 @@ useEffect(() => {
 
   hasTrackedPurchase.current = true;
 
-  // eslint-disable-next-line no-unused-vars
   const eventId = order._id;
 
   const subtotal =
@@ -53,26 +52,25 @@ useEffect(() => {
 
   const shipping = Number(order?.shippingFee) || 0;
   const discount = order?.discount?.amount || 0;
-  // eslint-disable-next-line no-unused-vars
   const total = subtotal + shipping - discount;
 
-  // if (window.fbq) {
-  //   window.fbq("track", "Purchase",
-  //     {
-  //       value: Number(order.totalPrice || total), // 🔥 خليه من الباك أفضل
-  //       currency: "EGP",
-  //       contents: order.orderItems.map((item) => ({
-  //         id: item.product || item.bundle,
-  //         quantity: item.quantity,
-  //         item_price: item.price,
-  //       })),
-  //       content_type: "product",
-  //     },
-  //     {
-  //       eventID: eventId, // 🔥 مهم جدًا
-  //     }
-  //   );
-  // }
+  if (window.fbq) {
+    window.fbq("track", "Purchase",
+      {
+        value: Number(order.totalPrice || total), // 🔥 خليه من الباك أفضل
+        currency: "EGP",
+        contents: order.orderItems.map((item) => ({
+          id: item.product || item.bundle,
+          quantity: item.quantity,
+          item_price: item.price,
+        })),
+        content_type: "product",
+      },
+      {
+        eventID: eventId, // 🔥 مهم جدًا
+      }
+    );
+  }
 
   
 }, [order]);
