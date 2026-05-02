@@ -137,9 +137,9 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   }, []);
 
  useEffect(() => {
-  if (cart?.length && formData && eventId) {
-    trackInitiateCheckout(cart, formData, eventId);
-  }
+  if (!cart?.length || !formData?.name || !eventId) return;
+
+  trackInitiateCheckout(cart, formData, eventId);
 }, [cart, formData, eventId]);
 
 const normalizePhone = (value) => {
