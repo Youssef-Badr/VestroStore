@@ -56,7 +56,7 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   
   const eventId = `init-${normalizedPhone}-${timeBlock}`;
   
-  const trackInitiateCheckout = (cart,formData, eventId) => {
+  const trackInitiateCheckout = (cart) => {
   if (!window.fbq) return;
 
   let totalValue = 0;
@@ -82,31 +82,17 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
       content_type: "product",
     };
   });
-// معالجة الاسم لضمان عدم وجود undefined
-  const nameParts = (formData.name || "").trim().split(/\s+/);
-  const firstName = nameParts[0] || "";
-  const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : firstName;
+
 
   window.fbq("track", "InitiateCheckout", {
     content_type: "product",
     currency: "EGP",
     value: totalValue,
-    
-   ph: formData.phone || undefined,
-  fn: formData.name.split(' ')[0] || firstName,
-  ln: formData.name.split(' ')[1] || lastName || lastName,
     contents,
-     em: formData.email || undefined,
-     
-     
-      // ممكن تضيف المدينة هنا كمان لو متاحة في الـ formData
-      ct: formData.cityName || undefined, 
-      country: "eg", // ثابت لمصر
     num_items: cart.reduce((sum, i) => sum + i.qty, 0),
- },{
-      eventID: eventId,
-     
-    });
+ }, {
+  eventID: eventId
+});
 };
 
   // 🌍 جلب المدن عند التحميل
@@ -136,11 +122,14 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     fetchDiscounts();
   }, []);
 
- useEffect(() => {
-  if (!cart?.length || !formData?.name || !eventId) return;
+  // 👇👇 هنا تحطها
+useEffect(() => {
+  if (cart?.length) {
+    trackInitiateCheckout(cart);
+  }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [cart]);
 
-  trackInitiateCheckout(cart, formData, eventId);
-}, [cart, formData, eventId]);
 
 const normalizePhone = (value) => {
   if (!value) return value;
