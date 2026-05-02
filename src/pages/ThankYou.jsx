@@ -41,8 +41,7 @@ useEffect(() => {
   if (!order || hasTrackedPurchase.current) return;
 
   hasTrackedPurchase.current = true;
-
-  const eventId = order._id;
+const purchaseEventId = order.purchaseEventId || order._id;
 
   const subtotal =
     order?.orderItems?.reduce(
@@ -54,7 +53,12 @@ useEffect(() => {
   const shipping = Number(order?.shippingFee) || 0;
   const discount = order?.discount?.amount || 0;
   const total = subtotal + shipping - discount;
-
+const customerData = order.guestInfo || {};
+  
+  // 3. تقسيم الاسم (First Name & Last Name)
+  const fullName = (customerData.name || "").trim().split(/\s+/);
+  const firstName = fullName[0] || "";
+  const lastName = fullName.length > 1 ? fullName.slice(1).join(" ") : fullName[0] || "";
  window.fbq("track", "Purchase",
   {
     value: Number(order.totalPrice || total),
@@ -67,8 +71,15 @@ useEffect(() => {
     content_type: "product",
   },
   {
-    eventID: order._id // 🔥 مهم جدًا
-  }
+      eventID: purchaseEventId, // للربط مع السيرفر (Deduplication)
+      em: customerData.email || undefined,
+      ph: customerData.phone || undefined,
+      fn: firstName,
+      ln: lastName,
+      ct: order.shippingAddress?.cityName || undefined, // المدينة من السكيما الخاصة بك
+      country: "eg", // ثابت لمصر
+      external_id: purchaseEventId // نستخدم الـ Order ID كمعرف خارجي
+    }
 );
 }, [order]);
 

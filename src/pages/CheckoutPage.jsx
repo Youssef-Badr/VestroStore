@@ -8,7 +8,7 @@ import api from "../../src/api/axiosInstance";
 import { useTheme } from "../contexts/ThemeContext";
 import OrderSummary from "./../components/OrderSummary";
 import { ChevronLeft, MapPin, Phone, User, Mail, CreditCard, Banknote, Tag, Home } from "lucide-react";
-
+import { getMetaCookies } from "../utils/metaCookies";
 const CheckoutPage = () => {
   const { cart, clearCart, updateQty, removeFromCart } = useCart();
   const navigate = useNavigate();
@@ -48,7 +48,15 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   });
 
   const [discountInfo, setDiscountInfo] = useState(null);
-  const trackInitiateCheckout = (cart) => {
+  
+
+  const tenHoursInMs = 15 * 60 * 1000;
+  const timeBlock = Math.floor(Date.now() / tenHoursInMs);
+  const normalizedPhone = normalizePhone(formData.phone); // تنظيف الرقم من أي حروف
+  
+  const eventId = `init-${normalizedPhone}-${timeBlock}`;
+  
+  const trackInitiateCheckout = (cart,formData, eventId) => {
   if (!window.fbq) return;
 
   let totalValue = 0;
@@ -74,14 +82,31 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
       content_type: "product",
     };
   });
+// معالجة الاسم لضمان عدم وجود undefined
+  const nameParts = (formData.name || "").trim().split(/\s+/);
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : firstName;
 
   window.fbq("track", "InitiateCheckout", {
     content_type: "product",
     currency: "EGP",
     value: totalValue,
+    em: formData.email, 
+  ph: formData.phone,
+  fn: formData.name.split(' ')[0],
+  ln: formData.name.split(' ')[1],
     contents,
     num_items: cart.reduce((sum, i) => sum + i.qty, 0),
-  });
+ },{
+      eventID: eventId,
+      em: formData.email || undefined,
+      ph: formData.phone || undefined,
+      fn: firstName,
+      ln: lastName,
+      // ممكن تضيف المدينة هنا كمان لو متاحة في الـ formData
+      ct: formData.cityName || undefined, 
+      country: "eg"
+    });
 };
 
   // 🌍 جلب المدن عند التحميل
@@ -116,6 +141,7 @@ useEffect(() => {
   if (cart?.length) {
     trackInitiateCheckout(cart);
   }
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [cart]);
 
 
@@ -490,10 +516,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
 
-  console.log("🚀 Submit Started");
-  console.log("🛒 Cart:", cart);
-  console.log("📦 Form Data:", formData);
-
+  const { fbp, fbc } = getMetaCookies();
   try {
     if (cart.length === 0) {
       console.warn("❌ Cart is empty");
@@ -607,6 +630,9 @@ const handleSubmit = async (e) => {
       email: formData.email,
       phone: formData.phone,
       secondaryPhone: formData.secondaryPhone,
+
+      fbp,
+    fbc,
       shippingAddress: {
         city: formData.city,
         cityName: selectedCityObj
@@ -625,10 +651,12 @@ const handleSubmit = async (e) => {
       },
       paymentMethod: formData.paymentMethod,
       orderItems,
+       
       discountCode: discountInfo?.valid ? formData.discountCode : null,
       buildingNumber: formData.buildingNumber,
       floor: formData.floor,
       apartment: formData.apartment,
+      eventId
     };
 
     console.log("📦 Payload before sending:", commonData);
