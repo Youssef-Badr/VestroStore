@@ -91,21 +91,21 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     content_type: "product",
     currency: "EGP",
     value: totalValue,
-    em: formData.email, 
-  ph: formData.phone,
-  fn: formData.name.split(' ')[0],
-  ln: formData.name.split(' ')[1],
+    
+   ph: formData.phone || undefined,
+  fn: formData.name.split(' ')[0] || firstName,
+  ln: formData.name.split(' ')[1] || lastName || lastName,
     contents,
+     em: formData.email || undefined,
+     
+     
+      // ممكن تضيف المدينة هنا كمان لو متاحة في الـ formData
+      ct: formData.cityName || undefined, 
+      country: "eg", // ثابت لمصر
     num_items: cart.reduce((sum, i) => sum + i.qty, 0),
  },{
       eventID: eventId,
-      em: formData.email || undefined,
-      ph: formData.phone || undefined,
-      fn: firstName,
-      ln: lastName,
-      // ممكن تضيف المدينة هنا كمان لو متاحة في الـ formData
-      ct: formData.cityName || undefined, 
-      country: "eg"
+     
     });
 };
 
@@ -136,14 +136,11 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     fetchDiscounts();
   }, []);
 
-  // 👇👇 هنا تحطها
-useEffect(() => {
-  if (cart?.length) {
-    trackInitiateCheckout(cart);
+ useEffect(() => {
+  if (cart?.length && formData && eventId) {
+    trackInitiateCheckout(cart, formData, eventId);
   }
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [cart]);
-
+}, [cart, formData, eventId]);
 
 const normalizePhone = (value) => {
   if (!value) return value;

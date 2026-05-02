@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 // ThankYou.jsx
 import { useNavigate, useParams } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -41,7 +41,8 @@ useEffect(() => {
   if (!order || hasTrackedPurchase.current) return;
 
   hasTrackedPurchase.current = true;
-const purchaseEventId = order.purchaseEventId || order._id;
+
+  const purchaseEventId = order.purchaseEventId; // لازم يكون جاي من الباك
 
   const subtotal =
     order?.orderItems?.reduce(
@@ -53,14 +54,14 @@ const purchaseEventId = order.purchaseEventId || order._id;
   const shipping = Number(order?.shippingFee) || 0;
   const discount = order?.discount?.amount || 0;
   const total = subtotal + shipping - discount;
-const customerData = order.guestInfo || {};
-  
-  // 3. تقسيم الاسم (First Name & Last Name)
+
+  const customerData = order.guestInfo || {};
+
   const fullName = (customerData.name || "").trim().split(/\s+/);
   const firstName = fullName[0] || "";
-  const lastName = fullName.length > 1 ? fullName.slice(1).join(" ") : fullName[0] || "";
- window.fbq("track", "Purchase",
-  {
+  const lastName = fullName.slice(1).join(" ") || firstName;
+
+  window.fbq("track", "Purchase", {
     value: Number(order.totalPrice || total),
     currency: "EGP",
     contents: order.orderItems.map((item) => ({
@@ -69,18 +70,18 @@ const customerData = order.guestInfo || {};
       item_price: item.price,
     })),
     content_type: "product",
-  },
-  {
-      eventID: purchaseEventId, // للربط مع السيرفر (Deduplication)
-      em: customerData.email || undefined,
-      ph: customerData.phone || undefined,
-      fn: firstName,
-      ln: lastName,
-      ct: order.shippingAddress?.cityName || undefined, // المدينة من السكيما الخاصة بك
-      country: "eg", // ثابت لمصر
-      external_id: purchaseEventId // نستخدم الـ Order ID كمعرف خارجي
-    }
-);
+
+    // 👇 user data هنا (صح)
+    em: customerData.email || undefined,
+    ph: customerData.phone || undefined,
+    fn: firstName || undefined,
+    ln: lastName || undefined,
+    ct: order.shippingAddress?.cityName || undefined,
+    country: "eg",
+  }, {
+    eventID: purchaseEventId
+  });
+
 }, [order]);
 
   const subtotal = order?.orderItems?.reduce(
