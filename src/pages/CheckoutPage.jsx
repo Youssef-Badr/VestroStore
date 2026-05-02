@@ -48,9 +48,21 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   });
 
   const [discountInfo, setDiscountInfo] = useState(null);
-  
+  const normalizePhone = (value) => {
+  if (!value) return value;
 
-  const tenHoursInMs = 15 * 60 * 1000;
+  return value
+    // عربي
+    .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    // فارسي
+    .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+    // حذف أي حاجة مش رقم
+    .replace(/\s+/g, "")
+    .replace(/[^0-9]/g, "");
+};
+
+
+  const tenHoursInMs = 15 * 60 * 30000;
   const timeBlock = Math.floor(Date.now() / tenHoursInMs);
   const normalizedPhone = normalizePhone(formData.phone); // تنظيف الرقم من أي حروف
   
@@ -131,18 +143,7 @@ useEffect(() => {
 }, [cart]);
 
 
-const normalizePhone = (value) => {
-  if (!value) return value;
 
-  return value
-    // عربي
-    .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
-    // فارسي
-    .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
-    // حذف أي حاجة مش رقم
-    .replace(/\s+/g, "")
-    .replace(/[^0-9]/g, "");
-};
 
  // 🔄 معالجة التغييرات في الحقول
 const handleChange = async (e) => {
