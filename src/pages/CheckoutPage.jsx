@@ -68,43 +68,67 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   
   const eventId = `init-${normalizedPhone}-${timeBlock}`;
   
-  const trackInitiateCheckout = (cart) => {
-  if (!window.fbq) return;
+  const trackInitiateCheckout = (cart, formData, eventId) => {
+  if (!window.fbq || !cart?.length) return;
 
   let totalValue = 0;
 
   const contents = cart.map((item) => {
-    if (item.isBundle) {
-      totalValue += item.price * item.qty;
+    const qty = Number(item.qty) || 0;
+    const price = Number(item.price) || 0;
 
+    totalValue += price * qty;
+
+    if (item.isBundle) {
       return {
         id: item.bundle,
-        quantity: item.qty,
-        item_price: item.price,
+        quantity: qty,
+        item_price: price,
         content_type: "bundle",
       };
     }
 
-    totalValue += item.price * item.qty;
-
     return {
-      id: item.variantId,
-      quantity: item.qty,
-      item_price: item.price,
+      id: item.variantId || item.product || item._id,
+      quantity: qty,
+      item_price: price,
       content_type: "product",
     };
   });
 
+  const totalItems = cart.reduce(
+    (sum, i) => sum + (Number(i.qty) || 0),
+    0
+  );
 
-  window.fbq("track", "InitiateCheckout", {
-    content_type: "product",
-    currency: "EGP",
-    value: totalValue,
-    contents,
-    num_items: cart.reduce((sum, i) => sum + i.qty, 0),
- }, {
-  eventID: eventId
-});
+  // 🧠 حماية الاسم
+  const nameParts = (formData?.name || "").trim().split(/\s+/);
+  const firstName = nameParts[0] || "";
+  const lastName =
+    nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+
+  window.fbq(
+    "track",
+    "InitiateCheckout",
+    {
+      content_type: "product",
+      currency: "EGP",
+      value: totalValue,
+      contents,
+      num_items: totalItems,
+    },
+    {
+      eventID: eventId,
+
+      // 🔥 Advanced matching (optional لكن مفيد)
+      em: formData?.email || undefined,
+      ph: formData?.phone || undefined,
+      fn: firstName || undefined,
+      ln: lastName || undefined,
+      ct: formData?.cityName || undefined,
+      country: "eg",
+    }
+  );
 };
 
   // 🌍 جلب المدن عند التحميل
@@ -334,171 +358,7 @@ const scrollToError = () => {
   }, 150); // زودنا الوقت شوية لـ 150ms للتأكيد
 };
 
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setLoading(true);
 
-//   try {
-//     if (cart.length === 0) {
-//       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
-//       setLoading(false);
-//       return;
-//     }
-
-//     const nameParts = formData.name.trim().split(/\s+/);
-//     if (nameParts.length < 2) {
-//       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
-//       setLoading(false);
-//       scrollToError();
-//       return;
-//     }
-
-//     const phoneRegex = /^(010|011|012|015)\d{8}$/;
-//     if (!formData.phone || !phoneRegex.test(formData.phone)) {
-//       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
-//       setLoading(false);
-//       scrollToError();
-//       return;
-//     }
-
-//     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
-//       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
-//       setLoading(false);
-//       scrollToError();
-//       return;
-//     }
-
-//     if (!formData.city || !formData.bostaDistrictId || !formData.address) {
-//       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
-//       setLoading(false);
-//       scrollToError();
-//       return;
-//     }
-
-//     let hasError = false;
-
-//   if (!formData.city) {
-//     setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
-//     hasError = true;
-//   }
-
-//   if (!formData.bostaDistrictId) {
-//     setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
-//     hasError = true;
-//   }
-
-//   if (hasError) {
-//     // السكرول اللي بيطلع العميل لمكان المشكلة
-//     shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-//     return;
-//   }
-
-//     // =========================
-//     // ORDER ITEMS
-//     // =========================
-//     const orderItems = cart.map((item) => {
-//       const actualId = item.bundle || item.product || item._id || item.id;
-
-//       return item.isBundle
-//         ? {
-//             bundle: actualId,
-//             isBundle: true,
-//             quantity: item.qty,
-//             bundleItems: item.bundleItems.map((bi) => ({
-//               product: bi.productId || bi.product || bi._id,
-//               variantId: bi.variantId,
-//               name: bi.name,
-//               size: bi.size,
-//               color: bi.color,
-//             })),
-//           }
-//         : {
-//             product: actualId,
-//             variantId: item.variantId,
-//             quantity: item.qty,
-//             color: item.color,
-//             size: item.size,
-//             price: item.price,
-//           };
-//     });
-
-//     const token = localStorage.getItem("token");
-
-//     const commonData = {
-//       name: formData.name,
-//       email: formData.email,
-//       phone: formData.phone,
-//       secondaryPhone: formData.secondaryPhone,
-
-//       shippingAddress: {
-//         city: formData.city,
-//         cityName: selectedCityObj
-//           ? isRTL
-//             ? selectedCityObj.cityAr
-//             : selectedCityObj.cityEn
-//           : "",
-//         district: formData.district,
-//         address: formData.address,
-//         buildingNumber: formData.buildingNumber,
-//         floor: formData.floor,
-//         apartment: formData.apartment,
-//         country: "Egypt",
-//         bostaCityId: selectedCityObj?.bostaCityId || "",
-//         bostaDistrictId: formData.bostaDistrictId,
-//       },
-
-//       paymentMethod: formData.paymentMethod,
-//       orderItems,
-//       discountCode: discountInfo?.valid ? formData.discountCode : null,
-//       buildingNumber: formData.buildingNumber,
-//       floor: formData.floor,
-//       apartment: formData.apartment,
-//     };
-
-//     let res;
-
-//     if (formData.paymentMethod === "card") {
-//       res = await api.post("/orders", commonData, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-
-//       if (res.data.paymentURL) {
-//         clearCart();
-//         window.location.href = res.data.paymentURL;
-//       }
-//     } else {
-//       const payload = new FormData();
-
-//       Object.keys(commonData).forEach((key) => {
-//         if (key === "shippingAddress" || key === "orderItems") {
-//           payload.append(key, JSON.stringify(commonData[key]));
-//         } else if (commonData[key]) {
-//           payload.append(key, commonData[key]);
-//         }
-//       });
-
-//       res = await api.post("/orders", payload, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-
-//       clearCart();
-//       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
-//       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
-//     }
-
-//   } catch (error) {
-//     toast.error(
-//       error.response?.data?.message ||
-//         (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
-//     );
-//     scrollToError();
-//   } finally {
-//     setLoading(false);
-//   }
-// };
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
@@ -1451,7 +1311,6 @@ return (
 };
 
 export default CheckoutPage;
-
 
 
 
