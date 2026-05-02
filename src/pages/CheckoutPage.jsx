@@ -68,67 +68,43 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   
   const eventId = `init-${normalizedPhone}-${timeBlock}`;
   
-  const trackInitiateCheckout = (cart, formData, eventId) => {
-  if (!window.fbq || !cart?.length) return;
+  const trackInitiateCheckout = (cart) => {
+  if (!window.fbq) return;
 
   let totalValue = 0;
 
   const contents = cart.map((item) => {
-    const qty = Number(item.qty) || 0;
-    const price = Number(item.price) || 0;
-
-    totalValue += price * qty;
-
     if (item.isBundle) {
+      totalValue += item.price * item.qty;
+
       return {
         id: item.bundle,
-        quantity: qty,
-        item_price: price,
+        quantity: item.qty,
+        item_price: item.price,
         content_type: "bundle",
       };
     }
 
+    totalValue += item.price * item.qty;
+
     return {
-      id: item.variantId || item.product || item._id,
-      quantity: qty,
-      item_price: price,
+      id: item.variantId,
+      quantity: item.qty,
+      item_price: item.price,
       content_type: "product",
     };
   });
 
-  const totalItems = cart.reduce(
-    (sum, i) => sum + (Number(i.qty) || 0),
-    0
-  );
 
-  // 🧠 حماية الاسم
-  const nameParts = (formData?.name || "").trim().split(/\s+/);
-  const firstName = nameParts[0] || "";
-  const lastName =
-    nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
-
-  window.fbq(
-    "track",
-    "InitiateCheckout",
-    {
-      content_type: "product",
-      currency: "EGP",
-      value: totalValue,
-      contents,
-      num_items: totalItems,
-    },
-    {
-      eventID: eventId,
-
-      // 🔥 Advanced matching (optional لكن مفيد)
-      em: formData?.email || undefined,
-      ph: formData?.phone || undefined,
-      fn: firstName || undefined,
-      ln: lastName || undefined,
-      ct: formData?.cityName || undefined,
-      country: "eg",
-    }
-  );
+  window.fbq("track", "InitiateCheckout", {
+    content_type: "product",
+    currency: "EGP",
+    value: totalValue,
+    contents,
+    num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+ }, {
+  eventID: eventId
+});
 };
 
   // 🌍 جلب المدن عند التحميل
