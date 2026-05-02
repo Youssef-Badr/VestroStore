@@ -62,50 +62,50 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
 };
 
 
-  const tenHoursInMs = 15 * 60 * 30000;
+ const tenHoursInMs = 15 * 60 * 30000;
   const timeBlock = Math.floor(Date.now() / tenHoursInMs);
-  const normalizedPhone = normalizePhone(formData.phone); // تنظيف الرقم من أي حروف
+  const normalizedPhone = normalizePhone(formData.phone); 
   
   const eventId = `init-${normalizedPhone}-${timeBlock}`;
   
   const trackInitiateCheckout = (cart) => {
-  if (!window.fbq) return;
+    if (!window.fbq) return;
 
-  let totalValue = 0;
-
-  const contents = cart.map((item) => {
-    if (item.isBundle) {
-      totalValue += item.price * item.qty;
-
+    let totalValue = 0;
+    const contents = cart.map((item) => {
+      totalValue += (Number(item.price) || 0) * (Number(item.qty) || 0);
       return {
-        id: item.bundle,
+        id: item.isBundle ? item.bundle : item.variantId,
         quantity: item.qty,
         item_price: item.price,
-        content_type: "bundle",
       };
-    }
+    });
 
-    totalValue += item.price * item.qty;
+    // 1. تقسيم الاسم لضمان جودة المطابقة
+    const nameParts = (formData.name || "").trim().split(/\s+/);
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : firstName;
 
-    return {
-      id: item.variantId,
-      quantity: item.qty,
-      item_price: item.price,
+    window.fbq("track", "InitiateCheckout", {
       content_type: "product",
-    };
-  });
+      currency: "EGP",
+      value: totalValue,
+      contents,
+      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+    }, {
+      // 2. 🔥 إضافة بيانات العميل هنا هي اللي هتشيل التحذير
+      eventID: eventId,
+      em: formData.email || undefined,     // البريد الإلكتروني
+      ph: normalizedPhone || undefined,    // رقم الهاتف
+      fn: firstName,                       // الاسم الأول
+      ln: lastName,                        // اسم العائلة
+      ct: formData.cityName || undefined,  // المدينة (لو متوفرة في الفورم)
+      country: "eg",                       // الدولة
+      external_id: normalizedPhone         // معرف خارجي لربط أقوى
+    });
+  };
 
-
-  window.fbq("track", "InitiateCheckout", {
-    content_type: "product",
-    currency: "EGP",
-    value: totalValue,
-    contents,
-    num_items: cart.reduce((sum, i) => sum + i.qty, 0),
- }, {
-  eventID: eventId
-});
-};
+ 
 
   // 🌍 جلب المدن عند التحميل
   useEffect(() => {
