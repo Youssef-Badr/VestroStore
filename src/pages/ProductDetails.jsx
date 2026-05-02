@@ -365,16 +365,10 @@ useEffect(() => {
 
   fbq("track", "ViewContent", {
     content_ids: [product._id],
-    content_name: product.name,
     content_type: "product",
-    content_category: product.category?.map(c => c.name).join(", "),
-    value: product.salePrice || product.originalPrice || product.price || 0,
-    currency: "EGP",
-    contents: product.variants?.slice(0, 3).map(v => ({
-      id: product._id,
-      quantity: v.stock || 1,
-      item_price: v.price || product.price
-    }))
+    content_name: product.name,
+    value: product.salePrice || product.price || 0,
+    currency: "EGP"
   });
 }, [product?._id]);
 

@@ -95,11 +95,11 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     }, {
       // 2. 🔥 إضافة بيانات العميل هنا هي اللي هتشيل التحذير
       eventID: eventId,
-      em: formData.email || undefined,     // البريد الإلكتروني
+     em: formData.email?.trim().toLowerCase() || undefined,     // البريد الإلكتروني
       ph: normalizedPhone || undefined,    // رقم الهاتف
-      fn: firstName,                       // الاسم الأول
-      ln: lastName,                        // اسم العائلة
-      ct: formData.cityName || undefined,  // المدينة (لو متوفرة في الفورم)
+     fn: firstName.toLowerCase(),
+ln: lastName.toLowerCase(),                     // اسم العائلة
+      ct: formData.cityName || undefined, // المدينة (لو متوفرة في الفورم)
       country: "eg",                       // الدولة
       external_id: normalizedPhone         // معرف خارجي لربط أقوى
     });

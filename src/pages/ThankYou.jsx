@@ -35,7 +35,19 @@ const hasTrackedPurchase = useRef(false);
     };
     if (orderId) fetchOrder();
   }, [orderId, isRTL]);
+const normalizePhone = (phone) => {
+  if (!phone) return null;
 
+  phone = phone
+    .replace(/[٠-٩]/g, (d) => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)])
+    .replace(/[۰-۹]/g, (d) => "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)])
+    .replace(/\D/g, "");
+
+  if (phone.startsWith("0")) return "+2" + phone;
+  if (!phone.startsWith("2")) return "+2" + phone;
+
+  return "+" + phone;
+};
 
 useEffect(() => {
   if (!order || hasTrackedPurchase.current) return;
@@ -72,12 +84,13 @@ useEffect(() => {
     content_type: "product",
 
     // 👇 user data هنا (صح)
-    em: customerData.email || undefined,
+   em: customerData.email?.trim().toLowerCase() || undefined,
     ph: customerData.phone || undefined,
-    fn: firstName || undefined,
-    ln: lastName || undefined,
-    ct: order.shippingAddress?.cityName || undefined,
+   fn: firstName.toLowerCase() || undefined,
+ln: lastName.toLowerCase() || undefined,
+ct: order.shippingAddress?.cityNameEn || undefined,
     country: "eg",
+    external_id: normalizePhone(customerData.phone) || undefined,
   }, {
     eventID: purchaseEventId
   });
