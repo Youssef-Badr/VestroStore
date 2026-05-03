@@ -103,20 +103,26 @@ const customSelectStyles = (isRTL, hasError) => ({
     fontWeight: "bold",
   }),
 
-  menu: (base) => ({
-    ...base,
-    backgroundColor: "#111111", // dark dropdown
-    borderRadius: "1rem",
-    overflow: "hidden",
-    zIndex: 50,
-  }),
+ menu: (base) => ({
+  ...base,
+  backgroundColor: "white", // 🔥 مش أسود
+  borderRadius: "1rem",
+  overflow: "hidden",
+  zIndex: 9999,
+  boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
+}),
+menuList: (base) => ({
+  ...base,
+  maxHeight: "600px", // 🔥 كان صغير → بقى كبير
+  padding: "6px",
+}),
 
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused
       ? "rgba(255,255,255,0.05)"
       : "transparent",
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     cursor: "pointer",
     textAlign: isRTL ? "right" : "left",
@@ -287,6 +293,7 @@ const handleCityChange = async (selected) => {
 
   if (cityError) setCityError("");
 };
+
 const handleDistrictChange = (selected) => {
   const value = selected?.value || "";
 
@@ -824,21 +831,12 @@ return (
       .find(opt => opt.value === formData.city) || null
   }
 
- onChange={(selected) => {
-  handleCityChange(selected);
-  if (!selected) {
-    setFormData(prev => ({
-      ...prev,
-      city: "",
-      district: "",
-      bostaDistrictId: "",
-    }));
-  }
-}}
+  onChange={handleCityChange}
   placeholder={isRTL ? "ابحث عن المحافظة..." : "Search city..."}
 
   styles={customSelectStyles(isRTL, !!cityError)}
   isRtl={isRTL}
+  isClearable
 
   className={`w-full py-1 bg-slate-50 dark:bg-[#111111] 
   border ${cityError ? 'border-red-500' : 'border-transparent dark:border-white/5'} 
@@ -866,7 +864,7 @@ return (
   }
 
   onChange={handleDistrictChange}
-
+isClearable
   placeholder={isRTL ? " ابحث عن المنطقة..." : "Search district..."}
 
   styles={customSelectStyles(isRTL, !!districtError)}
