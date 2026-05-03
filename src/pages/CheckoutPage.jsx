@@ -105,8 +105,7 @@ const customSelectStyles = (isRTL, hasError) => ({
 
  menu: (base) => ({
   ...base,
-  backgroundColor: "white", // 🔥 مش أسود
-  borderRadius: "1rem",
+ backgroundColor: darkMode ? "#111111" : "white",  borderRadius: "1rem",
   overflow: "hidden",
   zIndex: 9999,
   boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -120,9 +119,9 @@ menuList: (base) => ({
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isFocused
-      ? "rgba(255,255,255,0.05)"
-      : "transparent",
-    color: "black",
+    ? (darkMode ? "rgba(255,255,255,0.05)" : "#f1f5f9")
+    : (darkMode ? "#111111" : "white"),
+    color:  darkMode ? "white" : "#111111",  borderRadius: "1rem",
     fontWeight: "bold",
     cursor: "pointer",
     textAlign: isRTL ? "right" : "left",
