@@ -29,6 +29,8 @@ const { darkMode } = useTheme();
 const [nameError, setNameError] = useState("");
 const [cityError, setCityError] = useState("");
 const [districtError, setDistrictError] = useState("");
+const cityRef = useRef(null);
+const districtRef = useRef(null);
 const shippingSectionRef = useRef(null); // عشان السكرول
 const [baseShippingCost, setBaseShippingCost] = useState(0); 
  
@@ -232,75 +234,7 @@ useEffect(() => {
 const handleChange = async (e) => {
   const { name, value } = e.target;
 
-  // if (name === "city") {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     city: value,
-  //     district: "",
-  //     bostaDistrictId: "",
-  //   }));
-
-  //   const cityData = citiesList.find((c) => c._id === value);
-
-  //   if (cityData) {
-  //     // =========================
-  //     // 🔥 الشحن الأساسي الحقيقي
-  //     // =========================
-  //     setShippingCost(cityData.charge);
-  //     setBaseShippingCost(cityData.charge);
-
-  //     // =========================
-  //     // 🔥 reset أي خصم شحن
-  //     // =========================
-  //     setDiscountInfo(null);
-  //     setIsDiscountApplied(false);
-
-  //     setSelectedCityObj(cityData);
-
-  //     try {
-  //       const res = await api.get(
-  //         `/districts/${cityData.bostaCityId}`
-  //       );
-  //       setDistricts(res.data);
-  //     } catch (err) {
-  //       setDistricts([]);
-  //       toast.error(
-  //         isRTL
-  //           ? "تعذر تحميل الأحياء"
-  //           : "Could not load districts"
-  //       );
-  //     }
-  //   } else {
-  //     setShippingCost(0);
-  //     setBaseShippingCost(0);
-  //     setSelectedCityObj(null);
-  //     setDistricts([]);
-  //   }
-
-  //   return;
-  // }
-
-  // if (name === "district") {
-  //   const selected = districts.find(
-  //     (d) => String(d.bostaDistrictId) === String(value)
-  //   );
-
-  //   if (selected) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       district: selected.nameAr,
-  //       bostaDistrictId: String(value),
-  //     }));
-  //   } else {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       district: "",
-  //       bostaDistrictId: "",
-  //     }));
-  //   }
-
-  //   return;
-  // }
+  
 
   if (name === "phone" || name === "secondaryPhone") {
     setFormData((prev) => ({
@@ -528,18 +462,43 @@ const handleSubmit = async (e) => {
       return;
     }
 
-    let hasError = false;
+   let hasError = false;
 
-    if (!formData.city) {
-      setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
-      hasError = true;
-    }
+if (!formData.city) {
+  setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
 
-    if (!formData.bostaDistrictId) {
-      setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
-      hasError = true;
-    }
+  cityRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+  });
 
+  // focus على الـ input الداخلي
+  setTimeout(() => {
+    cityRef.current?.querySelector("input")?.focus();
+  }, 200);
+
+  hasError = true;
+}
+
+if (!formData.bostaDistrictId) {
+  setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
+
+  // لو المدينة سليمة بس الحي غلط
+  if (!hasError) {
+    districtRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+
+    setTimeout(() => {
+      districtRef.current?.querySelector("input")?.focus();
+    }, 200);
+  }
+
+  hasError = true;
+}
+
+if (hasError) return;
     if (hasError) {
       console.warn("❌ Address validation failed");
       shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -849,7 +808,7 @@ return (
   
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {/* 🏙️ المحافظة */}
-    <div className="space-y-2">
+    <div className="space-y-2" ref={cityRef}>
 <Select
   options={citiesList.map(c => ({
     value: c._id,
@@ -865,7 +824,17 @@ return (
       .find(opt => opt.value === formData.city) || null
   }
 
-  onChange={handleCityChange}
+ onChange={(selected) => {
+  handleCityChange(selected);
+  if (!selected) {
+    setFormData(prev => ({
+      ...prev,
+      city: "",
+      district: "",
+      bostaDistrictId: "",
+    }));
+  }
+}}
   placeholder={isRTL ? "ابحث عن المحافظة..." : "Search city..."}
 
   styles={customSelectStyles(isRTL, !!cityError)}
@@ -879,7 +848,7 @@ return (
     </div>
 
     {/* 🏘️ الحي / المنطقة */}
-    <div className="space-y-2">
+    <div className="space-y-2" ref={districtRef}>
 
     <Select
   options={districts.map(d => ({
