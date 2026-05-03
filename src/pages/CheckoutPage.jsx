@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect,useRef } from "react";
+import Select from "react-select";
 import { useCart } from "../contexts/CartContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +49,87 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
   });
 
   const [discountInfo, setDiscountInfo] = useState(null);
+  const cityOptions = citiesList.map(c => ({
+  value: c._id,
+  label: isRTL ? c.cityAr : c.cityEn
+}));
+
+const districtOptions = districts.map(d => ({
+  value: d.bostaDistrictId,
+  label: isRTL ? d.nameAr : (d.nameEn || d.nameAr)
+}));
+const customSelectStyles = (isRTL, hasError) => ({
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: "transparent", // زي input
+    border: hasError
+      ? "1px solid #ef4444"
+      : "1px solid transparent",
+    borderRadius: "1.5rem",
+    minHeight: "56px",
+    boxShadow: "none",
+    padding: "0 4px",
+    direction: isRTL ? "rtl" : "ltr",
+
+    "&:hover": {
+      border: hasError
+        ? "1px solid #ef4444"
+        : "1px solid transparent",
+    },
+  }),
+
+  valueContainer: (base) => ({
+    ...base,
+    padding: isRTL ? "0 16px 0 12px" : "0 12px 0 16px",
+  }),
+
+  input: (base) => ({
+    ...base,
+    color: "inherit", // نفس لون النص
+    fontWeight: "bold",
+  }),
+
+  placeholder: (base) => ({
+    ...base,
+    color: "#9ca3af", // زي input placeholder
+    fontWeight: "bold",
+  }),
+
+  singleValue: (base) => ({
+    ...base,
+    color: "inherit",
+    fontWeight: "bold",
+  }),
+
+  menu: (base) => ({
+    ...base,
+    backgroundColor: "#111111", // dark dropdown
+    borderRadius: "1rem",
+    overflow: "hidden",
+    zIndex: 50,
+  }),
+
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused
+      ? "rgba(255,255,255,0.05)"
+      : "transparent",
+    color: "white",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textAlign: isRTL ? "right" : "left",
+  }),
+
+  dropdownIndicator: (base) => ({
+    ...base,
+    color: "#9ca3af",
+  }),
+
+  indicatorSeparator: () => ({
+    display: "none",
+  }),
+});
+
   const normalizePhone = (value) => {
   if (!value) return value;
 
@@ -60,6 +142,7 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     .replace(/\s+/g, "")
     .replace(/[^0-9]/g, "");
 };
+
 
 
  const tenHoursInMs = 15 * 60 * 30000;
@@ -149,75 +232,75 @@ useEffect(() => {
 const handleChange = async (e) => {
   const { name, value } = e.target;
 
-  if (name === "city") {
-    setFormData((prev) => ({
-      ...prev,
-      city: value,
-      district: "",
-      bostaDistrictId: "",
-    }));
+  // if (name === "city") {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     city: value,
+  //     district: "",
+  //     bostaDistrictId: "",
+  //   }));
 
-    const cityData = citiesList.find((c) => c._id === value);
+  //   const cityData = citiesList.find((c) => c._id === value);
 
-    if (cityData) {
-      // =========================
-      // 🔥 الشحن الأساسي الحقيقي
-      // =========================
-      setShippingCost(cityData.charge);
-      setBaseShippingCost(cityData.charge);
+  //   if (cityData) {
+  //     // =========================
+  //     // 🔥 الشحن الأساسي الحقيقي
+  //     // =========================
+  //     setShippingCost(cityData.charge);
+  //     setBaseShippingCost(cityData.charge);
 
-      // =========================
-      // 🔥 reset أي خصم شحن
-      // =========================
-      setDiscountInfo(null);
-      setIsDiscountApplied(false);
+  //     // =========================
+  //     // 🔥 reset أي خصم شحن
+  //     // =========================
+  //     setDiscountInfo(null);
+  //     setIsDiscountApplied(false);
 
-      setSelectedCityObj(cityData);
+  //     setSelectedCityObj(cityData);
 
-      try {
-        const res = await api.get(
-          `/districts/${cityData.bostaCityId}`
-        );
-        setDistricts(res.data);
-      } catch (err) {
-        setDistricts([]);
-        toast.error(
-          isRTL
-            ? "تعذر تحميل الأحياء"
-            : "Could not load districts"
-        );
-      }
-    } else {
-      setShippingCost(0);
-      setBaseShippingCost(0);
-      setSelectedCityObj(null);
-      setDistricts([]);
-    }
+  //     try {
+  //       const res = await api.get(
+  //         `/districts/${cityData.bostaCityId}`
+  //       );
+  //       setDistricts(res.data);
+  //     } catch (err) {
+  //       setDistricts([]);
+  //       toast.error(
+  //         isRTL
+  //           ? "تعذر تحميل الأحياء"
+  //           : "Could not load districts"
+  //       );
+  //     }
+  //   } else {
+  //     setShippingCost(0);
+  //     setBaseShippingCost(0);
+  //     setSelectedCityObj(null);
+  //     setDistricts([]);
+  //   }
 
-    return;
-  }
+  //   return;
+  // }
 
-  if (name === "district") {
-    const selected = districts.find(
-      (d) => String(d.bostaDistrictId) === String(value)
-    );
+  // if (name === "district") {
+  //   const selected = districts.find(
+  //     (d) => String(d.bostaDistrictId) === String(value)
+  //   );
 
-    if (selected) {
-      setFormData((prev) => ({
-        ...prev,
-        district: selected.nameAr,
-        bostaDistrictId: String(value),
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        district: "",
-        bostaDistrictId: "",
-      }));
-    }
+  //   if (selected) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       district: selected.nameAr,
+  //       bostaDistrictId: String(value),
+  //     }));
+  //   } else {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       district: "",
+  //       bostaDistrictId: "",
+  //     }));
+  //   }
 
-    return;
-  }
+  //   return;
+  // }
 
   if (name === "phone" || name === "secondaryPhone") {
     setFormData((prev) => ({
@@ -230,6 +313,68 @@ const handleChange = async (e) => {
       [name]: value,
     }));
   }
+};
+const handleCityChange = async (selected) => {
+  const value = selected?.value || "";
+
+  setFormData((prev) => ({
+    ...prev,
+    city: value,
+    district: "",
+    bostaDistrictId: "",
+  }));
+
+  const cityData = citiesList.find((c) => c._id === value);
+
+  if (cityData) {
+    setShippingCost(cityData.charge);
+    setBaseShippingCost(cityData.charge);
+
+    setDiscountInfo(null);
+    setIsDiscountApplied(false);
+
+    setSelectedCityObj(cityData);
+
+    try {
+      const res = await api.get(`/districts/${cityData.bostaCityId}`);
+      setDistricts(res.data);
+    } catch (err) {
+      setDistricts([]);
+      toast.error(
+        isRTL ? "تعذر تحميل الأحياء" : "Could not load districts"
+      );
+    }
+  } else {
+    setShippingCost(0);
+    setBaseShippingCost(0);
+    setSelectedCityObj(null);
+    setDistricts([]);
+  }
+
+  if (cityError) setCityError("");
+};
+const handleDistrictChange = (selected) => {
+  const value = selected?.value || "";
+
+  const selectedDistrict = districts.find(
+    (d) => String(d.bostaDistrictId) === String(value)
+  );
+
+  if (selectedDistrict) {
+    setFormData((prev) => ({
+      ...prev,
+      district: selectedDistrict.nameAr,
+      bostaDistrictId: value,
+    }));
+  } else {
+    setFormData((prev) => ({
+      ...prev,
+      district: "",
+      bostaDistrictId: "",
+    }));
+  }
+
+  if (districtError) setDistrictError("");
 };
 
 const validateDiscount = async (codeToValidate, isCheckout = true) => {
@@ -705,50 +850,66 @@ return (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {/* 🏙️ المحافظة */}
     <div className="space-y-2">
-      <select
-        name="city" 
-        value={formData.city} 
-        onChange={(e) => {
-          handleChange(e);
-          if (cityError) setCityError(""); // مسح الخطأ عند الاختيار
-        }} 
-        required
-        className={`w-full p-4 bg-slate-50 dark:bg-[#111111] border ${cityError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none`}
-      >
-        <option value="">{isRTL ? "المحافظة" : "Select City"}</option>
-        {citiesList.map((c) => (
-          <option key={c._id} value={c._id}>{isRTL ? c.cityAr : c.cityEn}</option>
-        ))}
-      </select>
-      {cityError && (
-        <p className={`text-[11px] font-bold text-red-500 ${isRTL ? 'pr-4' : 'pl-4'} animate-pulse`}>
-          {cityError}
-        </p>
-      )}
+<Select
+  options={citiesList.map(c => ({
+    value: c._id,
+    label: isRTL ? c.cityAr : c.cityEn
+  }))}
+
+  value={
+    citiesList
+      .map(c => ({
+        value: c._id,
+        label: isRTL ? c.cityAr : c.cityEn
+      }))
+      .find(opt => opt.value === formData.city) || null
+  }
+
+  onChange={handleCityChange}
+  placeholder={isRTL ? "ابحث عن المحافظة..." : "Search city..."}
+
+  styles={customSelectStyles(isRTL, !!cityError)}
+  isRtl={isRTL}
+
+  className={`w-full py-1 bg-slate-50 dark:bg-[#111111] 
+  border ${cityError ? 'border-red-500' : 'border-transparent dark:border-white/5'} 
+  rounded-[1.5rem] focus-within:border-red-700 
+  font-bold text-slate-900 dark:text-white`}
+/>
     </div>
 
     {/* 🏘️ الحي / المنطقة */}
     <div className="space-y-2">
-      <select
-        name="district" 
-        value={formData.bostaDistrictId} 
-        onChange={(e) => {
-          handleChange(e);
-          if (districtError) setDistrictError(""); // مسح الخطأ عند الاختيار
-        }} 
-        required
-        className={`w-full p-4 bg-slate-50 dark:bg-[#111111] border ${districtError ? 'border-red-500' : 'border-transparent dark:border-white/5'} rounded-[1.5rem] focus:border-red-700 outline-none transition-all font-bold text-slate-900 dark:text-white appearance-none`}
-      >
-        <option value="">{isRTL ? "الحي / المنطقة" : "Select District"}</option>
-        {districts.map((d) => (
-          <option key={d._id} value={d.bostaDistrictId}>{isRTL ? d.nameAr : (d.nameEn || d.nameAr)}</option>
-        ))}
-      </select>
-      {districtError && (
-        <p className={`text-[11px] font-bold text-red-500 ${isRTL ? 'pr-4' : 'pl-4'} animate-pulse`}>
-          {districtError}
-        </p>
-      )}
+
+    <Select
+  options={districts.map(d => ({
+    value: d.bostaDistrictId,
+    label: isRTL ? d.nameAr : (d.nameEn || d.nameAr)
+  }))}
+
+  value={
+    districts
+      .map(d => ({
+        value: d.bostaDistrictId,
+        label: isRTL ? d.nameAr : (d.nameEn || d.nameAr)
+      }))
+      .find(opt => opt.value === formData.bostaDistrictId) || null
+  }
+
+  onChange={handleDistrictChange}
+
+  placeholder={isRTL ? " ابحث عن المنطقة..." : "Search district..."}
+
+  styles={customSelectStyles(isRTL, !!districtError)}
+  isRtl={isRTL}
+  isDisabled={!formData.city}
+
+  className={`w-full py-1 bg-slate-50 dark:bg-[#111111] 
+  border ${districtError ? 'border-red-500' : 'border-transparent dark:border-white/5'} 
+  rounded-[1.5rem] focus-within:border-red-700 
+  font-bold text-slate-900 dark:text-white`}
+/>
+
     </div>
   </div>
 
