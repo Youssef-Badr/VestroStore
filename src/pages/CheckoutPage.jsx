@@ -400,25 +400,32 @@ const validateDiscount = async (codeToValidate, isCheckout = true) => {
   }
 };
 
-const scrollToError = () => {
-  // بنستنى لحظة عشان الـ React يلحق يضيف كلاسات الخطأ للـ DOM
-  setTimeout(() => {
-    // بندور على أول حقل فيه كلاس الخطأ (عدل الكلاسات دي حسب اللي بتستخدمه)
-    const errorElement = document.querySelector('.text-red-500, .border-red-500, [aria-invalid="true"]');
+// const scrollToError = () => {
+//   // بنستنى لحظة عشان الـ React يلحق يضيف كلاسات الخطأ للـ DOM
+//   setTimeout(() => {
+//     // بندور على أول حقل فيه كلاس الخطأ (عدل الكلاسات دي حسب اللي بتستخدمه)
+//     const errorElement = document.querySelector('.text-red-500, .border-red-500, [aria-invalid="true"]');
     
-    if (errorElement) {
-      // بنجيب مكان العنصر بالنسبة للصفحة
-      const yOffset = -150; // مسافة أمان عشان الـ Header (غير الرقم ده حسب طول الهيدر عندك)
-      const y = errorElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+//     if (errorElement) {
+//       // بنجيب مكان العنصر بالنسبة للصفحة
+//       const yOffset = -150; // مسافة أمان عشان الـ Header (غير الرقم ده حسب طول الهيدر عندك)
+//       const y = errorElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-    }
-  }, 150); // زودنا الوقت شوية لـ 150ms للتأكيد
+//       window.scrollTo({
+//         top: y,
+//         behavior: 'smooth'
+//       });
+//     }
+//   }, 150); // زودنا الوقت شوية لـ 150ms للتأكيد
+// };
+const scrollToRef = (ref) => {
+  setTimeout(() => {
+    ref.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, 100);
 };
-
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -438,7 +445,7 @@ const handleSubmit = async (e) => {
       console.warn("❌ Invalid Name:", formData.name);
       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
       setLoading(false);
-      scrollToError();
+      // scrollToError();
       return;
     }
 
@@ -448,7 +455,7 @@ const handleSubmit = async (e) => {
       console.warn("❌ Invalid Phone:", formData.phone);
       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
       setLoading(false);
-      scrollToError();
+      // scrollToError();
       return;
     }
 
@@ -456,7 +463,7 @@ const handleSubmit = async (e) => {
       console.warn("❌ Invalid Secondary Phone:", formData.secondaryPhone);
       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
       setLoading(false);
-      scrollToError();
+      // scrollToError();
       return;
     }
 
@@ -464,52 +471,54 @@ const handleSubmit = async (e) => {
       console.warn("❌ Missing Address Data", formData);
       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
       setLoading(false);
-      scrollToError();
+      // scrollToError();
       return;
     }
 
    let hasError = false;
 
-if (!formData.city) {
-  setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
 
-  cityRef.current?.scrollIntoView({
-    behavior: "smooth",
-    block: "center",
-  });
 
-  // focus على الـ input الداخلي
-  setTimeout(() => {
-    cityRef.current?.querySelector("input")?.focus();
-  }, 200);
+let firstErrorRef = null;
 
-  hasError = true;
+    if (!formData.city) {
+      setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
+      if (!firstErrorRef) firstErrorRef = cityRef;
+    }
+
+    if (!formData.bostaDistrictId) {
+      setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
+      if (!firstErrorRef) firstErrorRef = districtRef;
+    }
+
+if (!formData.address) {
+  if (!firstErrorRef) firstErrorRef = shippingSectionRef;
 }
 
-if (!formData.bostaDistrictId) {
-  setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
-
-  // لو المدينة سليمة بس الحي غلط
-  if (!hasError) {
-    districtRef.current?.scrollIntoView({
+if (firstErrorRef) {
+  setTimeout(() => {
+    firstErrorRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
 
     setTimeout(() => {
-      districtRef.current?.querySelector("input")?.focus();
+      firstErrorRef.current
+        ?.querySelector("input, .react-select__input")
+        ?.focus?.();
     }, 200);
-  }
+  }, 150);
 
-  hasError = true;
+  return;
 }
-
 if (hasError) return;
-    if (hasError) {
-      console.warn("❌ Address validation failed");
-      shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
+
+// if (hasError) return;
+//     if (hasError) {
+//       console.warn("❌ Address validation failed");
+//       shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+//       return;
+//     }
 
     // =========================
     // ORDER ITEMS
@@ -650,7 +659,7 @@ if (hasError) return;
       (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
     );
 
-    scrollToError();
+    // scrollToError();
   } finally {
     console.log("🏁 Submit Ended");
     setLoading(false);
@@ -842,6 +851,7 @@ return (
   rounded-[1.5rem] focus-within:border-red-700 
   font-bold text-slate-900 dark:text-white`}
 />
+ {cityError && <p className="text-red-500">...</p>}
     </div>
 
     {/* 🏘️ الحي / المنطقة */}
