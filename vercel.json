@@ -1,12 +1,8 @@
 {
   "headers": [
+    
     {
-     "rewrites": [
-  {
-    "source": "/((?!.*\\.(jpg|jpeg|png|gif|webp|svg|ico)$).*)",
-    "destination": "/index.html"
-  }
-],
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Content-Security-Policy",
@@ -26,7 +22,10 @@
       ]
     }
   ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+   "rewrites": [
+    {
+      "source": "/((?!.*\\.(jpg|jpeg|png|gif|webp|svg|ico|js|css)$).*)",
+      "destination": "/index.html"
+    }
   ]
 }
