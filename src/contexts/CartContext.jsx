@@ -88,7 +88,7 @@ export const CartProvider = ({ children }) => {
         return [...prev, newItem];
       }
     });
-    fbqTrack("track", "AddToCart", {
+   fbqTrack( "AddToCart", {
   content_ids: [product._id],
   content_name: product.name,
   content_type: "product",
@@ -149,7 +149,7 @@ export const CartProvider = ({ children }) => {
       }
     });
 
-fbqTrack("track", "AddToCart", {
+fbqTrack( "AddToCart", {
   content_ids: [bundle._id],
   content_name: bundle.name,
   content_type: "product_group",

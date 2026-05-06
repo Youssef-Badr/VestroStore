@@ -38,34 +38,40 @@ export default function Products() {
     let isMounted = true;
 
     const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const res = await api.get("/products");
+  try {
+    setLoading(true);
+    const res = await api.get("/products");
 
-        if (!isMounted) return;
+    if (!isMounted) return;
 
-        const rawProducts = res.data.products || res.data;
+    // التأكد من استلام البيانات بشكل صحيح
+    const rawProducts = res.data.products || res.data;
 
-        const processed = rawProducts.map((p) => {
-          const discount = p.originalPrice > p.price
-            ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
-            : 0;
+    // 1. الفلترة أولاً: نأخذ فقط المنتجات الـ Active
+    // 2. المعالجة ثانياً: نحسب الخصم والأسعار
+    const processed = rawProducts
+      .filter((p) => p.isActive === true) // 🔥 السطر ده هو الأمان بتاعك
+      .map((p) => {
+        const discount = p.originalPrice > p.price
+          ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+          : 0;
 
-          return {
-            ...p,
-            discount,
-            displayPrice: p.price,
-            displayImage: p.images?.[0]?.url || ""
-          };
-        });
+        return {
+          ...p,
+          discount,
+          displayPrice: p.price,
+          displayImage: p.images?.[0]?.url || ""
+        };
+      });
 
-        setProducts(processed);
-      } catch (err) {
-        if (isMounted) setError(t.error);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
+    setProducts(processed);
+  } catch (err) {
+    if (isMounted) setError(t.error);
+    console.error("Fetch Error:", err);
+  } finally {
+    if (isMounted) setLoading(false);
+  }
+};
 
     fetchProducts();
     return () => { isMounted = false; };

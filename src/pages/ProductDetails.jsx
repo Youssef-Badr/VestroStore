@@ -103,18 +103,6 @@ useEffect(() => {
 }, []);
 const cartHasItems = cart && cart.length > 0;
 
-// ⭐️ Meta Pixel ViewContent عند تحميل المنتج
-useEffect(() => {
-  if (product && window.trackFBEvent) {
-    window.trackFBEvent("ViewContent", {
-      content_ids: [product._id],
-      content_name: product.name,
-      content_type: "product",
-      value: product.salePrice || product.originalPrice || 0,
-      currency: "EGP",
-    });
-  }
-}, [product]);
 
 useEffect(() => {
     if (!product?._id) return;
