@@ -251,6 +251,7 @@ const [position, setPosition] = useState({
             <div className="flex gap-8">
               <Link to="/privacy" className="hover:text-red-700 transition-colors">{isRTL ? "الخصوصية" : "Privacy"}</Link>
               <Link to="/terms" className="hover:text-red-700 transition-colors">{isRTL ? "الشروط" : "Terms"}</Link>
+              <Link to="/data-deletion" className="hover:text-red-700 transition-colors">{isRTL ? "حذف البيانات" : "Data Deletion"}</Link>
             </div>
           </div>
         </div>
