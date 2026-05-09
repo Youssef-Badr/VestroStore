@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axiosInstance";
 import { toast } from "react-toastify"; // التعديل لـ toastify
-import { User, Lock, Save, Loader2, Edit3, X, ShieldCheck } from "lucide-react";
+import { User, Lock, Save, Loader2, Edit3, X, ShieldCheck ,Trash2} from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 
@@ -14,8 +14,9 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-
+ const [showDeleteModal, setShowDeleteModal] = useState(false); // ⭐ الجديد
   const [profileData, setProfileData] = useState({ firstName: "", lastName: "", email: "" });
+   const [deleteReason, setDeleteReason] = useState("");
   const [passwordData, setPasswordData] = useState({ 
     oldPassword: "", 
     newPassword: "", 
@@ -91,6 +92,32 @@ export default function ProfilePage() {
     }
   };
 
+
+ // 🔥 NEW: Data Deletion Request
+  const handleDeleteRequest = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        "/clients/request-delete",
+        { reason: deleteReason },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success(isRTL ? "تم إرسال طلب الحذف" : "Deletion request sent");
+      setShowDeleteModal(false);
+      setDeleteReason("");
+    } catch {
+      toast.error(isRTL ? "فشل إرسال الطلب" : "Request failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   const inputStyle = `w-full bg-transparent border ${darkMode ? 'border-white/10 text-white' : 'border-black/10 text-black'} p-4 rounded-xl focus:border-[#B91C1C] outline-none transition-all font-bold`;
   const labelStyle = `block text-[10px] font-black uppercase mb-2 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`;
 
@@ -157,6 +184,14 @@ export default function ProfilePage() {
              >
                {isRTL ? "تغيير كلمة السر" : "Change Password"}
              </button>
+              {/* 🔥 NEW BUTTON */}
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="w-full border border-red-800 text-red-800 py-3 rounded-xl font-black flex items-center justify-center gap-2"
+          >
+            <Trash2 size={18} />
+            {isRTL ? "طلب حذف البيانات" : "Request Data Deletion"}
+          </button>
           </div>
         </div>
 
@@ -194,6 +229,47 @@ export default function ProfilePage() {
             </div>
           </div>
         )}
+         {/* 🔥 DELETE MODAL */}
+        {showDeleteModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4">
+            <div className="bg-white p-6 rounded-2xl w-full max-w-md">
+
+              <h2 className="font-black text-red-700 mb-3">
+                {isRTL ? "طلب حذف البيانات" : "Delete Data Request"}
+              </h2>
+
+              <p className="text-sm mb-4 opacity-70">
+                {isRTL
+                  ? "سيتم مراجعة طلبك وحذف بياناتك خلال 7-30 يوم."
+                  : "We will process your request within 7-30 days."}
+              </p>
+
+              <form onSubmit={handleDeleteRequest}>
+                <textarea
+                  className="w-full border p-3 rounded-xl"
+                  placeholder={isRTL ? "سبب الحذف (اختياري)" : "Reason (optional)"}
+                  value={deleteReason}
+                  onChange={(e) => setDeleteReason(e.target.value)}
+                />
+
+                <button
+                  disabled={loading}
+                  className="w-full bg-red-700 text-white mt-4 py-3 rounded-xl font-black"
+                >
+                  {loading ? "..." : (isRTL ? "إرسال الطلب" : "Send Request")}
+                </button>
+              </form>
+
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="mt-3 text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
 
       </div>
     </div>
