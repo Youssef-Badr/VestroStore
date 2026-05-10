@@ -350,16 +350,21 @@ if (initialVariation) {
 
 useEffect(() => {
   if (!product?._id) return;
-eventId = `product_${product._id}_${Date.now()}`;
-  fbq("track", "ViewContent", {
-    content_ids: [product._id],
-    content_type: "product",
-    content_name: product.name,
-    value: product.salePrice || product.price || 0,
-    currency: "EGP"
- }, {
-    eventID: eventId
-  });
+
+  const eventId = `product_${product._id}_${Date.now()}`;
+
+  fbq("track", "ViewContent",
+    {
+      content_ids: [product._id],
+      content_type: "product",
+      content_name: product.name,
+      value: product.salePrice || product.price || 0,
+      currency: "EGP",
+    },
+    {
+      eventID: eventId,
+    }
+  );
 
 }, [product?._id]);
 
