@@ -24,7 +24,7 @@ import ProductCard from "../components/ProductCard";
 import api from "../../src/api/axiosInstance";
 import ProductBundlesSection from "../components/ProductBundlesSection";
 import { toast } from "react-toastify"; // ✅ إضافة toast
-
+import { Helmet } from "react-helmet-async";
 const optimizeImage = (url, width = 1200) => {
   if (!url) return "";
 
@@ -690,11 +690,25 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     );
   };
 
+<Helmet>
+  <title>{product.name} | Vestro Store</title>
 
+  <meta name="description" content={product.description?.slice(0, 150)} />
+
+  <link rel="canonical" href={`https://vestro.net/products/${product._id}`} />
+
+  {/* Open Graph */}
+  <meta property="og:title" content={product.name} />
+  <meta property="og:description" content={product.description?.slice(0, 150)} />
+  <meta property="og:image" content={selectedImage || product.images?.[0]?.url} />
+  <meta property="og:url" content={`https://vestro.net/products/${product._id}`} />
+</Helmet>
 
 
 
   return (
+
+    
     <div
   dir={isRTL ? "rtl" : "ltr"}
   className="bg-white dark:bg-[#0A0A0A] text-slate-900 dark:text-white min-h-screen py-20 transition-colors duration-500"

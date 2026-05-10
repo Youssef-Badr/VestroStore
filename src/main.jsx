@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "../src/contexts/ThemeContext";
 import { LanguageProvider } from "../src/contexts/LanguageContext";
 import { CartProvider } from "../src/contexts/CartContext";
-
+import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import "./index.css";
 
@@ -14,14 +14,16 @@ import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <LanguageProvider>
-        <CartProvider>
-          <BrowserRouter>
+  <HelmetProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <LanguageProvider>
+          <CartProvider>
             <App />
-          </BrowserRouter>
-        </CartProvider>
-      </LanguageProvider>
-    </ThemeProvider>
-  </React.StrictMode>
+          </CartProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </HelmetProvider>
+</React.StrictMode>
 );
