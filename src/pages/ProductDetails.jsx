@@ -350,7 +350,7 @@ if (initialVariation) {
 
 useEffect(() => {
   if (!product?._id) return;
-
+eventId = `product_${product._id}_${Date.now()}`;
   fbq("track", "ViewContent", {
     content_ids: [product._id],
     content_type: "product",
