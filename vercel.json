@@ -43,9 +43,13 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  {
+    "source": "/sitemap.xml",
+    "destination": "https://api.vestro.net/sitemap.xml"
+  },
+  {
+    "source": "/(.*)",
+    "destination": "/index.html"
+  }
+]
 }
