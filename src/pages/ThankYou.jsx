@@ -85,7 +85,7 @@ useEffect(() => {
 
     // 👇 user data هنا (صح)
    em: customerData.email?.trim().toLowerCase() || undefined,
-    ph: customerData.phone || undefined,
+    ph: normalizePhone(customerData.phone) || undefined,
    fn: firstName.toLowerCase() || undefined,
 ln: lastName.toLowerCase() || undefined,
 ct: order.shippingAddress?.cityNameEn || undefined,
