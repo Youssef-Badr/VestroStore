@@ -357,7 +357,10 @@ useEffect(() => {
     content_name: product.name,
     value: product.salePrice || product.price || 0,
     currency: "EGP"
+ }, {
+    eventID: eventId
   });
+
 }, [product?._id]);
 
 // 2. الـ Effect المنفصل والوحيد للمنتجات ذات الصلة (استخدم Axios بما أنك تستخدمه بالفعل)
