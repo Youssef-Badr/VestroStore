@@ -695,15 +695,50 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
   <meta name="description" content={product.description?.slice(0, 150)} />
 
-  <link rel="canonical" href={`https://vestro.net/products/${product._id}`} />
+  <link
+    rel="canonical"
+    href={`https://vestro.net/products/${product._id}`}
+  />
 
   {/* Open Graph */}
   <meta property="og:title" content={product.name} />
   <meta property="og:description" content={product.description?.slice(0, 150)} />
   <meta property="og:image" content={selectedImage || product.images?.[0]?.url} />
   <meta property="og:url" content={`https://vestro.net/products/${product._id}`} />
-</Helmet>
 
+  {/* 🔥 JSON-LD PRODUCT SCHEMA */}
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.name,
+      image: product.images?.map((img) => img.url),
+      description: product.description,
+      sku: product._id,
+      brand: {
+        "@type": "Brand",
+        name: "Vestro Store",
+      },
+      offers: {
+        "@type": "Offer",
+        url: `https://vestro.net/products/${product._id}`,
+        priceCurrency: "EGP",
+        price: product.salePrice || product.price,
+        availability:
+          product.countInStock > 0
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+      },
+      aggregateRating: product.rating
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: product.rating,
+            reviewCount: product.numReviews || 0,
+          }
+        : undefined,
+    })}
+  </script>
+</Helmet>
 
 
   return (
