@@ -69,9 +69,9 @@ useEffect(() => {
 
   const customerData = order.guestInfo || {};
 
-  const fullName = (customerData.name || "").trim().split(/\s+/);
-  const firstName = fullName[0] || "";
-  const lastName = fullName.slice(1).join(" ") || firstName;
+  // const fullName = (customerData.name || "").trim().split(/\s+/);
+  // const firstName = fullName[0] || "";
+  // const lastName = fullName.slice(1).join(" ") || firstName;
 
   window.fbq("track", "Purchase", {
     value: Number(order.totalPrice || total),
@@ -82,16 +82,11 @@ useEffect(() => {
       item_price: item.price,
     })),
     content_type: "product",
-
-    // 👇 user data هنا (صح)
-   em: customerData.email?.trim().toLowerCase() || undefined,
-    ph: normalizePhone(customerData.phone) || undefined,
-   fn: firstName.toLowerCase() || undefined,
-ln: lastName.toLowerCase() || undefined,
-ct: order.shippingAddress?.cityNameEn || undefined,
-    country: "eg",
     external_id: normalizePhone(customerData.phone) || undefined,
-  }, {
+  }, 
+  
+  
+  {
     eventID: purchaseEventId
   });
 
