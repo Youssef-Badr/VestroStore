@@ -526,14 +526,14 @@ if (hasError) return;
     const orderItems = cart.map((item, index) => {
       const actualId = item.bundle || item.product || item._id || item.id;
 
-      console.log(`🧩 Cart Item ${index}:`, item);
+      // console.log(`🧩 Cart Item ${index}:`, item);
 
       if (!item.isBundle) {
-        console.log("➡️ PRODUCT ITEM");
-        console.log("product:", actualId);
-        console.log("variantId:", item.variantId);
-        console.log("color:", item.color);
-        console.log("size:", item.size);
+        // console.log("➡️ PRODUCT ITEM");
+        // console.log("product:", actualId);
+        // console.log("variantId:", item.variantId);
+        // console.log("color:", item.color);
+        // console.log("size:", item.size);
       }
 
       return item.isBundle
@@ -542,7 +542,7 @@ if (hasError) return;
             isBundle: true,
             quantity: item.qty,
             bundleItems: item.bundleItems.map((bi, i) => {
-              console.log(`📦 Bundle Item ${i}:`, bi);
+              // console.log(`📦 Bundle Item ${i}:`, bi);
               return {
                 product: bi.productId || bi.product || bi._id,
                 variantId: bi.variantId,
@@ -562,10 +562,10 @@ if (hasError) return;
           };
     });
 
-    console.log("📤 Final orderItems:", orderItems);
+    // console.log("📤 Final orderItems:", orderItems);
 
     const token = localStorage.getItem("token");
-    console.log("🔑 Token:", token);
+    // console.log("🔑 Token:", token);
 
     const commonData = {
       name: formData.name,
@@ -601,25 +601,25 @@ if (hasError) return;
       eventId
     };
 
-    console.log("📦 Payload before sending:", commonData);
+    // console.log("📦 Payload before sending:", commonData);
 
     let res;
 
     if (formData.paymentMethod === "card") {
-      console.log("💳 Payment: CARD");
+      // console.log("💳 Payment: CARD");
 
       res = await api.post("/orders", commonData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("✅ Response:", res.data);
+      // console.log("✅ Response:", res.data);
 
       if (res.data.paymentURL) {
         clearCart();
         window.location.href = res.data.paymentURL;
       }
     } else {
-      console.log("💵 Payment: CASH / OTHER");
+      // console.log("💵 Payment: CASH / OTHER");
 
       const payload = new FormData();
 
@@ -631,7 +631,7 @@ if (hasError) return;
         }
       });
 
-      console.log("📤 FormData prepared");
+      // console.log("📤 FormData prepared");
 
       res = await api.post("/orders", payload, {
         headers: {
@@ -640,12 +640,12 @@ if (hasError) return;
         },
       });
 
-      console.log("✅ Response:", res.data);
+      // console.log("✅ Response:", res.data);
 
       clearCart();
       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
 
-      console.log("➡️ Redirecting to Thank You page");
+      // console.log("➡️ Redirecting to Thank You page");
 
       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
     }
@@ -661,7 +661,7 @@ if (hasError) return;
 
     // scrollToError();
   } finally {
-    console.log("🏁 Submit Ended");
+    // console.log("🏁 Submit Ended");
     setLoading(false);
   }
 };
