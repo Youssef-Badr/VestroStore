@@ -25,7 +25,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Vestro Store | ملابس رياضية بجودة عالية" />
     <meta property="og:description" content="تسوق أحدث الملابس الرياضية بأفضل الأسعار والشحن السريع في مصر" />
-    <meta property="og:image" content="https://vestro.net/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://vestro.net/og-image.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
     <meta property="og:url" content="https://vestro.net" />
     <meta property="og:site_name" content="Vestro Store" />
     <meta property="fb:app_id" content="860135366594294" />
@@ -62,9 +63,13 @@
         t.src = v;
         s = b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t, s);
+        
       })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
 
-      fbq("init", "1670963710255895");
+     fbq("init", "1670963710255895", {
+  em: "auto",
+  ph: "auto"
+});
       fbq("track", "PageView");
       
     </script>
