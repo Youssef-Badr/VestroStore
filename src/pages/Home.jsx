@@ -159,51 +159,45 @@ const HomeSkeleton = ({ darkMode }) => (
 // });
 const MarqueeScroller = React.memo(({ products, darkMode }) => {
   const containerRef = useRef(null);
-  const timeoutRef = useRef(null);
-  const isFixingRef = useRef(false);
 
+  // 🔁 كرر 3 مرات عشان نعمل seamless loop
   const items = useMemo(() => {
     if (!products?.length) return [];
-    return [...products, ...products];
+    return [...products, ...products, ...products];
   }, [products]);
 
-  const fixLoop = useCallback(() => {
+  // 📍 نبدأ من النص
+  useEffect(() => {
     const el = containerRef.current;
-    if (!el || isFixingRef.current) return;
+    if (!el || !products?.length) return;
 
-    const half = el.scrollWidth / 2;
-    const threshold = 5; // مهم جدًا لتجنب jitter
+    requestAnimationFrame(() => {
+      const third = el.scrollWidth / 3;
+      el.scrollLeft = third;
+    });
+  }, [products]);
 
-    if (el.scrollLeft >= half - threshold) {
-      isFixingRef.current = true;
+  // 🔄 infinite loop بدون جليتش
+  const onScroll = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-      requestAnimationFrame(() => {
-        el.scrollLeft -= half;
-        isFixingRef.current = false;
-      });
+    const oneThird = el.scrollWidth / 3;
+    const threshold = 5;
+
+    // لو قرب من آخر نسخة
+    if (el.scrollLeft >= oneThird * 2 - threshold) {
+      el.scrollLeft -= oneThird;
     }
 
+    // لو قرب من أول نسخة
     if (el.scrollLeft <= threshold) {
-      isFixingRef.current = true;
-
-      requestAnimationFrame(() => {
-        el.scrollLeft += half;
-        isFixingRef.current = false;
-      });
+      el.scrollLeft += oneThird;
     }
   }, []);
 
-  const onScroll = useCallback(() => {
-    if (isFixingRef.current) return;
-
-    clearTimeout(timeoutRef.current);
-
-    timeoutRef.current = setTimeout(() => {
-      fixLoop();
-    }, 100);
-  }, [fixLoop]);
-
-  const scrollManual = (type) => {
+  // ⬅️➡️ manual scroll
+  const scrollManual = (dir) => {
     const el = containerRef.current;
     if (!el) return;
 
@@ -213,7 +207,7 @@ const MarqueeScroller = React.memo(({ products, darkMode }) => {
     const move = card + 16;
 
     el.scrollBy({
-      left: type === "next" ? move : -move,
+      left: dir === "next" ? move : -move,
       behavior: "smooth",
     });
   };
@@ -222,27 +216,51 @@ const MarqueeScroller = React.memo(({ products, darkMode }) => {
 
   return (
     <div className="relative w-full py-5" dir="ltr">
-      {/* arrows */}
-      <button onClick={() => scrollManual("prev")} className="absolute left-2 top-1/2">
-        <ChevronLeft />
+      {/* Left */}
+      <button
+        onClick={() => scrollManual("prev")}
+        className={`absolute left-2 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow ${
+          darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
+        }`}
+      >
+        <ChevronLeft size={22} />
       </button>
 
-      <button onClick={() => scrollManual("next")} className="absolute right-2 top-1/2">
-        <ChevronRight />
+      {/* Right */}
+      <button
+        onClick={() => scrollManual("next")}
+        className={`absolute right-2 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow ${
+          darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
+        }`}
+      >
+        <ChevronRight size={22} />
       </button>
 
+      {/* Slider */}
       <div
         ref={containerRef}
         onScroll={onScroll}
-        className="overflow-x-auto no-scrollbar flex gap-4 px-4"
-        style={{ scrollBehavior: "smooth" }}
+        className="overflow-x-auto no-scrollbar flex gap-4 px-4 md:px-6"
+        style={{
+          WebkitOverflowScrolling: "touch",
+        }}
       >
         {items.map((product, index) => (
           <div
             key={`${product._id}-${index}`}
             className="product-card-container flex-shrink-0 w-48 sm:w-72 md:w-80"
           >
-            <ProductCard product={product} />
+            <Suspense
+              fallback={
+                <div
+                  className={`h-72 rounded-3xl animate-pulse ${
+                    darkMode ? "bg-zinc-900" : "bg-zinc-100"
+                  }`}
+                />
+              }
+            >
+              <ProductCard product={product} />
+            </Suspense>
           </div>
         ))}
       </div>
