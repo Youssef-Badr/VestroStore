@@ -56,9 +56,111 @@ const HomeSkeleton = ({ darkMode }) => (
 
 /* -------------------- Marquee -------------------- */
 
+// const MarqueeScroller = React.memo(({ products, darkMode }) => {
+//   const containerRef = useRef(null);
+//   const timeoutRef = useRef(null);
+
+//   const items = useMemo(() => {
+//     if (!products?.length) return [];
+//     return [...products, ...products];
+//   }, [products]);
+
+//   const fixLoop = useCallback(() => {
+//     const el = containerRef.current;
+//     if (!el) return;
+
+//     const half = el.scrollWidth / 2;
+
+//     if (el.scrollLeft >= half) {
+//       el.scrollLeft -= half;
+//     } else if (el.scrollLeft <= 0) {
+//       el.scrollLeft += half;
+//     }
+//   }, []);
+
+//   const onScroll = useCallback(() => {
+//     clearTimeout(timeoutRef.current);
+
+//     timeoutRef.current = setTimeout(() => {
+//       fixLoop();
+//     }, 80);
+//   }, [fixLoop]);
+
+//   const scrollManual = (type) => {
+//     const el = containerRef.current;
+//     if (!el) return;
+
+//     const card =
+//       el.querySelector(".product-card-container")?.offsetWidth || 280;
+
+//     const gap = 16;
+//     const move = card + gap;
+
+//     el.scrollBy({
+//       left: type === "next" ? move : -move,
+//       behavior: "smooth",
+//     });
+//   };
+
+//   if (!items.length) return null;
+
+//   return (
+//     <div className="relative w-full py-5" dir="ltr">
+//       {/* Arrows */}
+//       <button
+//         onClick={() => scrollManual("prev")}
+//         className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-xl active:scale-90 ${
+//           darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
+//         }`}
+//       >
+//         <ChevronLeft size={22} />
+//       </button>
+
+//       <button
+//         onClick={() => scrollManual("next")}
+//         className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-xl active:scale-90 ${
+//           darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
+//         }`}
+//       >
+//         <ChevronRight size={22} />
+//       </button>
+
+//       {/* Slider */}
+//       <div
+//         ref={containerRef}
+//         onScroll={onScroll}
+//         className="overflow-x-auto no-scrollbar flex gap-4 px-4 md:px-6"
+//         style={{
+//           WebkitOverflowScrolling: "touch",
+//           scrollBehavior: "smooth",
+//         }}
+//       >
+//         {items.map((product, index) => (
+//           <div
+//             key={`${product._id}-${index}`}
+//             className="product-card-container flex-shrink-0 w-48 sm:w-72 md:w-80"
+//           >
+//             <Suspense
+//               fallback={
+//                 <div
+//                   className={`h-72 rounded-3xl animate-pulse ${
+//                     darkMode ? "bg-zinc-900" : "bg-zinc-100"
+//                   }`}
+//                 />
+//               }
+//             >
+//               <ProductCard product={product} />
+//             </Suspense>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// });
 const MarqueeScroller = React.memo(({ products, darkMode }) => {
   const containerRef = useRef(null);
   const timeoutRef = useRef(null);
+  const isFixingRef = useRef(false);
 
   const items = useMemo(() => {
     if (!products?.length) return [];
@@ -67,23 +169,38 @@ const MarqueeScroller = React.memo(({ products, darkMode }) => {
 
   const fixLoop = useCallback(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || isFixingRef.current) return;
 
     const half = el.scrollWidth / 2;
+    const threshold = 5; // مهم جدًا لتجنب jitter
 
-    if (el.scrollLeft >= half) {
-      el.scrollLeft -= half;
-    } else if (el.scrollLeft <= 0) {
-      el.scrollLeft += half;
+    if (el.scrollLeft >= half - threshold) {
+      isFixingRef.current = true;
+
+      requestAnimationFrame(() => {
+        el.scrollLeft -= half;
+        isFixingRef.current = false;
+      });
+    }
+
+    if (el.scrollLeft <= threshold) {
+      isFixingRef.current = true;
+
+      requestAnimationFrame(() => {
+        el.scrollLeft += half;
+        isFixingRef.current = false;
+      });
     }
   }, []);
 
   const onScroll = useCallback(() => {
+    if (isFixingRef.current) return;
+
     clearTimeout(timeoutRef.current);
 
     timeoutRef.current = setTimeout(() => {
       fixLoop();
-    }, 80);
+    }, 100);
   }, [fixLoop]);
 
   const scrollManual = (type) => {
@@ -93,8 +210,7 @@ const MarqueeScroller = React.memo(({ products, darkMode }) => {
     const card =
       el.querySelector(".product-card-container")?.offsetWidth || 280;
 
-    const gap = 16;
-    const move = card + gap;
+    const move = card + 16;
 
     el.scrollBy({
       left: type === "next" ? move : -move,
@@ -106,58 +222,33 @@ const MarqueeScroller = React.memo(({ products, darkMode }) => {
 
   return (
     <div className="relative w-full py-5" dir="ltr">
-      {/* Arrows */}
-      <button
-        onClick={() => scrollManual("prev")}
-        className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-xl active:scale-90 ${
-          darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
-        }`}
-      >
-        <ChevronLeft size={22} />
+      {/* arrows */}
+      <button onClick={() => scrollManual("prev")} className="absolute left-2 top-1/2">
+        <ChevronLeft />
       </button>
 
-      <button
-        onClick={() => scrollManual("next")}
-        className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full shadow-xl active:scale-90 ${
-          darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
-        }`}
-      >
-        <ChevronRight size={22} />
+      <button onClick={() => scrollManual("next")} className="absolute right-2 top-1/2">
+        <ChevronRight />
       </button>
 
-      {/* Slider */}
       <div
         ref={containerRef}
         onScroll={onScroll}
-        className="overflow-x-auto no-scrollbar flex gap-4 px-4 md:px-6"
-        style={{
-          WebkitOverflowScrolling: "touch",
-          scrollBehavior: "smooth",
-        }}
+        className="overflow-x-auto no-scrollbar flex gap-4 px-4"
+        style={{ scrollBehavior: "smooth" }}
       >
         {items.map((product, index) => (
           <div
             key={`${product._id}-${index}`}
             className="product-card-container flex-shrink-0 w-48 sm:w-72 md:w-80"
           >
-            <Suspense
-              fallback={
-                <div
-                  className={`h-72 rounded-3xl animate-pulse ${
-                    darkMode ? "bg-zinc-900" : "bg-zinc-100"
-                  }`}
-                />
-              }
-            >
-              <ProductCard product={product} />
-            </Suspense>
+            <ProductCard product={product} />
           </div>
         ))}
       </div>
     </div>
   );
 });
-
 /* -------------------- Home -------------------- */
 
 export default function Home() {
