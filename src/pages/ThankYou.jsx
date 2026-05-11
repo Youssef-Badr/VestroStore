@@ -72,10 +72,14 @@ useEffect(() => {
   // const fullName = (customerData.name || "").trim().split(/\s+/);
   // const firstName = fullName[0] || "";
   // const lastName = fullName.slice(1).join(" ") || firstName;
+const getContentId = (item) => {
+  return item.product ? item.product.toString() : item.bundle.toString();
+};
 
   window.fbq("track", "Purchase", {
     value: Number(order.totalPrice || total),
     currency: "EGP",
+    content_ids: order.orderItems.map(getContentId),
     contents: order.orderItems.map((item) => ({
       id: item.product || item.bundle,
       quantity: item.quantity,

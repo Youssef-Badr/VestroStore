@@ -355,7 +355,7 @@ useEffect(() => {
 
   fbq("track", "ViewContent",
     {
-      content_ids: [product._id],
+      content_ids: [product._id.toString()],
       content_type: "product",
       content_name: product.name,
       value: product.salePrice || product.price || 0,

@@ -88,19 +88,24 @@ export const CartProvider = ({ children }) => {
         return [...prev, newItem];
       }
     });
-   fbqTrack("track", "AddToCart", {
-  content_ids: [product._id],
+  fbqTrack("track", "AddToCart", {
+  content_ids: [product._id.toString()],
+
   content_name: product.name,
+
   content_type: "product",
-  // السعر في الـ JSON بتاعك موجود في product.price مباشرة
-  value: selectedVariant?.price || product.price, 
+
+  value: Number(selectedVariant?.price || product.price || 0),
+
   currency: "EGP",
-  quantity: qty,
+
+  quantity: Number(qty || 1),
+
   contents: [
     {
-      id: product._id,
-      quantity: qty,
-      item_price: selectedVariant?.price || product.price
+      id: product._id.toString(), // ✅ مهم جدًا
+      quantity: Number(qty || 1),
+      item_price: Number(selectedVariant?.price || product.price || 0)
     }
   ]
 });
@@ -150,18 +155,22 @@ export const CartProvider = ({ children }) => {
     });
 
 fbqTrack("track", "AddToCart", {
-  content_ids: [bundle._id],
+  content_ids: bundle.items.map(i => i.product._id.toString()),
+
   content_name: bundle.name,
-  content_type: "product_group",
-  value: bundle.bundlePrice, // السعر النهائي للعرض 500
+
+  content_type: "product_group", // ✅ مهم جدًا
+
+  value: bundle.bundlePrice,
+
   currency: "EGP",
+
   quantity: qty,
-  // بنعمل map على bundle.items عشان نجيب المنتجات اللي جوه
+
   contents: bundle.items.map(item => ({
-    id: item.product._id, // الـ ID بتاع المنتج جوه الباندل
-    quantity: 1, 
-    // بنبعت سعر المنتج الأصلي عشان الفيسبوك يفهم قيمة المحتوى
-    item_price: item.product.price 
+    id: item.product._id.toString(), // ✅ مهم تكون string
+    quantity: 1,
+    item_price: Number(item.product.price || 0)
   }))
 });
 
