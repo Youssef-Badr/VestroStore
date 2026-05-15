@@ -39,6 +39,7 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     email: "",
     phone: "",
     secondaryPhone: "",
+    marketingConsent: true,
     city: "",
     district: "",
     bostaDistrictId: "",
@@ -571,6 +572,7 @@ if (hasError) return;
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
+      marketingConsent: formData.marketingConsent,
       secondaryPhone: formData.secondaryPhone,
 
       fbp,
@@ -665,6 +667,8 @@ if (hasError) return;
     setLoading(false);
   }
 };
+
+
 const isFreeShipping = shippingCost === 0 && discountInfo?.freeShippingApplied;
 
 const cartTotal = cart.reduce(
@@ -1398,7 +1402,40 @@ isClearable
 
   </div>
 </div>
+<div className="rounded-[1.5rem] border border-slate-200 dark:border-white/10 p-4 bg-slate-50 dark:bg-[#111111]">
 
+  <label className="flex items-start gap-3 cursor-pointer">
+
+    <input
+      type="checkbox"
+      checked={formData.marketingConsent}
+      onChange={(e) =>
+        setFormData((prev) => ({
+          ...prev,
+          marketingConsent: e.target.checked,
+        }))
+      }
+      className="mt-1 w-5 h-5 accent-red-700"
+    />
+
+    <div className="flex flex-col">
+
+      <span className="text-[13px] font-black text-slate-900 dark:text-white">
+        {isRTL
+          ? "أوافق على استقبال رسائل واتساب التسويقية من VESTRO"
+          : "I agree to receive WhatsApp marketing messages from Vestro"}
+      </span>
+
+      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mt-1">
+        {isRTL
+          ? "يمكنك إلغاء الاشتراك في أي وقت"
+          : "You can unsubscribe at any time"}
+      </span>
+
+    </div>
+
+  </label>
+</div>
           {/* 🚀 Submit Button */}
           <button
             type="submit" disabled={loading}
