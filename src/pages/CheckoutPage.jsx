@@ -26,11 +26,13 @@ const { darkMode } = useTheme();
   const [showToast, setShowToast] = useState(false);
   const [discountError, setDiscountError] = useState(""); // لمسح رسائل الخطأ
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
-const [nameError, setNameError] = useState("");
-const [cityError, setCityError] = useState("");
-const [districtError, setDistrictError] = useState("");
-const cityRef = useRef(null);
+  const [nameError, setNameError] = useState("");
+  const [cityError, setCityError] = useState("");
+  const [districtError, setDistrictError] = useState("");
+  const nameRef = useRef(null);
+  const cityRef = useRef(null);
 const districtRef = useRef(null);
+const addressRef = useRef(null);
 const shippingSectionRef = useRef(null); // عشان السكرول
 const [baseShippingCost, setBaseShippingCost] = useState(0); 
  
@@ -428,130 +430,362 @@ const scrollToRef = (ref) => {
   }, 100);
 };
 
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   setLoading(true);
+
+//   const { fbp, fbc } = getMetaCookies();
+//   try {
+//     if (cart.length === 0) {
+//       console.warn("❌ Cart is empty");
+//       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
+//       setLoading(false);
+//       return;
+//     }
+
+//     const nameParts = formData.name.trim().split(/\s+/);
+//     if (nameParts.length < 2) {
+//       console.warn("❌ Invalid Name:", formData.name);
+//       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
+//       setLoading(false);
+//       // scrollToError();
+//       return;
+//     }
+
+//     const phoneRegex = /^(010|011|012|015)\d{8}$/;
+
+//     if (!formData.phone || !phoneRegex.test(formData.phone)) {
+//       console.warn("❌ Invalid Phone:", formData.phone);
+//       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
+//       setLoading(false);
+//       // scrollToError();
+//       return;
+//     }
+
+//     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
+//       console.warn("❌ Invalid Secondary Phone:", formData.secondaryPhone);
+//       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
+//       setLoading(false);
+//       // scrollToError();
+//       return;
+//     }
+
+//     if (!formData.city || !formData.bostaDistrictId || !formData.address) {
+//       console.warn("❌ Missing Address Data", formData);
+//       toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
+//       setLoading(false);
+//       // scrollToError();
+//       return;
+//     }
+
+//    let hasError = false;
+
+
+
+// let firstErrorRef = null;
+
+//     // 1. تشيك المحافظة
+//     if (!formData.city) {
+//       setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
+//       toast.error(isRTL ? "⚠️ الرجاء اختيار المحافظة" : "⚠️ Please select a city");
+//       if (!firstErrorRef) firstErrorRef = cityRef;
+//     } else {
+//       setCityError(""); // تصفير الخطأ لو سليم
+//     }
+
+//     // 2. تشيك الحي
+//     if (!formData.bostaDistrictId) {
+//       setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
+//       toast.error(isRTL ? "⚠️ الرجاء اختيار الحي أو المنطقة" : "⚠️ Please select a district");
+//       if (!firstErrorRef) firstErrorRef = districtRef;
+//     } else {
+//       setDistrictError(""); // تصفير الخطأ لو سليم
+//     }
+
+//     // 3. تشيك العنوان بالتفصيل
+//     if (!formData.address || !formData.address.trim()) {
+//       toast.error(isRTL ? "⚠️ الرجاء إدخال العنوان بالتفصيل" : "⚠️ Please enter detailed address");
+//       if (!firstErrorRef) firstErrorRef = addressRef;
+//     }
+
+//     // 🚨 لو فيه أي خطأ في الـ 3 حقول اللي فوق.. هيعمل سكرول لأول واحد فيهم فوراً
+//     if (firstErrorRef) {
+//       setTimeout(() => {
+//         firstErrorRef.current?.scrollIntoView({
+//           behavior: "smooth",
+//           block: "center", // يخلي الحقل في نص الشاشة بالظبط في الموبايل
+//         });
+
+//         // فوكس سريع عشان الكيبورد يفتح أو يركز على الحقل الناقص
+//         setTimeout(() => {
+//           firstErrorRef.current
+//             ?.querySelector("input, .react-select__input")
+//             ?.focus?.();
+//         }, 250);
+//       }, 50);
+
+//       setLoading(false);
+//       return; // يوقف وميكملش الأوردر للـ API
+//     }
+// if (hasError) return;
+
+// // if (hasError) return;
+// //     if (hasError) {
+// //       console.warn("❌ Address validation failed");
+// //       shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+// //       return;
+// //     }
+
+//     // =========================
+//     // ORDER ITEMS
+//     // =========================
+//     const orderItems = cart.map((item, index) => {
+//       const actualId = item.bundle || item.product || item._id || item.id;
+
+//       // console.log(`🧩 Cart Item ${index}:`, item);
+
+//       if (!item.isBundle) {
+//         // console.log("➡️ PRODUCT ITEM");
+//         // console.log("product:", actualId);
+//         // console.log("variantId:", item.variantId);
+//         // console.log("color:", item.color);
+//         // console.log("size:", item.size);
+//       }
+
+//       return item.isBundle
+//         ? {
+//             bundle: actualId,
+//             isBundle: true,
+//             quantity: item.qty,
+//             bundleItems: item.bundleItems.map((bi, i) => {
+//               // console.log(`📦 Bundle Item ${i}:`, bi);
+//               return {
+//                 product: bi.productId || bi.product || bi._id,
+//                 variantId: bi.variantId,
+//                 name: bi.name,
+//                 size: bi.size,
+//                 color: bi.color,
+//               };
+//             }),
+//           }
+//         : {
+//             product: actualId,
+//             variantId: item.variantId,
+//             quantity: item.qty,
+//             color: item.color,
+//             size: item.size,
+//             price: item.price,
+//           };
+//     });
+
+//     // console.log("📤 Final orderItems:", orderItems);
+
+//     const token = localStorage.getItem("token");
+//     // console.log("🔑 Token:", token);
+
+//     const commonData = {
+//       name: formData.name,
+//       email: formData.email,
+//       phone: formData.phone,
+//       marketingConsent: formData.marketingConsent,
+//       secondaryPhone: formData.secondaryPhone,
+
+//       fbp,
+//     fbc,
+//       shippingAddress: {
+//         city: formData.city,
+//         cityName: selectedCityObj
+//           ? isRTL
+//             ? selectedCityObj.cityAr
+//             : selectedCityObj.cityEn
+//           : "",
+//         district: formData.district,
+//         address: formData.address,
+//         buildingNumber: formData.buildingNumber,
+//         floor: formData.floor,
+//         apartment: formData.apartment,
+//         country: "Egypt",
+//         bostaCityId: selectedCityObj?.bostaCityId || "",
+//         bostaDistrictId: formData.bostaDistrictId,
+//       },
+//       paymentMethod: formData.paymentMethod,
+//       orderItems,
+       
+//       discountCode: discountInfo?.valid ? formData.discountCode : null,
+//       buildingNumber: formData.buildingNumber,
+//       floor: formData.floor,
+//       apartment: formData.apartment,
+//       eventId
+//     };
+
+//     // console.log("📦 Payload before sending:", commonData);
+
+//     let res;
+
+//     if (formData.paymentMethod === "card") {
+//       // console.log("💳 Payment: CARD");
+
+//       res = await api.post("/orders", commonData, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       // console.log("✅ Response:", res.data);
+
+//       if (res.data.paymentURL) {
+//         clearCart();
+//         window.location.href = res.data.paymentURL;
+//       }
+//     } else {
+//       // console.log("💵 Payment: CASH / OTHER");
+
+//       const payload = new FormData();
+
+//       Object.keys(commonData).forEach((key) => {
+//         if (key === "shippingAddress" || key === "orderItems") {
+//           payload.append(key, JSON.stringify(commonData[key]));
+//         } else if (commonData[key]) {
+//           payload.append(key, commonData[key]);
+//         }
+//       });
+
+//       // console.log("📤 FormData prepared");
+
+//       res = await api.post("/orders", payload, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       // console.log("✅ Response:", res.data);
+
+//       clearCart();
+//       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
+
+//       // console.log("➡️ Redirecting to Thank You page");
+
+//       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
+//     }
+
+//   } catch (error) {
+//     console.error("🔥 ERROR:", error);
+//     console.error("📛 Server Message:", error.response?.data);
+
+//     toast.error(
+//       error.response?.data?.message ||
+//       (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
+//     );
+
+//     // scrollToError();
+//   } finally {
+//     // console.log("🏁 Submit Ended");
+//     setLoading(false);
+//   }
+// };
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
 
+  // تصفير الأخطاء السابقة
+  setNameError("");
+  setCityError("");
+  setDistrictError("");
+
   const { fbp, fbc } = getMetaCookies();
+  
   try {
+    // 0. تشيك عربة التسوق
     if (cart.length === 0) {
-      console.warn("❌ Cart is empty");
       toast.error(isRTL ? "عربة التسوق فارغة ❌" : "Your cart empty ❌");
       setLoading(false);
       return;
     }
 
-    const nameParts = formData.name.trim().split(/\s+/);
-    if (nameParts.length < 2) {
-      console.warn("❌ Invalid Name:", formData.name);
+    let hasValidationError = false;
+    let firstErrorRef = null;
+
+    // 1️⃣ فحص الاسم
+    const nameParts = formData.name ? formData.name.trim().split(/\s+/) : [];
+    if (!formData.name || !formData.name.trim() || nameParts.length < 2) {
       setNameError(isRTL ? "الاسم يجب أن يكون ثنائياً" : "Name must be at least two words");
-      setLoading(false);
-      // scrollToError();
-      return;
+      hasValidationError = true;
+      if (!firstErrorRef) firstErrorRef = nameRef; // 🎯 حجز أول خطأ للاسم
     }
 
+    // 2️⃣ فحص رقم الهاتف الأساسي
     const phoneRegex = /^(010|011|012|015)\d{8}$/;
-
     if (!formData.phone || !phoneRegex.test(formData.phone)) {
-      console.warn("❌ Invalid Phone:", formData.phone);
       toast.error(isRTL ? "⚠️ رقم الهاتف غير صالح" : "⚠️ Invalid phone number");
-      setLoading(false);
-      // scrollToError();
-      return;
+      hasValidationError = true;
     }
 
+    // 3️⃣ فحص الهاتف الإضافي
     if (formData.secondaryPhone && !phoneRegex.test(formData.secondaryPhone)) {
-      console.warn("❌ Invalid Secondary Phone:", formData.secondaryPhone);
       toast.error(isRTL ? "رقم الهاتف الإضافي غير صحيح" : "Invalid secondary phone number");
-      setLoading(false);
-      // scrollToError();
-      return;
+      hasValidationError = true;
     }
 
-    if (!formData.city || !formData.bostaDistrictId || !formData.address) {
-      console.warn("❌ Missing Address Data", formData);
-      toast.error(isRTL ? "⚠️ الرجاء إدخال البيانات الأساسية" : "⚠️ Please provide City, District and Address");
-      setLoading(false);
-      // scrollToError();
-      return;
-    }
-
-   let hasError = false;
-
-
-
-let firstErrorRef = null;
-
+    // 4️⃣ فحص المحافظة/المدينة
     if (!formData.city) {
       setCityError(isRTL ? "من فضلك اختر المحافظة" : "Please select a city");
-      if (!firstErrorRef) firstErrorRef = cityRef;
+      toast.error(isRTL ? "⚠️ الرجاء اختيار المحافظة" : "⚠️ Please select a city");
+      hasValidationError = true;
+      if (!firstErrorRef) firstErrorRef = shippingSectionRef;
     }
 
-    if (!formData.bostaDistrictId) {
+    // 5️⃣ فحص الحي / المنطقة (لن يظهر أو يفحص إلا إذا تم اختيار المحافظة أولاً)
+    if (formData.city && !formData.bostaDistrictId) {
       setDistrictError(isRTL ? "من فضلك اختر الحي" : "Please select a district");
-      if (!firstErrorRef) firstErrorRef = districtRef;
+      toast.error(isRTL ? "⚠️ الرجاء اختيار الحي أو المنطقة" : "⚠️ Please select a district");
+      hasValidationError = true;
+      if (!firstErrorRef) firstErrorRef = shippingSectionRef;
     }
 
-if (!formData.address) {
-  if (!firstErrorRef) firstErrorRef = shippingSectionRef;
-}
+    // 6️⃣ فحص العنوان بالتفصيل
+    if (!formData.address || !formData.address.trim()) {
+      toast.error(isRTL ? "⚠️ الرجاء إدخال العنوان بالتفصيل" : "⚠️ Please enter detailed address");
+      hasValidationError = true;
+      if (!firstErrorRef) firstErrorRef = shippingSectionRef;
+    }
 
-if (firstErrorRef) {
-  setTimeout(() => {
-    firstErrorRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
+    // 🚨 إيقاف الفورم وعمل سكرول في حالة وجود أي خطأ
+    if (hasValidationError) {
+      if (firstErrorRef && firstErrorRef.current) {
+        setTimeout(() => {
+          firstErrorRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
 
-    setTimeout(() => {
-      firstErrorRef.current
-        ?.querySelector("input, .react-select__input")
-        ?.focus?.();
-    }, 200);
-  }, 150);
-
-  return;
-}
-if (hasError) return;
-
-// if (hasError) return;
-//     if (hasError) {
-//       console.warn("❌ Address validation failed");
-//       shippingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-//       return;
-//     }
-
-    // =========================
-    // ORDER ITEMS
-    // =========================
-    const orderItems = cart.map((item, index) => {
-      const actualId = item.bundle || item.product || item._id || item.id;
-
-      // console.log(`🧩 Cart Item ${index}:`, item);
-
-      if (!item.isBundle) {
-        // console.log("➡️ PRODUCT ITEM");
-        // console.log("product:", actualId);
-        // console.log("variantId:", item.variantId);
-        // console.log("color:", item.color);
-        // console.log("size:", item.size);
+          setTimeout(() => {
+            firstErrorRef.current
+              ?.querySelector("input, .react-select__input")
+              ?.focus?.();
+          }, 250);
+        }, 50);
       }
 
+      setLoading(false);
+      return; 
+    }
+
+    // =========================================================
+    // إرسال البيانات للـ API (باقي الكود السليم الخاص بك)
+    // =========================================================
+    const orderItems = cart.map((item) => {
+      const actualId = item.bundle || item.product || item._id || item.id;
       return item.isBundle
         ? {
             bundle: actualId,
             isBundle: true,
             quantity: item.qty,
-            bundleItems: item.bundleItems.map((bi, i) => {
-              // console.log(`📦 Bundle Item ${i}:`, bi);
-              return {
-                product: bi.productId || bi.product || bi._id,
-                variantId: bi.variantId,
-                name: bi.name,
-                size: bi.size,
-                color: bi.color,
-              };
-            }),
+            bundleItems: item.bundleItems.map((bi) => ({
+              product: bi.productId || bi.product || bi._id,
+              variantId: bi.variantId,
+              name: bi.name,
+              size: bi.size,
+              color: bi.color,
+            })),
           }
         : {
             product: actualId,
@@ -563,20 +797,15 @@ if (hasError) return;
           };
     });
 
-    // console.log("📤 Final orderItems:", orderItems);
-
     const token = localStorage.getItem("token");
-    // console.log("🔑 Token:", token);
-
     const commonData = {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
       marketingConsent: formData.marketingConsent,
       secondaryPhone: formData.secondaryPhone,
-
       fbp,
-    fbc,
+      fbc,
       shippingAddress: {
         city: formData.city,
         cityName: selectedCityObj
@@ -595,7 +824,6 @@ if (hasError) return;
       },
       paymentMethod: formData.paymentMethod,
       orderItems,
-       
       discountCode: discountInfo?.valid ? formData.discountCode : null,
       buildingNumber: formData.buildingNumber,
       floor: formData.floor,
@@ -603,28 +831,17 @@ if (hasError) return;
       eventId
     };
 
-    // console.log("📦 Payload before sending:", commonData);
-
     let res;
-
     if (formData.paymentMethod === "card") {
-      // console.log("💳 Payment: CARD");
-
       res = await api.post("/orders", commonData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // console.log("✅ Response:", res.data);
-
       if (res.data.paymentURL) {
         clearCart();
         window.location.href = res.data.paymentURL;
       }
     } else {
-      // console.log("💵 Payment: CASH / OTHER");
-
       const payload = new FormData();
-
       Object.keys(commonData).forEach((key) => {
         if (key === "shippingAddress" || key === "orderItems") {
           payload.append(key, JSON.stringify(commonData[key]));
@@ -633,8 +850,6 @@ if (hasError) return;
         }
       });
 
-      // console.log("📤 FormData prepared");
-
       res = await api.post("/orders", payload, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -642,32 +857,21 @@ if (hasError) return;
         },
       });
 
-      // console.log("✅ Response:", res.data);
-
       clearCart();
       toast.success(isRTL ? "🎉 تم تسجيل طلبك بنجاح" : "🎉 Order placed successfully");
-
-      // console.log("➡️ Redirecting to Thank You page");
-
       navigate(`/thankyou/${res.data._id || res.data.order?._id}`);
     }
 
   } catch (error) {
     console.error("🔥 ERROR:", error);
-    console.error("📛 Server Message:", error.response?.data);
-
     toast.error(
       error.response?.data?.message ||
       (isRTL ? "⚠️ حصل خطأ أثناء الإرسال" : "⚠️ Something went wrong")
     );
-
-    // scrollToError();
   } finally {
-    // console.log("🏁 Submit Ended");
     setLoading(false);
   }
 };
-
 
 const isFreeShipping = shippingCost === 0 && discountInfo?.freeShippingApplied;
 
@@ -737,7 +941,7 @@ return (
             </h2>
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2"> {/* حاوية للمدخل والرسالة */}
-  <div className="relative group">
+  <div className="relative group " ref={nameRef}> 
     <User 
       size={18} 
       className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 ${nameError ? 'text-red-500' : 'text-slate-400'} group-focus-within:text-red-700 transition-colors`} 
@@ -855,7 +1059,7 @@ return (
   rounded-[1.5rem] focus-within:border-red-700 
   font-bold text-slate-900 dark:text-white`}
 />
- {cityError && <p className="text-red-500">...</p>}
+ {cityError && <p className="text-red-500"></p>}
     </div>
 
     {/* 🏘️ الحي / المنطقة */}
@@ -894,7 +1098,7 @@ isClearable
   </div>
 
   {/* 📍 العنوان بالتفصيل */}
-  <div className="relative group">
+  <div className="relative group" ref={addressRef}>
     <MapPin size={18} className={`${isRTL ? 'right-4' : 'left-4'} absolute top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-700`} />
     <input
       type="text" 
