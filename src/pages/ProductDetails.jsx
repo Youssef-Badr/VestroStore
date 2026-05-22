@@ -47,6 +47,7 @@ export default function ProductDetails() {
   const [selectedColorId, setSelectedColorId] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedSizeId, setSelectedSizeId] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedQty, setSelectedQty] = useState(1);
   const [error, setError] = useState("");
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -353,22 +354,27 @@ useEffect(() => {
 
   const eventId = `product_${product._id}_${Date.now()}`;
 
- const selectedVariantId =
-  selectedVariant?._id || product.variants?.[0]?._id;
+  const variant =
+    selectedVariant ||
+    product.variants?.[0];
 
-fbq("track", "ViewContent",
-{
-  content_ids: [selectedVariantId],
-  content_type: "product",
-  content_name: product.name,
-  value: product.salePrice || product.price || 0,
-  currency: "EGP",
-},
-{
-  eventID: eventId,
-});
+  if (!variant?._id) return;
 
-}, [product?._id]);
+  fbq(
+    "track",
+    "ViewContent",
+    {
+      content_ids: [variant._id.toString()], // 🔥 VARIANT ONLY
+      content_type: "product",
+      content_name: product.name,
+      value: product.salePrice || product.price || 0,
+      currency: "EGP",
+    },
+    {
+      eventID: eventId,
+    }
+  );
+}, [product?._id, selectedVariant?._id]);
 
 // 2. الـ Effect المنفصل والوحيد للمنتجات ذات الصلة (استخدم Axios بما أنك تستخدمه بالفعل)
 useEffect(() => {

@@ -339,7 +339,7 @@ export const CartProvider = ({ children }) => {
         expiry: Date.now() + 24 * 60 * 60 * 1000,
       };
       localStorage.setItem("cart", JSON.stringify(data));
-      console.log(cart);
+      // console.log(cart);
     } else {
       localStorage.removeItem("cart");
     }
