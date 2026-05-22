@@ -353,18 +353,20 @@ useEffect(() => {
 
   const eventId = `product_${product._id}_${Date.now()}`;
 
-  fbq("track", "ViewContent",
-    {
-      content_ids: [product._id.toString()],
-      content_type: "product",
-      content_name: product.name,
-      value: product.salePrice || product.price || 0,
-      currency: "EGP",
-    },
-    {
-      eventID: eventId,
-    }
-  );
+ const selectedVariantId =
+  selectedVariant?._id || product.variants?.[0]?._id;
+
+fbq("track", "ViewContent",
+{
+  content_ids: [selectedVariantId],
+  content_type: "product",
+  content_name: product.name,
+  value: product.salePrice || product.price || 0,
+  currency: "EGP",
+},
+{
+  eventID: eventId,
+});
 
 }, [product?._id]);
 

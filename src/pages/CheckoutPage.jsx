@@ -160,43 +160,98 @@ menuList: (base) => ({
   const normalizedPhone = normalizePhone(formData.phone); 
   
   const eventId = `init-${normalizedPhone}-${timeBlock}`;
-  
   const trackInitiateCheckout = (cart) => {
-    if (!window.fbq) return;
+  if (!window.fbq) return;
 
-    let totalValue = 0;
-    const contents = cart.map((item) => {
-      totalValue += (Number(item.price) || 0) * (Number(item.qty) || 0);
-      return {
-        id: item.isBundle ? item.bundle : item.variantId,
-        quantity: item.qty,
-        item_price: item.price,
-      };
-    });
+  let totalValue = 0;
 
-    // 1. تقسيم الاسم لضمان جودة المطابقة
-    const nameParts = (formData.name || "").trim().split(/\s+/);
-    const firstName = nameParts[0] || "";
-    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : firstName;
+  const contents = cart.map((item) => {
+    const id = item.isBundle
+      ? item.bundleItems?.map(i => i.variantId) // لو bundle
+      : item.variantId;
 
-    window.fbq("track", "InitiateCheckout", {
+    totalValue += (Number(item.price) || 0) * (Number(item.qty) || 0);
+
+    return {
+      id: item.variantId, // ✅ دا المهم (مش product ولا bundle)
+      quantity: item.qty,
+      item_price: item.price,
+    };
+  });
+
+  const contentIds = cart.flatMap(item =>
+    item.isBundle
+      ? item.bundleItems.map(i => i.variantId)
+      : [item.variantId]
+  );
+
+  const nameParts = (formData.name || "").trim().split(/\s+/);
+  const firstName = nameParts[0] || "";
+  const lastName =
+    nameParts.length > 1 ? nameParts.slice(1).join(" ") : firstName;
+
+  window.fbq(
+    "track",
+    "InitiateCheckout",
+    {
       content_type: "product",
       currency: "EGP",
       value: totalValue,
+
+      content_ids: contentIds, // ✅ أهم سطر هنا
+
       contents,
+
       num_items: cart.reduce((sum, i) => sum + i.qty, 0),
-    }, {
-      // 2. 🔥 إضافة بيانات العميل هنا هي اللي هتشيل التحذير
-      eventID: eventId,
-     em: formData.email?.trim().toLowerCase() || undefined,     // البريد الإلكتروني
-      ph: normalizedPhone || undefined,    // رقم الهاتف
-     fn: firstName.toLowerCase(),
-ln: lastName.toLowerCase(),                     // اسم العائلة
-      ct: formData.cityName || undefined, // المدينة (لو متوفرة في الفورم)
-      country: "eg",                       // الدولة
-      external_id: normalizedPhone         // معرف خارجي لربط أقوى
-    });
-  };
+    },
+    {
+      eventID: eventId, // ✅ لازم يبقى هنا
+      em: formData.email?.trim().toLowerCase() || undefined,
+      ph: normalizedPhone || undefined,
+      fn: firstName.toLowerCase(),
+      ln: lastName.toLowerCase(),
+      ct: formData.cityName || undefined,
+      country: "eg",
+      external_id: normalizedPhone,
+    }
+  );
+};
+//   const trackInitiateCheckout = (cart) => {
+//     if (!window.fbq) return;
+
+//     let totalValue = 0;
+//     const contents = cart.map((item) => {
+//       totalValue += (Number(item.price) || 0) * (Number(item.qty) || 0);
+//       return {
+//         id: item.isBundle ? item.bundle : item.variantId,
+//         quantity: item.qty,
+//         item_price: item.price,
+//       };
+//     });
+
+//     // 1. تقسيم الاسم لضمان جودة المطابقة
+//     const nameParts = (formData.name || "").trim().split(/\s+/);
+//     const firstName = nameParts[0] || "";
+//     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : firstName;
+
+//     window.fbq("track", "InitiateCheckout", {
+//       content_type: "product",
+//       currency: "EGP",
+//       value: totalValue,
+//       contents,
+//       num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+//     }, {
+//       // 2. 🔥 إضافة بيانات العميل هنا هي اللي هتشيل التحذير
+//       eventID: eventId,
+//      em: formData.email?.trim().toLowerCase() || undefined,     // البريد الإلكتروني
+//       ph: normalizedPhone || undefined,    // رقم الهاتف
+//      fn: firstName.toLowerCase(),
+// ln: lastName.toLowerCase(),                     // اسم العائلة
+//       ct: formData.cityName || undefined, // المدينة (لو متوفرة في الفورم)
+//       country: "eg",                       // الدولة
+//       external_id: normalizedPhone         // معرف خارجي لربط أقوى
+//     });
+//   };
 
  
 

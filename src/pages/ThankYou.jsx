@@ -73,26 +73,29 @@ useEffect(() => {
   // const firstName = fullName[0] || "";
   // const lastName = fullName.slice(1).join(" ") || firstName;
 const getContentId = (item) => {
-  return item.product ? item.product.toString() : item.bundle.toString();
+  if (item.isBundle) return item.bundle.toString();
+
+  // أهم تعديل: استخدم variantId لو موجود
+  return (item.variantId || item.product).toString();
 };
 
-  window.fbq("track", "Purchase", {
-    value: Number(order.totalPrice || total),
-    currency: "EGP",
-    content_ids: order.orderItems.map(getContentId),
-    contents: order.orderItems.map((item) => ({
-      id: item.product || item.bundle,
-      quantity: item.quantity,
-      item_price: item.price,
-    })),
-    content_type: "product",
-    external_id: normalizePhone(customerData.phone) || undefined,
-  }, 
-  
-  
-  {
-    eventID: purchaseEventId
-  });
+ window.fbq("track", "Purchase", {
+  value: Number(order.totalPrice || total),
+  currency: "EGP",
+
+  content_ids: order.orderItems.map(getContentId),
+
+  contents: order.orderItems.map((item) => ({
+    id: (item.variantId || item.product || item.bundle).toString(),
+    quantity: Number(item.quantity || 1),
+    item_price: Number(item.price || 0),
+  })),
+
+  content_type: "product",
+  external_id: normalizePhone(customerData.phone) || undefined,
+}, {
+  eventID: purchaseEventId
+});
 
 }, [order]);
 
