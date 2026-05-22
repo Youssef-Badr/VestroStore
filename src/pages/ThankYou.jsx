@@ -69,34 +69,64 @@ useEffect(() => {
 
   const customerData = order.guestInfo || {};
 
-  // const fullName = (customerData.name || "").trim().split(/\s+/);
-  // const firstName = fullName[0] || "";
-  // const lastName = fullName.slice(1).join(" ") || firstName;
+  
+// eslint-disable-next-line no-unused-vars
 const getContentId = (item) => {
-  if (item.isBundle) return item.bundle.toString();
+  // 🔥 ALWAYS variantId فقط
+  if (item.variantId) return item.variantId.toString();
 
-  // أهم تعديل: استخدم variantId لو موجود
-  return (item.variantId || item.product).toString();
+  // fallback فقط لو قديم
+  if (item.bundleItems) {
+    return item.bundleItems.map(i => i.variantId).join("-");
+  }
+
+  return item.product?.toString();
 };
 
- window.fbq("track", "Purchase", {
-  value: Number(order.totalPrice || total),
-  currency: "EGP",
+ window.fbq(
+  "track",
+  "Purchase",
+  {
+    value: Number(order.totalPrice || total),
+    currency: "EGP",
 
-  content_ids: order.orderItems.map(getContentId),
+    // 🔥 أهم سطر: variant IDs فقط
+    content_ids: order.orderItems.flatMap(item => {
+      // bundle
+      if (item.bundleItems?.length) {
+        return item.bundleItems.map(b => b.variantId.toString());
+      }
 
-  contents: order.orderItems.map((item) => ({
-    id: (item.variantId || item.product || item.bundle).toString(),
-    quantity: Number(item.quantity || 1),
-    item_price: Number(item.price || 0),
-  })),
+      // normal product
+      return [item.variantId.toString()];
+    }),
 
-  content_type: "product",
-  external_id: normalizePhone(customerData.phone) || undefined,
-}, {
-  eventID: purchaseEventId
-});
+    contents: order.orderItems.flatMap(item => {
+      // bundle
+      if (item.bundleItems?.length) {
+        return item.bundleItems.map(b => ({
+          id: b.variantId.toString(),
+          quantity: 1,
+          item_price: Number(b.price || item.price || 0),
+        }));
+      }
 
+      // normal product
+      return [{
+        id: item.variantId.toString(),
+        quantity: Number(item.quantity || 1),
+        item_price: Number(item.price || 0),
+      }];
+    }),
+
+    content_type: "product",
+
+    external_id: normalizePhone(customerData.phone) || undefined,
+  },
+  {
+    eventID: purchaseEventId,
+  }
+);
 }, [order]);
 
   const subtotal = order?.orderItems?.reduce(
