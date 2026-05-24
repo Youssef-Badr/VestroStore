@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://cdnjs.cloudflare.com https://vercel.live https://*.facebook.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.tiktok.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' https://res.cloudinary.com https://www.facebook.com https://facebook.com https://storage.googleapis.com data: blob: https://connect.facebook.net; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vestro-backend.onrender.com https://api.vestro.net https://res.cloudinary.com https://vestro-store.com https://www.vestro.net https://vercel.live https://*.a.run.app https://*.on.aws http://localhost:5000 https://localhost:5000; frame-src 'self' https://www.facebook.com https://connect.facebook.net https://vercel.live; object-src 'none'; frame-ancestors 'self' https://www.facebook.com; upgrade-insecure-requests;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://cdnjs.cloudflare.com https://vercel.live https://*.facebook.net https://www.googletagmanager.com https://www.google-analytics.com https://analytics.tiktok.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' https://res.cloudinary.com https://www.facebook.com https://facebook.com https://storage.googleapis.com data: blob: https://connect.facebook.net; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vestro-backend.onrender.com https://api.vestro.net https://res.cloudinary.com https://vestro-store.com https://www.vestro.net https://vestro.net https://vercel.live https://*.a.run.app https://*.on.aws http://localhost:5000 https://localhost:5000; frame-src 'self' https://www.facebook.com https://connect.facebook.net https://vercel.live; object-src 'none'; frame-ancestors 'self' https://www.facebook.com; upgrade-insecure-requests;"
         },
         {
           "key": "Strict-Transport-Security",
@@ -42,14 +42,27 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.vestro.net"
+        }
+      ],
+      "destination": "https://vestro.net/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-  {
-    "source": "/sitemap.xml",
-    "destination": "https://api.vestro.net/sitemap.xml"
-  },
-  {
-    "source": "/(.*)",
-    "destination": "/index.html"
-  }
-]
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://api.vestro.net/sitemap.xml"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

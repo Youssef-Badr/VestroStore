@@ -486,7 +486,7 @@ export const CartProvider = ({ children }) => {
     fbqTrack("track", "AddToCart", {
       content_ids: selections.map((i) => i.variantId.toString()),
       content_name: bundle.name,
-      content_type: "product_group",
+      content_type: "product",
       value: Number(bundle.price || bundle.bundlePrice || 0),
       currency: "EGP",
       quantity: qty,

@@ -309,7 +309,7 @@ export default function Home() {
           hero: heroRes.data,
           featured: featuredRes.data,
           categories: catsRes.data,
-          allProducts: allRes.data,
+           allProducts: allRes.data.filter(p => p.isActive),
           loading: false,
         };
 
