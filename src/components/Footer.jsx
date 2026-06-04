@@ -361,34 +361,115 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-      {/* Policy Modal */}
-      {showPolicyModal && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div
-            className={`relative max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 rounded-3xl border ${darkMode ? "bg-[#0a0a0a] border-white/10 text-white" : "bg-white border-black text-black"}`}
-          >
-            <button
-              onClick={() => setShowPolicyModal(false)}
-              className="absolute top-4 right-4 rtl:left-4 p-2 hover:bg-red-500 hover:text-white rounded-full transition-all"
-            >
-              <FiX size={24} />
-            </button>
-            <h2 className="text-2xl font-black    mb-6 border-b-2 border-red-700 pb-2 inline-block uppercase">
-              {isRTL ? "سياسة الإرجاع والاستبدال" : "Return Policy"}
-            </h2>
-            <div
-              className={`space-y-4 text-sm leading-relaxed ${isRTL ? "text-right" : "text-left"} ${!darkMode && "font-medium"}`}
-            >
-              <p>• يمكن إرجاع المنتجات في غضون 14 يومًا من استلام الشحنة.</p>
-              <p>• يجب إثبات التلف أو النقص أثناء تواجد المندوب.</p>
-              <p className="bg-red-800 p-3 rounded-lg border-l-4 border-red-700">
-                ⚠️ يتم دفع مصاريف الشحن فقط عند رفض الشحنة أثناء المعاينة.
-              </p>
-              <p>• يجب أن يكون المنتج بحالته الأصلية وبغلافه الأصلي.</p>
-            </div>
-          </div>
-        </div>
-      )}
+     {/* Policy Modal */}
+{showPolicyModal && (
+  <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div
+      className={`relative max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 rounded-3xl border ${
+        darkMode
+          ? "bg-[#0a0a0a] border-white/10 text-white"
+          : "bg-white border-black text-black"
+      }`}
+    >
+      <button
+        onClick={() => setShowPolicyModal(false)}
+        className="absolute top-4 right-4 rtl:left-4 p-2 hover:bg-red-500 hover:text-white rounded-full transition-all"
+      >
+        <FiX size={24} />
+      </button>
+
+      <h2 className="text-2xl font-black mb-6 border-b-2 border-red-700 pb-2 inline-block uppercase">
+        {isRTL
+          ? "سياسة الإرجاع والاستبدال"
+          : "Return & Exchange Policy"}
+      </h2>
+
+      <div
+        className={`space-y-4 text-sm leading-relaxed ${
+          isRTL ? "text-right" : "text-left"
+        } ${!darkMode && "font-medium"}`}
+      >
+        <p>
+          {isRTL
+            ? "• يمكن إرجاع أو استبدال المنتجات خلال 14 يومًا من تاريخ استلام الشحنة."
+            : "• Products may be returned or exchanged within 14 days from the delivery date."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• المعاينة مسموحة أثناء وجود مندوب الشحن للتحقق من الخامة والمقاس ومحتويات الشحنة."
+            : "• Inspection is allowed while the courier is present to verify the material, size, and package contents."}
+        </p>
+
+        <p className="bg-yellow-600/20 p-3 rounded-lg border-r-4 border-yellow-500">
+          {isRTL
+            ? "⚠️ من فضلك يُرجى فحص شحنتك بشكل كافٍ قبل انصراف مندوب الشحن."
+            : "⚠️ Please inspect your shipment carefully before the courier leaves."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• يتم دفع مبلغ الشحن للمندوب عند رفض الشحنة أثناء المعاينة."
+            : "• Shipping fees must be paid to the courier if the shipment is refused during inspection."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• في حالة رفض الشحنة أثناء المعاينة بسبب جودة المنتج أو وجود محتويات خاطئة، تتحمل الشركة جميع المصاريف المترتبة على ذلك."
+            : "• If the shipment is refused during inspection due to a product quality issue or incorrect contents, the company will bear all related costs."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• عند طلب استرجاع المنتج بعد استلام الشحنة لأي سبب، يلتزم العميل بسداد مصاريف الشحن والاسترجاع."
+            : "• If a return is requested after receiving the shipment for any reason, the customer is responsible for shipping and return fees."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• إذا كان سبب الاسترجاع متعلقًا بجودة المنتج، تتحمل الشركة جميع المصاريف."
+            : "• If the return is due to a product quality issue, the company will cover all costs."}
+        </p>
+
+        <p className="bg-red-800/20 p-3 rounded-lg border-r-4 border-red-700">
+          {isRTL
+            ? "⚠️ يُقصد بمشكلة الجودة وجود عيب في التقفيل أو عيب تصنيع واضح بالمنتج."
+            : "⚠️ A quality issue refers only to a manufacturing defect or stitching/finishing defect in the product."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• عند الاسترجاع النهائي للمنتج، يتم رد قيمة الطلب المستحقة للعميل بعد خصم أي مصاريف شحن أو استرجاع مستحقة وفقًا لسبب الإرجاع."
+            : "• Upon final approval of the return, the customer will receive the refundable order amount after deducting any applicable shipping or return fees."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• يتم رد المبلغ عن طريق تحويل كاش على محفظة إلكترونية أو من خلال InstaPay بعد وصول المنتج إلى مخزن الشركة والتأكد من مطابقته للحالة التي تم تسليمه بها."
+            : "• Refunds are issued via mobile wallet transfer or InstaPay after the product is received at the company warehouse and inspected to ensure it is in its original condition."}
+        </p>
+
+        <p className="bg-red-800/20 p-3 rounded-lg border-r-4 border-red-700">
+          {isRTL
+            ? "❌ لا يتم رد أي مبالغ مستحقة للمنتجات التي يتبين أنها غُسلت أو استُخدمت بعد الاستلام."
+            : "❌ No refund will be issued for products found to have been washed or used after delivery."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• في حال تم استرجاع منتج واتضح أنه مستخدم، يحق للعميل استلام المنتج مرة أخرى ويتحمل العميل كامل تكاليف إعادة الشحن."
+            : "• If a returned product is found to be used, the customer has the right to receive it back and will be responsible for all re-shipping costs."}
+        </p>
+
+        <p>
+          {isRTL
+            ? "• يجب أن يكون المنتج بحالته الأصلية وبجميع الملحقات والتغليف الأصلي عند طلب الاسترجاع أو الاستبدال."
+            : "• Products must be returned in their original condition with all accessories and original packaging."}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }
