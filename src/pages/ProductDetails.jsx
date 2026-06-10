@@ -298,6 +298,8 @@ useEffect(() => {
         const prod = data?.product || data;
         if (!mounted) return;
         setProduct(prod);
+        const reviewsData = await fetchReviews(id);
+setReviews(reviewsData);
 
        // ... بعد setProduct(prod) ...
 
@@ -1482,7 +1484,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
 
       <div className="space-y-6">
         {reviews.length === 0 ? (
-          <p className="text-center text-slate-400       py-10">{translations.noReviews}</p>
+          <p className="text-center text-slate-400 py-10">{translations.noReviews}</p>
         ) : (
           reviews.map((review, index) => (
             <div key={review._id || index} className="p-6 bg-slate-50 dark:bg-[#111111] rounded-[2rem] border border-slate-100 dark:border-white/5 transition-all hover:border-red-800">
@@ -1501,6 +1503,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
         )}
       </div>
     </div>
+    
 
   {showToast && (
   <div 
@@ -1537,6 +1540,8 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     </div>
   </div>
 )}
+
+
   </div>
 </div>
   );
