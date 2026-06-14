@@ -64,16 +64,15 @@ const CategoryPage = () => {
     >
       <div className="container mx-auto px-4 relative">
         
-        {/* Back Button */}
-        <motion.button
-          whileHover={{ scale: 1.1, backgroundColor: "#DC2626", color: "#000" }}
-          onClick={() => navigate(-1)}
-          className={`absolute top-0 ${
-            isRTL ? "right-4" : "left-4"
-          } w-8 h-8 flex items-center justify-center rounded-full border border-zinc-800 transition-all`}
-        >
-          {isRTL ? <ArrowRight /> : <ArrowLeft />}
-        </motion.button>
+     <motion.button
+  whileHover={{ scale: 1.1, backgroundColor: "#DC2626", color: "#000" }}
+  onClick={() => navigate(-1)}
+  className={`fixed top-30 ${
+    isRTL ? "right-4" : "left-4"
+  } w-8 h-8 flex items-center justify-center rounded-full border border-zinc-800 transition-all z-50`}
+>
+  {isRTL ? <ArrowRight /> : <ArrowLeft />}
+</motion.button>
 
         {/* Header Section */}
         <header className="text-center mb-6 mt-6">
