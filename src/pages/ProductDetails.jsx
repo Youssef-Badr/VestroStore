@@ -763,7 +763,7 @@ const isSoldOut = selectedOptions.Size && selectedOptions.Color
     <button
       aria-labelledby="back-button"
       onClick={() => navigate(-1)}
-className="fixed top-20 left-4 md:left-8 p-3 rounded-full bg-slate-500 dark:bg-white/30 text-slate-900 dark:text-white hover:scale-110 transition-all z-50 shadow-sm border border-transparent dark:border-white/10"      aria-label="Go back"
+className="fixed top-28 left-4 md:left-8 p-3 rounded-full bg-slate-500 dark:bg-white/30 text-slate-900 dark:text-white hover:scale-110 transition-all z-50 shadow-sm border border-transparent dark:border-white/10"      aria-label="Go back"
     >
       <ArrowLeft size={20} className={isRTL ? "rotate-180" : ""} />
     </button>
