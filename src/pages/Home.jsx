@@ -784,10 +784,9 @@ const MarqueeScroller = React.memo(
 // HERO MEDIA SLIDER
 // =========================================================
 
-const HeroMedia = ({
-  media,
-  darkMode,
-}) => {
+
+
+const HeroMedia = ({ media, darkMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const imageTimerRef = useRef(null);
@@ -795,25 +794,18 @@ const HeroMedia = ({
 
   const currentMedia = media?.[currentIndex];
 
-  // =========================================================
   // Reset index if media changes
-  // =========================================================
-
   useEffect(() => {
     if (!media?.length) {
       setCurrentIndex(0);
       return;
     }
-
     if (currentIndex >= media.length) {
       setCurrentIndex(0);
     }
   }, [media, currentIndex]);
 
-  // =========================================================
   // Cleanup image timer
-  // =========================================================
-
   useEffect(() => {
     return () => {
       if (imageTimerRef.current) {
@@ -822,35 +814,19 @@ const HeroMedia = ({
     };
   }, []);
 
-  // =========================================================
   // Next media
-  // =========================================================
-
   const goNext = useCallback(() => {
     if (!media?.length) return;
-
-    setCurrentIndex(
-      (prev) => (prev + 1) % media.length
-    );
+    setCurrentIndex((prev) => (prev + 1) % media.length);
   }, [media]);
 
-  // =========================================================
   // Previous media
-  // =========================================================
-
   const goPrevious = useCallback(() => {
     if (!media?.length) return;
-
-    setCurrentIndex(
-      (prev) =>
-        (prev - 1 + media.length) % media.length
-    );
+    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
   }, [media]);
 
-  // =========================================================
   // Image auto advance - 4 seconds
-  // =========================================================
-
   useEffect(() => {
     if (!currentMedia) return;
 
@@ -858,10 +834,7 @@ const HeroMedia = ({
       clearTimeout(imageTimerRef.current);
     }
 
-    if (
-      currentMedia.type === "image" &&
-      media.length > 1
-    ) {
+    if (currentMedia.type === "image" && media.length > 1) {
       imageTimerRef.current = setTimeout(() => {
         goNext();
       }, 4000);
@@ -872,55 +845,55 @@ const HeroMedia = ({
         clearTimeout(imageTimerRef.current);
       }
     };
-  }, [
-    currentIndex,
-    currentMedia,
-    media,
-    goNext,
-  ]);
+  }, [currentIndex, currentMedia, media, goNext]);
 
-  // =========================================================
-  // Video autoplay
-  // =========================================================
-
+  // Reliable Mobile Video Autoplay Logic
   useEffect(() => {
-    if (!currentMedia) return;
+    if (!currentMedia || currentMedia.type !== "video") return;
 
-    if (currentMedia.type === "video") {
-      const video = videoRef.current;
+    const video = videoRef.current;
+    if (!video) return;
 
-      if (!video) return;
+    let isSubscribed = true;
 
-      video.muted = true;
-      video.playsInline = true;
+    // Force strict mobile autoplay attributes
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
 
-      const playVideo = () => {
-        video.play().catch(() => {});
-      };
+    const attemptPlay = async () => {
+      try {
+        video.currentTime = 0;
+        await video.play();
+      } catch (error) {
+        console.warn("Mobile Video Autoplay Blocked/Failed:", error);
+        // If autoplay is blocked by mobile OS, force advance after 4s fallback so slider doesn't get stuck
+        if (isSubscribed && media.length > 1) {
+          imageTimerRef.current = setTimeout(() => {
+            goNext();
+          }, 4000);
+        }
+      }
+    };
 
-      playVideo();
+    // Attempt immediately when index changes
+    attemptPlay();
 
-      video.addEventListener("canplay", playVideo);
-      video.addEventListener("loadeddata", playVideo);
-
-      return () => {
-        video.removeEventListener("canplay", playVideo);
-        video.removeEventListener("loadeddata", playVideo);
-      };
-    }
-  }, [currentIndex, currentMedia]);
-
-  // =========================================================
-  // No media
-  // =========================================================
+    return () => {
+      isSubscribed = false;
+      if (video) {
+        video.pause();
+      }
+    };
+  }, [currentIndex, currentMedia, media, goNext]);
 
   if (!media?.length) {
     return (
       <div
         className={`absolute inset-0 ${
-          darkMode
-            ? "bg-black"
-            : "bg-zinc-100"
+          darkMode ? "bg-black" : "bg-zinc-100"
         }`}
       />
     );
@@ -928,95 +901,52 @@ const HeroMedia = ({
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-
       {/* IMAGE */}
-
       {currentMedia.type === "image" && (
         <img
-          key={currentMedia.public_id}
-          src={optimizeImage(
-            currentMedia.url,
-            1400
-          )}
+          key={currentMedia.public_id || currentIndex}
+          src={optimizeImage(currentMedia.url, 1400)}
           alt="Banner"
-          loading={
-            currentIndex === 0
-              ? "eager"
-              : "lazy"
-          }
+          loading={currentIndex === 0 ? "eager" : "lazy"}
           decoding="async"
-          className="
-            absolute
-            inset-0
-            w-full
-            h-full
-            object-cover
-            animate-[heroFadeIn_700ms_ease-in-out]
-          "
+          className="absolute inset-0 w-full h-full object-cover animate-[heroFadeIn_700ms_ease-in-out]"
         />
       )}
 
       {/* VIDEO */}
-
       {currentMedia.type === "video" && (
         <video
-          key={currentMedia.public_id}
+          key={currentMedia.public_id || currentIndex}
           ref={videoRef}
           src={currentMedia.url}
           autoPlay
           muted
           playsInline
+          webkit-playsinline="true"
           controls={false}
           preload="auto"
-          onLoadedData={() => {
-            const video = videoRef.current;
-
-            if (!video) return;
-
-            video.muted = true;
-            video.play().catch(() => {});
-          }}
-          onCanPlay={() => {
-            const video = videoRef.current;
-
-            if (!video) return;
-
-            video.play().catch(() => {});
-          }}
           onEnded={() => {
             if (media.length > 1) {
               goNext();
             } else {
               const video = videoRef.current;
-
-              if (!video) return;
-
-              video.currentTime = 0;
-              video.play().catch(() => {});
+              if (video) {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+              }
             }
           }}
-          className="
-            absolute
-            inset-0
-            w-full
-            h-full
-            object-cover
-            animate-[heroFadeIn_700ms_ease-in-out]
-          "
+          className="absolute inset-0 w-full h-full object-cover animate-[heroFadeIn_700ms_ease-in-out]"
         />
       )}
 
       {/* OVERLAY */}
-
       <div className="absolute inset-0 bg-black/35 pointer-events-none z-[5]" />
 
       {/* NAVIGATION */}
-
       {media.length > 1 && (
         <>
-
           {/* Previous */}
-
           <button
             type="button"
             onClick={(e) => {
@@ -1029,7 +959,6 @@ const HeroMedia = ({
           </button>
 
           {/* Next */}
-
           <button
             type="button"
             onClick={(e) => {
@@ -1042,11 +971,10 @@ const HeroMedia = ({
           </button>
 
           {/* Dots */}
-
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {media.map((item, index) => (
               <button
-                key={`${item.public_id}-${index}`}
+                key={`${item.public_id || index}-${index}`}
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -1060,13 +988,11 @@ const HeroMedia = ({
               />
             ))}
           </div>
-
         </>
       )}
     </div>
   );
 };
-
 // =========================================================
 // HOME
 // =========================================================
