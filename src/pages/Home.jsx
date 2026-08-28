@@ -790,49 +790,95 @@ const HeroMedia = ({ media, darkMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const imageTimerRef = useRef(null);
-  const videoRef = useRef(null);
+  const fallbackTimerRef = useRef(null);
+  const videoRefs = useRef({});
 
   const currentMedia = media?.[currentIndex];
 
+  // =========================================================
   // Reset index if media changes
+  // =========================================================
+
   useEffect(() => {
     if (!media?.length) {
       setCurrentIndex(0);
       return;
     }
+
     if (currentIndex >= media.length) {
       setCurrentIndex(0);
     }
   }, [media, currentIndex]);
 
-  // Cleanup image timer
-  useEffect(() => {
-    return () => {
-      if (imageTimerRef.current) {
-        clearTimeout(imageTimerRef.current);
-      }
-    };
+  // =========================================================
+  // Clear all active timers
+  // =========================================================
+
+  const clearAllTimers = useCallback(() => {
+    if (imageTimerRef.current) clearTimeout(imageTimerRef.current);
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
   }, []);
 
+  useEffect(() => {
+    return () => clearAllTimers();
+  }, [clearAllTimers]);
+
+  // =========================================================
   // Next media
+  // =========================================================
+
   const goNext = useCallback(() => {
     if (!media?.length) return;
-    setCurrentIndex((prev) => (prev + 1) % media.length);
+
+    setCurrentIndex((prev) => {
+      return (prev + 1) % media.length;
+    });
   }, [media]);
 
+  // =========================================================
   // Previous media
+  // =========================================================
+
   const goPrevious = useCallback(() => {
     if (!media?.length) return;
-    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
+
+    setCurrentIndex((prev) => {
+      return (prev - 1 + media.length) % media.length;
+    });
   }, [media]);
 
-  // Image auto advance - 4 seconds
-  useEffect(() => {
-    if (!currentMedia) return;
+  // =========================================================
+  // Mobile Safe Playback Helper
+  // =========================================================
 
-    if (imageTimerRef.current) {
-      clearTimeout(imageTimerRef.current);
+  const playVideo = useCallback((video) => {
+    if (!video) return;
+
+    // Direct DOM Attributes Assignment for Strict iOS/Android Autoplay Policies
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+
+    const promise = video.play();
+
+    if (promise !== undefined) {
+      promise.catch((error) => {
+        // Autoplay blocked by mobile OS energy/data saver policy
+        console.warn("Mobile autoplay rejected:", error);
+      });
     }
+  }, []);
+
+  // =========================================================
+  // Image timer - 4 seconds
+  // =========================================================
+
+  useEffect(() => {
+    clearAllTimers();
+
+    if (!currentMedia) return;
 
     if (currentMedia.type === "image" && media.length > 1) {
       imageTimerRef.current = setTimeout(() => {
@@ -840,54 +886,64 @@ const HeroMedia = ({ media, darkMode }) => {
       }, 4000);
     }
 
-    return () => {
-      if (imageTimerRef.current) {
-        clearTimeout(imageTimerRef.current);
-      }
-    };
-  }, [currentIndex, currentMedia, media, goNext]);
+    return () => clearAllTimers();
+  }, [currentIndex, currentMedia, media, goNext, clearAllTimers]);
 
-  // Reliable Mobile Video Autoplay Logic
+  // =========================================================
+  // Play current video & handle mobile fallback
+  // =========================================================
+
   useEffect(() => {
-    if (!currentMedia || currentMedia.type !== "video") return;
+    clearAllTimers();
 
-    const video = videoRef.current;
+    if (!currentMedia) return;
+    if (currentMedia.type !== "video") return;
+
+    const video = videoRefs.current[currentMedia.public_id];
     if (!video) return;
 
-    let isSubscribed = true;
+    try {
+      video.currentTime = 0;
+    } catch (e) {
+      // Ignore seek errors before metadata loading
+    }
 
-    // Force strict mobile autoplay attributes
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "");
+    // Attempt autoplay
+    playVideo(video);
 
-    const attemptPlay = async () => {
-      try {
-        video.currentTime = 0;
-        await video.play();
-      } catch (error) {
-        console.warn("Mobile Video Autoplay Blocked/Failed:", error);
-        // If autoplay is blocked by mobile OS, force advance after 4s fallback so slider doesn't get stuck
-        if (isSubscribed && media.length > 1) {
-          imageTimerRef.current = setTimeout(() => {
-            goNext();
-          }, 4000);
+    // Pause inactive video instances to conserve mobile RAM/GPU memory
+    Object.keys(videoRefs.current).forEach((key) => {
+      if (key !== currentMedia.public_id && videoRefs.current[key]) {
+        videoRefs.current[key].pause();
+      }
+    });
+
+    // Mobile Fallback: Advance slide after 6 seconds if video gets blocked or fails to play
+    if (media.length > 1) {
+      fallbackTimerRef.current = setTimeout(() => {
+        if (video.paused || video.ended) {
+          goNext();
         }
+      }, 6000);
+    }
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        playVideo(video);
       }
     };
 
-    // Attempt immediately when index changes
-    attemptPlay();
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      isSubscribed = false;
-      if (video) {
-        video.pause();
-      }
+      document.removeEventListener("visibilitychange", handleVisibility);
+      clearAllTimers();
     };
-  }, [currentIndex, currentMedia, media, goNext]);
+  }, [currentIndex, currentMedia, media, goNext, playVideo, clearAllTimers]);
+
+  // =========================================================
+  // No media
+  // =========================================================
 
   if (!media?.length) {
     return (
@@ -900,78 +956,183 @@ const HeroMedia = ({ media, darkMode }) => {
   }
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* IMAGE */}
-      {currentMedia.type === "image" && (
-        <img
-          key={currentMedia.public_id || currentIndex}
-          src={optimizeImage(currentMedia.url, 1400)}
-          alt="Banner"
-          loading={currentIndex === 0 ? "eager" : "lazy"}
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover animate-[heroFadeIn_700ms_ease-in-out]"
-        />
-      )}
+    <div className="absolute inset-0 overflow-hidden bg-black">
+      {/* =====================================================
+          ALL MEDIA
+          Keep videos mounted so mobile browser can preload them
+      ===================================================== */}
 
-      {/* VIDEO */}
-      {currentMedia.type === "video" && (
-        <video
-          key={currentMedia.public_id || currentIndex}
-          ref={videoRef}
-          src={currentMedia.url}
-          autoPlay
-          muted
-          playsInline
-          webkit-playsinline="true"
-          controls={false}
-          preload="auto"
-          onEnded={() => {
-            if (media.length > 1) {
-              goNext();
-            } else {
-              const video = videoRef.current;
-              if (video) {
-                video.currentTime = 0;
-                video.play().catch(() => {});
+      {media.map((item, index) => {
+        const isActive = index === currentIndex;
+
+        // ===================================================
+        // IMAGE
+        // ===================================================
+
+        if (item.type === "image") {
+          return (
+            <img
+              key={item.public_id || index}
+              src={
+                typeof optimizeImage === "function"
+                  ? optimizeImage(item.url, 1400)
+                  : item.url
               }
-            }
-          }}
-          className="absolute inset-0 w-full h-full object-cover animate-[heroFadeIn_700ms_ease-in-out]"
-        />
-      )}
+              alt="Banner"
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className={`
+                absolute
+                inset-0
+                w-full
+                h-full
+                object-cover
+                transition-opacity
+                duration-700
+                ease-in-out
+                ${
+                  isActive
+                    ? "opacity-100 z-[2]"
+                    : "opacity-0 z-[1]"
+                }
+              `}
+            />
+          );
+        }
 
-      {/* OVERLAY */}
+        // ===================================================
+        // VIDEO
+        // ===================================================
+
+        if (item.type === "video") {
+          return (
+            <video
+              key={item.public_id || index}
+              ref={(element) => {
+                if (element) {
+                  videoRefs.current[item.public_id] = element;
+                }
+              }}
+              src={item.url}
+              autoPlay
+              muted
+              playsInline
+              webkit-playsinline="true"
+              controls={false}
+              preload="auto"
+              loop={false}
+              onCanPlay={(e) => {
+                if (isActive) {
+                  playVideo(e.currentTarget);
+                }
+              }}
+              onEnded={() => {
+                if (media.length > 1) {
+                  goNext();
+                } else {
+                  const video = videoRefs.current[item.public_id];
+                  if (!video) return;
+                  video.currentTime = 0;
+                  playVideo(video);
+                }
+              }}
+              className={`
+                absolute
+                inset-0
+                w-full
+                h-full
+                object-cover
+                transition-opacity
+                duration-700
+                ease-in-out
+                ${
+                  isActive
+                    ? "opacity-100 z-[3]"
+                    : "opacity-0 z-[1]"
+                }
+              `}
+            />
+          );
+        }
+
+        return null;
+      })}
+
+      {/* =====================================================
+          OVERLAY
+      ===================================================== */}
+
       <div className="absolute inset-0 bg-black/35 pointer-events-none z-[5]" />
 
-      {/* NAVIGATION */}
+      {/* =====================================================
+          NAVIGATION
+      ===================================================== */}
+
       {media.length > 1 && (
         <>
           {/* Previous */}
+
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               goPrevious();
             }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 text-white hover:bg-black/80 transition-all"
+            className="
+              absolute
+              left-4
+              top-1/2
+              -translate-y-1/2
+              z-20
+              p-3
+              rounded-full
+              bg-black/50
+              text-white
+              hover:bg-black/80
+              transition-all
+            "
           >
             <ChevronLeft size={24} />
           </button>
 
           {/* Next */}
+
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               goNext();
             }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 text-white hover:bg-black/80 transition-all"
+            className="
+              absolute
+              right-4
+              top-1/2
+              -translate-y-1/2
+              z-20
+              p-3
+              rounded-full
+              bg-black/50
+              text-white
+              hover:bg-black/80
+              transition-all
+            "
           >
             <ChevronRight size={24} />
           </button>
 
           {/* Dots */}
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+
+          <div
+            className="
+              absolute
+              bottom-5
+              left-1/2
+              -translate-x-1/2
+              z-20
+              flex
+              gap-2
+            "
+          >
             {media.map((item, index) => (
               <button
                 key={`${item.public_id || index}-${index}`}
@@ -980,11 +1141,16 @@ const HeroMedia = ({ media, darkMode }) => {
                   e.stopPropagation();
                   setCurrentIndex(index);
                 }}
-                className={`transition-all duration-300 rounded-full ${
-                  index === currentIndex
-                    ? "w-8 h-2 bg-white"
-                    : "w-2 h-2 bg-white/50"
-                }`}
+                className={`
+                  transition-all
+                  duration-300
+                  rounded-full
+                  ${
+                    index === currentIndex
+                      ? "w-8 h-2 bg-white"
+                      : "w-2 h-2 bg-white/50"
+                  }
+                `}
               />
             ))}
           </div>
