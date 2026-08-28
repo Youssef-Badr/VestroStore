@@ -788,116 +788,90 @@ const HeroMedia = ({
   media,
   darkMode,
 }) => {
-
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const imageTimerRef = useRef(null);
+  const videoRef = useRef(null);
 
-  const currentMedia =
-    media?.[currentIndex];
+  const currentMedia = media?.[currentIndex];
 
-  // -------------------------------------------------------
+  // =========================================================
   // Reset index if media changes
-  // -------------------------------------------------------
+  // =========================================================
 
   useEffect(() => {
-
-    if (
-      currentIndex >=
-      (media?.length || 0)
-    ) {
+    if (!media?.length) {
       setCurrentIndex(0);
+      return;
     }
 
+    if (currentIndex >= media.length) {
+      setCurrentIndex(0);
+    }
   }, [media, currentIndex]);
 
-  // -------------------------------------------------------
+  // =========================================================
   // Cleanup image timer
-  // -------------------------------------------------------
+  // =========================================================
 
   useEffect(() => {
-
     return () => {
       if (imageTimerRef.current) {
-        clearTimeout(
-          imageTimerRef.current
-        );
+        clearTimeout(imageTimerRef.current);
       }
     };
-
   }, []);
 
-  // -------------------------------------------------------
-  // Single media
-  // -------------------------------------------------------
-
-  const isSingle =
-    media?.length === 1;
-
-  // -------------------------------------------------------
+  // =========================================================
   // Next media
-  // -------------------------------------------------------
+  // =========================================================
 
   const goNext = useCallback(() => {
-
     if (!media?.length) return;
 
     setCurrentIndex(
-      (prev) =>
-        (prev + 1) % media.length
+      (prev) => (prev + 1) % media.length
     );
-
   }, [media]);
 
-  // -------------------------------------------------------
+  // =========================================================
   // Previous media
-  // -------------------------------------------------------
+  // =========================================================
 
   const goPrevious = useCallback(() => {
-
     if (!media?.length) return;
 
     setCurrentIndex(
       (prev) =>
-        (prev - 1 + media.length) %
-        media.length
+        (prev - 1 + media.length) % media.length
     );
-
   }, [media]);
 
-  // -------------------------------------------------------
-  // Image auto advance
-  //
-  // Only when there is more than one media.
-  // -------------------------------------------------------
+  // =========================================================
+  // Image auto advance - 4 seconds
+  // =========================================================
 
   useEffect(() => {
-
     if (!currentMedia) return;
+
+    if (imageTimerRef.current) {
+      clearTimeout(imageTimerRef.current);
+    }
 
     if (
       currentMedia.type === "image" &&
       media.length > 1
     ) {
-
-      imageTimerRef.current =
-        setTimeout(() => {
-          goNext();
-        }, 5000);
-
+      imageTimerRef.current = setTimeout(() => {
+        goNext();
+      }, 4000);
     }
 
     return () => {
-
       if (imageTimerRef.current) {
-        clearTimeout(
-          imageTimerRef.current
-        );
+        clearTimeout(imageTimerRef.current);
       }
-
     };
-
   }, [
     currentIndex,
     currentMedia,
@@ -905,12 +879,42 @@ const HeroMedia = ({
     goNext,
   ]);
 
-  // -------------------------------------------------------
+  // =========================================================
+  // Video autoplay
+  // =========================================================
+
+  useEffect(() => {
+    if (!currentMedia) return;
+
+    if (currentMedia.type === "video") {
+      const video = videoRef.current;
+
+      if (!video) return;
+
+      video.muted = true;
+      video.playsInline = true;
+
+      const playVideo = () => {
+        video.play().catch(() => {});
+      };
+
+      playVideo();
+
+      video.addEventListener("canplay", playVideo);
+      video.addEventListener("loadeddata", playVideo);
+
+      return () => {
+        video.removeEventListener("canplay", playVideo);
+        video.removeEventListener("loadeddata", playVideo);
+      };
+    }
+  }, [currentIndex, currentMedia]);
+
+  // =========================================================
   // No media
-  // -------------------------------------------------------
+  // =========================================================
 
   if (!media?.length) {
-
     return (
       <div
         className={`absolute inset-0 ${
@@ -920,15 +924,12 @@ const HeroMedia = ({
         }`}
       />
     );
-
   }
 
   return (
-    <>
+    <div className="absolute inset-0 overflow-hidden">
 
-      {/* =================================================
-          IMAGE
-      ================================================= */}
+      {/* IMAGE */}
 
       {currentMedia.type === "image" && (
         <img
@@ -944,62 +945,72 @@ const HeroMedia = ({
               : "lazy"
           }
           decoding="async"
-          className="w-full h-full object-cover"
+          className="
+            absolute
+            inset-0
+            w-full
+            h-full
+            object-cover
+            animate-[heroFadeIn_700ms_ease-in-out]
+          "
         />
       )}
 
-      {/* =================================================
-          VIDEO
-      ================================================= */}
+      {/* VIDEO */}
 
       {currentMedia.type === "video" && (
         <video
           key={currentMedia.public_id}
+          ref={videoRef}
           src={currentMedia.url}
           autoPlay
           muted
           playsInline
           controls={false}
           preload="auto"
-          onEnded={() => {
+          onLoadedData={() => {
+            const video = videoRef.current;
 
-            if (media.length > 1) {
+            if (!video) return;
 
-              // More than one media
-              goNext();
-
-            } else {
-
-              // Single video
-              // restart it
-              const video =
-                document.querySelector(
-                  "#hero-video"
-                );
-
-              if (video) {
-                video.currentTime = 0;
-                video.play().catch(() => {});
-              }
-
-            }
-
+            video.muted = true;
+            video.play().catch(() => {});
           }}
-          id="hero-video"
-          className="w-full h-full object-cover"
+          onCanPlay={() => {
+            const video = videoRef.current;
+
+            if (!video) return;
+
+            video.play().catch(() => {});
+          }}
+          onEnded={() => {
+            if (media.length > 1) {
+              goNext();
+            } else {
+              const video = videoRef.current;
+
+              if (!video) return;
+
+              video.currentTime = 0;
+              video.play().catch(() => {});
+            }
+          }}
+          className="
+            absolute
+            inset-0
+            w-full
+            h-full
+            object-cover
+            animate-[heroFadeIn_700ms_ease-in-out]
+          "
         />
       )}
 
-      {/* =================================================
-          Dark Overlay
-      ================================================= */}
+      {/* OVERLAY */}
 
-      <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/35 pointer-events-none z-[5]" />
 
-      {/* =================================================
-          Navigation
-          Only if multiple media
-      ================================================= */}
+      {/* NAVIGATION */}
 
       {media.length > 1 && (
         <>
@@ -1033,9 +1044,7 @@ const HeroMedia = ({
           {/* Dots */}
 
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-
             {media.map((item, index) => (
-
               <button
                 key={`${item.public_id}-${index}`}
                 type="button"
@@ -1049,15 +1058,12 @@ const HeroMedia = ({
                     : "w-2 h-2 bg-white/50"
                 }`}
               />
-
             ))}
-
           </div>
 
         </>
       )}
-
-    </>
+    </div>
   );
 };
 
