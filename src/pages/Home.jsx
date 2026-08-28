@@ -789,8 +789,7 @@ const MarqueeScroller = React.memo(
 const HeroMedia = ({ media, darkMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const imageTimerRef = useRef(null);
-  const fallbackTimerRef = useRef(null);
+  const timerRef = useRef(null);
   const videoRefs = useRef({});
 
   const currentMedia = media?.[currentIndex];
@@ -798,63 +797,50 @@ const HeroMedia = ({ media, darkMode }) => {
   // =========================================================
   // Reset index if media changes
   // =========================================================
-
   useEffect(() => {
     if (!media?.length) {
       setCurrentIndex(0);
       return;
     }
-
     if (currentIndex >= media.length) {
       setCurrentIndex(0);
     }
   }, [media, currentIndex]);
 
   // =========================================================
-  // Clear all active timers
+  // Helper to clear timer safely
   // =========================================================
-
-  const clearAllTimers = useCallback(() => {
-    if (imageTimerRef.current) clearTimeout(imageTimerRef.current);
-    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
   }, []);
 
+  // Global cleanup on unmount
   useEffect(() => {
-    return () => clearAllTimers();
-  }, [clearAllTimers]);
+    return () => clearTimer();
+  }, [clearTimer]);
 
   // =========================================================
-  // Next media
+  // Next / Previous Navigation
   // =========================================================
-
   const goNext = useCallback(() => {
     if (!media?.length) return;
-
-    setCurrentIndex((prev) => {
-      return (prev + 1) % media.length;
-    });
+    setCurrentIndex((prev) => (prev + 1) % media.length);
   }, [media]);
-
-  // =========================================================
-  // Previous media
-  // =========================================================
 
   const goPrevious = useCallback(() => {
     if (!media?.length) return;
-
-    setCurrentIndex((prev) => {
-      return (prev - 1 + media.length) % media.length;
-    });
+    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
   }, [media]);
 
   // =========================================================
   // Mobile Safe Playback Helper
   // =========================================================
-
   const playVideo = useCallback((video) => {
     if (!video) return;
 
-    // Direct DOM Attributes Assignment for Strict iOS/Android Autoplay Policies
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
@@ -862,89 +848,73 @@ const HeroMedia = ({ media, darkMode }) => {
     video.setAttribute("webkit-playsinline", "");
 
     const promise = video.play();
-
     if (promise !== undefined) {
       promise.catch((error) => {
-        // Autoplay blocked by mobile OS energy/data saver policy
         console.warn("Mobile autoplay rejected:", error);
       });
     }
   }, []);
 
   // =========================================================
-  // Image timer - 4 seconds
+  // Auto Advance Controller (Image 4s / Video Fallback 6s)
   // =========================================================
-
   useEffect(() => {
-    clearAllTimers();
+    clearTimer();
 
-    if (!currentMedia) return;
+    if (!currentMedia || media.length <= 1) return;
 
-    if (currentMedia.type === "image" && media.length > 1) {
-      imageTimerRef.current = setTimeout(() => {
+    // 1. IMAGE: Slide after 4 seconds automatically
+    if (currentMedia.type === "image") {
+      timerRef.current = setTimeout(() => {
         goNext();
       }, 4000);
     }
 
-    return () => clearAllTimers();
-  }, [currentIndex, currentMedia, media, goNext, clearAllTimers]);
+    // 2. VIDEO: Try autoplay & pause unactive videos
+    if (currentMedia.type === "video") {
+      const video = videoRefs.current[currentMedia.public_id];
+      if (video) {
+        try {
+          video.currentTime = 0;
+        } catch (e) {}
 
-  // =========================================================
-  // Play current video & handle mobile fallback
-  // =========================================================
-
-  useEffect(() => {
-    clearAllTimers();
-
-    if (!currentMedia) return;
-    if (currentMedia.type !== "video") return;
-
-    const video = videoRefs.current[currentMedia.public_id];
-    if (!video) return;
-
-    try {
-      video.currentTime = 0;
-    } catch (e) {
-      // Ignore seek errors before metadata loading
-    }
-
-    // Attempt autoplay
-    playVideo(video);
-
-    // Pause inactive video instances to conserve mobile RAM/GPU memory
-    Object.keys(videoRefs.current).forEach((key) => {
-      if (key !== currentMedia.public_id && videoRefs.current[key]) {
-        videoRefs.current[key].pause();
-      }
-    });
-
-    // Mobile Fallback: Advance slide after 6 seconds if video gets blocked or fails to play
-    if (media.length > 1) {
-      fallbackTimerRef.current = setTimeout(() => {
-        if (video.paused || video.ended) {
-          goNext();
-        }
-      }, 6000);
-    }
-
-    const handleVisibility = () => {
-      if (!document.hidden) {
         playVideo(video);
+
+        // Fallback: If mobile OS completely freezes the video, force next slide after 7s
+        timerRef.current = setTimeout(() => {
+          if (video.paused || video.ended) {
+            goNext();
+          }
+        }, 7000);
+      }
+
+      // Pause hidden background videos to save mobile memory
+      Object.keys(videoRefs.current).forEach((key) => {
+        if (key !== currentMedia.public_id && videoRefs.current[key]) {
+          videoRefs.current[key].pause();
+        }
+      });
+    }
+
+    return () => clearTimer();
+  }, [currentIndex, currentMedia, media, goNext, playVideo, clearTimer]);
+
+  // Dynamic tab/app visibility handler
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (!document.hidden && currentMedia?.type === "video") {
+        const video = videoRefs.current[currentMedia.public_id];
+        if (video) playVideo(video);
       }
     };
 
     document.addEventListener("visibilitychange", handleVisibility);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibility);
-      clearAllTimers();
-    };
-  }, [currentIndex, currentMedia, media, goNext, playVideo, clearAllTimers]);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [currentMedia, playVideo]);
 
   // =========================================================
-  // No media
+  // No media state
   // =========================================================
-
   if (!media?.length) {
     return (
       <div
@@ -957,18 +927,11 @@ const HeroMedia = ({ media, darkMode }) => {
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* =====================================================
-          ALL MEDIA
-          Keep videos mounted so mobile browser can preload them
-      ===================================================== */}
-
+      {/* ALL MEDIA */}
       {media.map((item, index) => {
         const isActive = index === currentIndex;
 
-        // ===================================================
         // IMAGE
-        // ===================================================
-
         if (item.type === "image") {
           return (
             <img
@@ -982,28 +945,15 @@ const HeroMedia = ({ media, darkMode }) => {
               loading={index === 0 ? "eager" : "lazy"}
               decoding="async"
               className={`
-                absolute
-                inset-0
-                w-full
-                h-full
-                object-cover
-                transition-opacity
-                duration-700
-                ease-in-out
-                ${
-                  isActive
-                    ? "opacity-100 z-[2]"
-                    : "opacity-0 z-[1]"
-                }
+                absolute inset-0 w-full h-full object-cover
+                transition-opacity duration-700 ease-in-out
+                ${isActive ? "opacity-100 z-[2]" : "opacity-0 z-[1]"}
               `}
             />
           );
         }
 
-        // ===================================================
         // VIDEO
-        // ===================================================
-
         if (item.type === "video") {
           return (
             <video
@@ -1022,34 +972,24 @@ const HeroMedia = ({ media, darkMode }) => {
               preload="auto"
               loop={false}
               onCanPlay={(e) => {
-                if (isActive) {
-                  playVideo(e.currentTarget);
-                }
+                if (isActive) playVideo(e.currentTarget);
               }}
               onEnded={() => {
+                clearTimer();
                 if (media.length > 1) {
                   goNext();
                 } else {
                   const video = videoRefs.current[item.public_id];
-                  if (!video) return;
-                  video.currentTime = 0;
-                  playVideo(video);
+                  if (video) {
+                    video.currentTime = 0;
+                    playVideo(video);
+                  }
                 }
               }}
               className={`
-                absolute
-                inset-0
-                w-full
-                h-full
-                object-cover
-                transition-opacity
-                duration-700
-                ease-in-out
-                ${
-                  isActive
-                    ? "opacity-100 z-[3]"
-                    : "opacity-0 z-[1]"
-                }
+                absolute inset-0 w-full h-full object-cover
+                transition-opacity duration-700 ease-in-out
+                ${isActive ? "opacity-100 z-[3]" : "opacity-0 z-[1]"}
               `}
             />
           );
@@ -1058,99 +998,54 @@ const HeroMedia = ({ media, darkMode }) => {
         return null;
       })}
 
-      {/* =====================================================
-          OVERLAY
-      ===================================================== */}
-
+      {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/35 pointer-events-none z-[5]" />
 
-      {/* =====================================================
-          NAVIGATION
-      ===================================================== */}
-
+      {/* NAVIGATION */}
       {media.length > 1 && (
         <>
           {/* Previous */}
-
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
+              clearTimer();
               goPrevious();
             }}
-            className="
-              absolute
-              left-4
-              top-1/2
-              -translate-y-1/2
-              z-20
-              p-3
-              rounded-full
-              bg-black/50
-              text-white
-              hover:bg-black/80
-              transition-all
-            "
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 text-white hover:bg-black/80 transition-all"
           >
             <ChevronLeft size={24} />
           </button>
 
           {/* Next */}
-
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
+              clearTimer();
               goNext();
             }}
-            className="
-              absolute
-              right-4
-              top-1/2
-              -translate-y-1/2
-              z-20
-              p-3
-              rounded-full
-              bg-black/50
-              text-white
-              hover:bg-black/80
-              transition-all
-            "
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 text-white hover:bg-black/80 transition-all"
           >
             <ChevronRight size={24} />
           </button>
 
           {/* Dots */}
-
-          <div
-            className="
-              absolute
-              bottom-5
-              left-1/2
-              -translate-x-1/2
-              z-20
-              flex
-              gap-2
-            "
-          >
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {media.map((item, index) => (
               <button
                 key={`${item.public_id || index}-${index}`}
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
+                  clearTimer();
                   setCurrentIndex(index);
                 }}
-                className={`
-                  transition-all
-                  duration-300
-                  rounded-full
-                  ${
-                    index === currentIndex
-                      ? "w-8 h-2 bg-white"
-                      : "w-2 h-2 bg-white/50"
-                  }
-                `}
+                className={`transition-all duration-300 rounded-full ${
+                  index === currentIndex
+                    ? "w-8 h-2 bg-white"
+                    : "w-2 h-2 bg-white/50"
+                }`}
               />
             ))}
           </div>
