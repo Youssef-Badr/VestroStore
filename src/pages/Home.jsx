@@ -1059,6 +1059,7 @@ const HeroMedia = ({ media, darkMode }) => {
 // HOME
 // =========================================================
 
+ jsx
 export default function Home() {
 
   const { language } =
@@ -1198,8 +1199,6 @@ export default function Home() {
         const hero =
           heroRes.data || null;
 
-        // Make sure media is always array
-
         if (hero) {
 
           hero.media =
@@ -1300,8 +1299,15 @@ export default function Home() {
   if (loading) {
 
     return (
+
       <div
-        className="min-h-screen pt-24 px-4"
+        className="
+          min-h-screen
+          pt-20
+          sm:pt-24
+          px-3
+          sm:px-4
+        "
         style={{
           backgroundColor:
             darkMode
@@ -1315,6 +1321,7 @@ export default function Home() {
         />
 
       </div>
+
     );
 
   }
@@ -1326,7 +1333,15 @@ export default function Home() {
   return (
 
     <div
-      className="min-h-screen pt-20 md:pt-24 transition-colors duration-500"
+      className="
+        min-h-screen
+        pt-16
+        sm:pt-20
+        md:pt-24
+        transition-colors
+        duration-500
+        overflow-x-hidden
+      "
       dir={
         isRTL
           ? "rtl"
@@ -1345,7 +1360,23 @@ export default function Home() {
       }}
     >
 
-      <div className="container mx-auto px-4 py-10 space-y-10">
+      <div
+        className="
+          w-full
+          max-w-[1600px]
+          mx-auto
+          px-3
+          sm:px-4
+          md:px-6
+          lg:px-8
+          py-5
+          sm:py-8
+          md:py-10
+          space-y-10
+          sm:space-y-12
+          md:space-y-16
+        "
+      >
 
         {/* =================================================
             HERO
@@ -1353,19 +1384,31 @@ export default function Home() {
 
         {hero?.isActive && (
 
-          <div
+          <section
+            className="
+              relative
+              w-full
+              h-[420px]
+              xs:h-[450px]
+              sm:h-[480px]
+              md:h-[520px]
+              lg:h-[560px]
+              xl:h-[600px]
+              rounded-3xl
+              sm:rounded-[2rem]
+              md:rounded-[2.5rem]
+              overflow-hidden
+              cursor-pointer
+              group
+              border
+            "
             onClick={() =>
               navigate("/products")
             }
-            className={`relative h-[320px] md:h-[420px] rounded-[2.5rem] overflow-hidden cursor-pointer group border ${
-              darkMode
-                ? "border-red-700 bg-black"
-                : "border-zinc-200 bg-white"
-            }`}
           >
 
             {/* =================================================
-                Hero Media
+                HERO MEDIA
             ================================================= */}
 
             <HeroMedia
@@ -1382,10 +1425,179 @@ export default function Home() {
             />
 
             {/* =================================================
-                Hero Text
+                HERO CONTENT
             ================================================= */}
 
-          </div>
+            <div
+              className="
+                absolute
+                inset-0
+                z-10
+                flex
+                flex-col
+                items-center
+                justify-center
+                text-center
+                text-white
+                px-4
+                sm:px-6
+                md:px-10
+                pointer-events-none
+              "
+            >
+
+              {/* TITLE */}
+
+              <h1
+                className="
+                  w-full
+                  max-w-[95%]
+                  sm:max-w-[90%]
+                  md:max-w-4xl
+                  lg:max-w-5xl
+
+                  text-3xl
+                  sm:text-4xl
+                  md:text-6xl
+                  lg:text-7xl
+
+                  font-black
+                  uppercase
+                  leading-[1.1]
+
+                  mb-3
+                  sm:mb-4
+
+                  break-words
+                "
+              >
+
+                {isRTL
+                  ? hero.titleAr
+                  : hero.titleEn}
+
+              </h1>
+
+              {/* SUBTITLE */}
+
+              <p
+                className="
+                  w-full
+                  max-w-[90%]
+                  sm:max-w-xl
+                  md:max-w-2xl
+                  lg:max-w-3xl
+
+                  text-sm
+                  sm:text-base
+                  md:text-lg
+                  lg:text-xl
+
+                  leading-relaxed
+
+                  opacity-90
+
+                  uppercase
+                "
+              >
+
+                {isRTL
+                  ? hero.subtitleAr
+                  : hero.subtitleEn}
+
+              </p>
+
+              {/* =================================================
+                  SHOP BUTTON
+              ================================================= */}
+
+              <button
+                type="button"
+                onClick={(e) => {
+
+                  e.stopPropagation();
+
+                  navigate(
+                    "/products"
+                  );
+
+                }}
+                className="
+                  pointer-events-auto
+
+                  mt-6
+                  sm:mt-7
+                  md:mt-8
+
+                  min-w-[190px]
+                  sm:min-w-[210px]
+                  md:min-w-[230px]
+
+                  px-6
+                  sm:px-8
+                  md:px-10
+
+                  py-3
+                  sm:py-3.5
+                  md:py-4
+
+                  flex
+                  items-center
+                  justify-center
+
+                  text-center
+                  whitespace-nowrap
+
+                  text-sm
+                  sm:text-base
+                  md:text-lg
+
+                  font-black
+                  uppercase
+
+                  rounded-xl
+                  sm:rounded-2xl
+
+                  shadow-xl
+
+                  transition-all
+                  duration-300
+
+                  hover:scale-105
+                  active:scale-95
+
+                  bg-black
+                  text-white
+
+                  dark:bg-white
+                  dark:text-black
+
+                  hover:bg-red-700
+                  hover:text-white
+                "
+              >
+
+                <span
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    text-center
+                    leading-none
+                  "
+                >
+
+                  {isRTL
+                    ? "تسوق المنتجات الآن"
+                    : "Shop All Products"}
+
+                </span>
+
+              </button>
+
+            </div>
+
+          </section>
 
         )}
 
@@ -1393,83 +1605,113 @@ export default function Home() {
             COLLECTION
         ================================================= */}
 
-      {allProducts.length > 0 && (
-  <section className="relative w-full flex flex-col items-center justify-center text-center overflow-hidden py-10 md:py-16">
-    
-    {/* Content Container Over Overlay */}
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-4 sm:px-6 pointer-events-none">
-      
-      {/* Headings Wrapper */}
-      <div className="flex flex-col items-center justify-center gap-2 sm:gap-4 max-w-4xl mx-auto">
-        <h1 className="text-2xl sm:text-5xl md:text-7xl font-black uppercase tracking-tight leading-tight">
-          {isRTL ? hero.titleAr : hero.titleEn}
-        </h1>
+        {allProducts.length > 0 && (
 
-        <p className="text-xs sm:text-base md:text-xl opacity-90 max-w-2xl uppercase font-medium">
-          {isRTL ? hero.subtitleAr : hero.subtitleEn}
-        </p>
-      </div>
+          <section
+            className="
+              w-full
+              flex
+              flex-col
+              items-center
+              text-center
+            "
+          >
 
-      {/* =================================================
-          Animated Bouncing Shop Button (Centered)
-      ================================================= */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          navigate("/products");
-        }}
-        className="
-          pointer-events-auto
-          mt-6 sm:mt-10 md:mt-12
-          px-5 sm:px-8 py-2.5 sm:py-3.5
-          text-xs sm:text-sm md:text-base
-          font-black
-          rounded-xl
-          shadow-xl
-          transition-all
-          duration-300
-          hover:scale-110
-          active:scale-95
-          animate-bounce
-          bg-black
-          text-white
-          dark:bg-white
-          dark:text-black
-          hover:bg-red-700
-          dark:hover:bg-red-700
-          dark:hover:text-white
-        "
-      >
-        <span className="inline-flex items-center gap-2">
-          {isRTL ? "تسوق المنتجات الآن" : "Shop All Products"}
-        </span>
-      </button>
+            <h2
+              className="
+                text-2xl
+                sm:text-3xl
+                md:text-4xl
+                font-black
+                uppercase
+                mb-3
+                sm:mb-4
+              "
+            >
 
-    </div>
+              {isRTL
+                ? "اكتشف مجموعتنا"
+                : "Explore Collection"}
 
-    {/* Marquee Scroller Background / Content */}
-    <div className="w-full mt-4 sm:mt-8 flex justify-center">
-      <MarqueeScroller
-        products={allProducts}
-        darkMode={darkMode}
-      />
-    </div>
+            </h2>
 
-    {/* Motion Button */}
-    <motion.button
-      whileHover={{ scale: 1.04 }}
-      whileTap={{ scale: 0.96 }}
-      onClick={() => navigate("/products")}
-      className={`mt-6 sm:mt-8 px-6 sm:px-10 py-3 sm:py-4 rounded-full text-xs sm:text-sm md:text-base font-black uppercase transition-colors hover:bg-red-700 ${
-        darkMode ? "bg-white text-black" : "bg-black text-white"
-      }`}
-    >
-      {isRTL ? "كل المنتجات" : "Shop All"}
-    </motion.button>
+            {/* PRODUCT SCROLLER */}
 
-  </section>
-)}
+            <div
+              className="
+                w-full
+                flex
+                justify-center
+                overflow-hidden
+              "
+            >
+
+              <MarqueeScroller
+                products={
+                  allProducts
+                }
+                darkMode={
+                  darkMode
+                }
+              />
+
+            </div>
+
+            {/* SHOP ALL */}
+
+            <motion.button
+              whileHover={{
+                scale: 1.04,
+              }}
+              whileTap={{
+                scale: 0.96,
+              }}
+              onClick={() =>
+                navigate(
+                  "/products"
+                )
+              }
+              className={`
+                mt-4
+                sm:mt-5
+
+                px-7
+                sm:px-10
+
+                py-3
+                sm:py-4
+
+                rounded-full
+
+                font-black
+                uppercase
+
+                text-sm
+                sm:text-base
+
+                transition-all
+                duration-300
+
+                ${
+                  darkMode
+                    ? "bg-white text-black"
+                    : "bg-black text-white"
+                }
+
+                hover:bg-red-700
+                hover:text-white
+              `}
+            >
+
+              {isRTL
+                ? "كل المنتجات"
+                : "Shop All"}
+
+            </motion.button>
+
+          </section>
+
+        )}
 
         {/* =================================================
             CATEGORIES
@@ -1477,9 +1719,24 @@ export default function Home() {
 
         {categories.length > 0 && (
 
-          <section>
+          <section
+            className="w-full"
+          >
 
-            <h2 className="text-3xl md:text-6xl font-black uppercase text-center mb-8">
+            <h2
+              className="
+                text-3xl
+                sm:text-4xl
+                md:text-5xl
+                lg:text-6xl
+                font-black
+                uppercase
+                text-center
+                mb-6
+                sm:mb-8
+                md:mb-10
+              "
+            >
 
               {isRTL
                 ? "الأقسام"
@@ -1487,7 +1744,21 @@ export default function Home() {
 
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div
+              className="
+                grid
+                grid-cols-2
+                sm:grid-cols-2
+                md:grid-cols-3
+                lg:grid-cols-4
+                xl:grid-cols-5
+
+                gap-3
+                sm:gap-4
+                md:gap-5
+                lg:gap-6
+              "
+            >
 
               {categories.map(
                 (cat, index) => {
@@ -1503,7 +1774,9 @@ export default function Home() {
                   return (
 
                     <div
-                      key={cat._id}
+                      key={
+                        cat._id
+                      }
                       onClick={() =>
                         navigate(
                           `/products/category/${
@@ -1512,29 +1785,85 @@ export default function Home() {
                           }`
                         )
                       }
-                      className={`relative h-36 sm:h-52 md:h-64 rounded-[2.5rem] overflow-hidden cursor-pointer group ${
-                        isLastOdd
-                          ? "col-span-2 md:col-span-1"
-                          : ""
-                      }`}
+                      className={`
+                        relative
+
+                        h-40
+                        sm:h-48
+                        md:h-56
+                        lg:h-64
+
+                        rounded-2xl
+                        sm:rounded-3xl
+                        md:rounded-[2rem]
+
+                        overflow-hidden
+
+                        cursor-pointer
+                        group
+
+                        ${
+                          isLastOdd
+                            ? "col-span-2 md:col-span-1"
+                            : ""
+                        }
+                      `}
                     >
 
                       <img
                         src={optimizeImage(
                           cat.image?.url,
-                          500
+                          700
                         )}
                         alt={
                           cat.name
                         }
                         loading="lazy"
                         decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="
+                          w-full
+                          h-full
+                          object-cover
+
+                          group-hover:scale-110
+
+                          transition-transform
+                          duration-700
+                        "
                       />
 
-                      <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                      <div
+                        className="
+                          absolute
+                          inset-0
+                          bg-black/45
 
-                        <h3 className="text-white text-xl md:text-3xl font-black uppercase text-center px-2">
+                          flex
+                          items-center
+                          justify-center
+
+                          p-3
+                          sm:p-4
+                        "
+                      >
+
+                        <h3
+                          className="
+                            text-white
+
+                            text-lg
+                            sm:text-xl
+                            md:text-2xl
+                            lg:text-3xl
+
+                            font-black
+                            uppercase
+
+                            text-center
+
+                            leading-tight
+                          "
+                        >
 
                           {cat.name}
 
@@ -1561,9 +1890,28 @@ export default function Home() {
 
         {featured.length > 0 && (
 
-          <section>
+          <section
+            className="w-full"
+          >
 
-            <h2 className="text-2xl md:text-5xl font-black uppercase mb-8">
+            <h2
+              className="
+                text-2xl
+                sm:text-3xl
+                md:text-4xl
+                lg:text-5xl
+
+                font-black
+                uppercase
+
+                mb-6
+                sm:mb-8
+                md:mb-10
+
+                text-center
+                md:text-left
+              "
+            >
 
               {isRTL
                 ? "منتجات مميزة"
@@ -1571,7 +1919,21 @@ export default function Home() {
 
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div
+              className="
+                grid
+
+                grid-cols-2
+                sm:grid-cols-2
+                md:grid-cols-3
+                lg:grid-cols-4
+
+                gap-3
+                sm:gap-4
+                md:gap-5
+                lg:gap-6
+              "
+            >
 
               {featured.map(
                 (item) => (
@@ -1583,11 +1945,18 @@ export default function Home() {
                     fallback={
 
                       <div
-                        className={`h-72 rounded-3xl animate-pulse ${
-                          darkMode
-                            ? "bg-zinc-900"
-                            : "bg-zinc-100"
-                        }`}
+                        className={`
+                          h-64
+                          sm:h-72
+                          rounded-3xl
+                          animate-pulse
+
+                          ${
+                            darkMode
+                              ? "bg-zinc-900"
+                              : "bg-zinc-100"
+                          }
+                        `}
                       />
 
                     }
@@ -1616,3 +1985,4 @@ export default function Home() {
 
   );
 }
+ 
