@@ -1393,120 +1393,83 @@ export default function Home() {
             COLLECTION
         ================================================= */}
 
-        {allProducts.length > 0 && (
+      {allProducts.length > 0 && (
+  <section className="relative w-full flex flex-col items-center justify-center text-center overflow-hidden py-10 md:py-16">
+    
+    {/* Content Container Over Overlay */}
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-4 sm:px-6 pointer-events-none">
+      
+      {/* Headings Wrapper */}
+      <div className="flex flex-col items-center justify-center gap-2 sm:gap-4 max-w-4xl mx-auto">
+        <h1 className="text-2xl sm:text-5xl md:text-7xl font-black uppercase tracking-tight leading-tight">
+          {isRTL ? hero.titleAr : hero.titleEn}
+        </h1>
 
-          <section className="flex flex-col items-center text-center">
+        <p className="text-xs sm:text-base md:text-xl opacity-90 max-w-2xl uppercase font-medium">
+          {isRTL ? hero.subtitleAr : hero.subtitleEn}
+        </p>
+      </div>
 
-           
+      {/* =================================================
+          Animated Bouncing Shop Button (Centered)
+      ================================================= */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate("/products");
+        }}
+        className="
+          pointer-events-auto
+          mt-6 sm:mt-10 md:mt-12
+          px-5 sm:px-8 py-2.5 sm:py-3.5
+          text-xs sm:text-sm md:text-base
+          font-black
+          rounded-xl
+          shadow-xl
+          transition-all
+          duration-300
+          hover:scale-110
+          active:scale-95
+          animate-bounce
+          bg-black
+          text-white
+          dark:bg-white
+          dark:text-black
+          hover:bg-red-700
+          dark:hover:bg-red-700
+          dark:hover:text-white
+        "
+      >
+        <span className="inline-flex items-center gap-2">
+          {isRTL ? "تسوق المنتجات الآن" : "Shop All Products"}
+        </span>
+      </button>
 
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-5 pointer-events-none">
+    </div>
 
-              <h1 className="text-3xl md:text-7xl font-black uppercase mb-3">
+    {/* Marquee Scroller Background / Content */}
+    <div className="w-full mt-4 sm:mt-8 flex justify-center">
+      <MarqueeScroller
+        products={allProducts}
+        darkMode={darkMode}
+      />
+    </div>
 
-                {isRTL
-                  ? hero.titleAr
-                  : hero.titleEn}
+    {/* Motion Button */}
+    <motion.button
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.96 }}
+      onClick={() => navigate("/products")}
+      className={`mt-6 sm:mt-8 px-6 sm:px-10 py-3 sm:py-4 rounded-full text-xs sm:text-sm md:text-base font-black uppercase transition-colors hover:bg-red-700 ${
+        darkMode ? "bg-white text-black" : "bg-black text-white"
+      }`}
+    >
+      {isRTL ? "كل المنتجات" : "Shop All"}
+    </motion.button>
 
-              </h1>
-
-              <p className="text-sm md:text-xl opacity-90 max-w-2xl uppercase">
-
-                {isRTL
-                  ? hero.subtitleAr
-                  : hero.subtitleEn}
-
-              </p>
-
-              {/* =================================================
-                  Shop Button
-              ================================================= */}
-
-              <button
-                type="button"
-                onClick={(e) => {
-
-                  e.stopPropagation();
-
-                  navigate(
-                    "/products"
-                  );
-
-                }}
-                className="
-                  pointer-events-auto
-                  mt-32
-                  mb-2
-                  px-3
-                  py-3
-                  font-black
-                  rounded-xl
-                  shadow-lg
-                  transition-all
-                  duration-300
-                  hover:scale-110
-                  active:scale-95
-                  animate-bounce
-                  bg-black
-                  text-white
-                  dark:bg-white
-                  dark:text-black
-                  hover:bg-red-700
-                "
-              >
-
-                <span className="inline-flex items-center gap-2">
-
-                  {isRTL
-                    ? "تسوق المنتجات الآن"
-                    : "Shop All Products"}
-
-                </span>
-
-              </button>
-
-            </div>
-
-            <div className="w-full mt-8 flex justify-center">
-
-              <MarqueeScroller
-                products={
-                  allProducts
-                }
-                darkMode={
-                  darkMode
-                }
-              />
-
-            </div>
-
-            <motion.button
-              whileHover={{
-                scale: 1.04,
-              }}
-              whileTap={{
-                scale: 0.96,
-              }}
-              onClick={() =>
-                navigate(
-                  "/products"
-                )
-              }
-              className={`mt-5 px-10 py-4 rounded-full font-black uppercase hover:bg-red-700 ${
-                darkMode
-                  ? "bg-white text-black"
-                  : "bg-black text-white"
-              }`}
-            >
-
-              {isRTL
-                ? "كل المنتجات"
-                : "Shop All"}
-
-            </motion.button>
-
-          </section>
-
-        )}
+  </section>
+)}
 
         {/* =================================================
             CATEGORIES
