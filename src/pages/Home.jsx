@@ -876,6 +876,7 @@ const HeroMedia = ({ media, darkMode }) => {
       if (video) {
         try {
           video.currentTime = 0;
+        // eslint-disable-next-line no-empty
         } catch (e) {}
 
         playVideo(video);
@@ -1384,6 +1385,26 @@ export default function Home() {
                 Hero Text
             ================================================= */}
 
+          </div>
+
+        )}
+
+        {/* =================================================
+            COLLECTION
+        ================================================= */}
+
+        {allProducts.length > 0 && (
+
+          <section className="flex flex-col items-center text-center">
+
+            {/* <h2 className="text-2xl md:text-4xl font-black uppercase mb-4">
+
+              {isRTL
+                ? "اكتشف مجموعتنا"
+                : "Explore Collection"}
+
+            </h2> */}
+
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-5 pointer-events-none">
 
               <h1 className="text-3xl md:text-7xl font-black uppercase mb-3">
@@ -1419,7 +1440,8 @@ export default function Home() {
                 }}
                 className="
                   pointer-events-auto
-                  mt-6
+                  mt-1
+                  mb-2
                   px-3
                   py-3
                   font-black
@@ -1430,10 +1452,10 @@ export default function Home() {
                   hover:scale-110
                   active:scale-95
                   animate-bounce
-                  bg-white
-                  text-black
-                  dark:bg-black
-                  dark:text-white
+                  bg-black
+                  text-white
+                  dark:bg-white
+                  dark:text-black
                   hover:bg-red-700
                 "
               >
@@ -1450,27 +1472,7 @@ export default function Home() {
 
             </div>
 
-          </div>
-
-        )}
-
-        {/* =================================================
-            COLLECTION
-        ================================================= */}
-
-        {allProducts.length > 0 && (
-
-          <section className="flex flex-col items-center text-center">
-
-            <h2 className="text-2xl md:text-4xl font-black uppercase mb-4">
-
-              {isRTL
-                ? "اكتشف مجموعتنا"
-                : "Explore Collection"}
-
-            </h2>
-
-            <div className="w-full flex justify-center">
+            <div className="w-full mt-8 flex justify-center">
 
               <MarqueeScroller
                 products={
