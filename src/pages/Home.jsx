@@ -1428,7 +1428,7 @@ export default function Home() {
       }}
       className="
         pointer-events-auto
-        mt-5
+        mt-15
         mx-auto
         flex
         items-center
