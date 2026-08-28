@@ -1440,7 +1440,7 @@ export default function Home() {
                 }}
                 className="
                   pointer-events-auto
-                  mt-1
+                  mt-32
                   mb-2
                   px-3
                   py-3
