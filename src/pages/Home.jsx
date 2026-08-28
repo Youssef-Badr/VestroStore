@@ -1393,204 +1393,120 @@ export default function Home() {
             COLLECTION
         ================================================= */}
 
-       ```jsx
-{allProducts.length > 0 && (
+        {allProducts.length > 0 && (
 
-  <section className="w-full flex flex-col items-center text-center">
+          <section className="flex flex-col items-center text-center">
 
-    {/* =================================================
-        HERO TEXT + SHOP BUTTON
-    ================================================= */}
+           
 
-    <div
-      className="
-        absolute
-        inset-0
-        z-10
-        flex
-        flex-col
-        items-center
-        justify-center
-        text-center
-        text-white
-        px-5
-        pointer-events-none
-      "
-    >
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-5 pointer-events-none">
 
-      {/* HERO TITLE */}
+              <h1 className="text-3xl md:text-7xl font-black uppercase mb-3">
 
-      <h1
-        className="
-          text-3xl
-          sm:text-4xl
-          md:text-6xl
-          lg:text-7xl
-          font-black
-          uppercase
-          leading-tight
-          mb-3
-          max-w-[95%]
-          md:max-w-4xl
-        "
-      >
-        {isRTL
-          ? hero.titleAr
-          : hero.titleEn}
-      </h1>
+                {isRTL
+                  ? hero.titleAr
+                  : hero.titleEn}
 
-      {/* HERO SUBTITLE */}
+              </h1>
 
-      <p
-        className="
-          text-sm
-          sm:text-base
-          md:text-xl
-          opacity-90
-          max-w-[90%]
-          sm:max-w-xl
-          md:max-w-2xl
-          uppercase
-          leading-relaxed
-        "
-      >
-        {isRTL
-          ? hero.subtitleAr
-          : hero.subtitleEn}
-      </p>
+              <p className="text-sm md:text-xl opacity-90 max-w-2xl uppercase">
 
-      {/* =================================================
-          SHOP BUTTON
-      ================================================= */}
+                {isRTL
+                  ? hero.subtitleAr
+                  : hero.subtitleEn}
 
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          navigate("/products");
-        }}
-        className="
-          pointer-events-auto
+              </p>
 
-          mt-6
-          sm:mt-7
-          md:mt-8
+              {/* =================================================
+                  Shop Button
+              ================================================= */}
 
-          px-6
-          sm:px-8
-          md:px-10
+              <button
+                type="button"
+                onClick={(e) => {
 
-          py-3
-          sm:py-3.5
-          md:py-4
+                  e.stopPropagation();
 
-          min-w-[180px]
-          sm:min-w-[200px]
+                  navigate(
+                    "/products"
+                  );
 
-          text-sm
-          sm:text-base
-          md:text-lg
+                }}
+                className="
+                  pointer-events-auto
+                  mt-32
+                  mb-2
+                  px-3
+                  py-3
+                  font-black
+                  rounded-xl
+                  shadow-lg
+                  transition-all
+                  duration-300
+                  hover:scale-110
+                  active:scale-95
+                  animate-bounce
+                  bg-black
+                  text-white
+                  dark:bg-white
+                  dark:text-black
+                  hover:bg-red-700
+                "
+              >
 
-          font-black
-          uppercase
+                <span className="inline-flex items-center gap-2">
 
-          rounded-xl
-          md:rounded-2xl
+                  {isRTL
+                    ? "تسوق المنتجات الآن"
+                    : "Shop All Products"}
 
-          shadow-lg
+                </span>
 
-          transition-all
-          duration-300
+              </button>
 
-          hover:scale-105
-          active:scale-95
+            </div>
 
-          bg-black
-          text-white
+            <div className="w-full mt-8 flex justify-center">
 
-          dark:bg-white
-          dark:text-black
+              <MarqueeScroller
+                products={
+                  allProducts
+                }
+                darkMode={
+                  darkMode
+                }
+              />
 
-          hover:bg-red-700
-          hover:text-white
+            </div>
 
-          whitespace-nowrap
+            <motion.button
+              whileHover={{
+                scale: 1.04,
+              }}
+              whileTap={{
+                scale: 0.96,
+              }}
+              onClick={() =>
+                navigate(
+                  "/products"
+                )
+              }
+              className={`mt-5 px-10 py-4 rounded-full font-black uppercase hover:bg-red-700 ${
+                darkMode
+                  ? "bg-white text-black"
+                  : "bg-black text-white"
+              }`}
+            >
 
-          flex
-          items-center
-          justify-center
-        "
-      >
-        <span className="inline-flex items-center justify-center text-center">
-          {isRTL
-            ? "تسوق المنتجات الآن"
-            : "Shop All Products"}
-        </span>
-      </button>
+              {isRTL
+                ? "كل المنتجات"
+                : "Shop All"}
 
-    </div>
+            </motion.button>
 
-    {/* =================================================
-        PRODUCTS
-    ================================================= */}
+          </section>
 
-    <div className="w-full mt-8 flex justify-center">
-
-      <MarqueeScroller
-        products={allProducts}
-        darkMode={darkMode}
-      />
-
-    </div>
-
-    {/* =================================================
-        SHOP ALL BUTTON
-    ================================================= */}
-
-    <motion.button
-      whileHover={{
-        scale: 1.04,
-      }}
-      whileTap={{
-        scale: 0.96,
-      }}
-      onClick={() =>
-        navigate("/products")
-      }
-      className={`
-        mt-5
-        px-8
-        sm:px-10
-        py-3
-        sm:py-4
-        rounded-full
-        font-black
-        uppercase
-        text-sm
-        sm:text-base
-        transition-all
-        duration-300
-
-        ${
-          darkMode
-            ? "bg-white text-black"
-            : "bg-black text-white"
-        }
-
-        hover:bg-red-700
-        hover:text-white
-      `}
-    >
-      {isRTL
-        ? "كل المنتجات"
-        : "Shop All"}
-    </motion.button>
-
-  </section>
-
-)}
-```
-
+        )}
 
         {/* =================================================
             CATEGORIES
