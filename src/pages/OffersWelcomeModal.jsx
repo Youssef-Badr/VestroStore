@@ -492,7 +492,7 @@ function OffersWelcomeModal({
 
           exit={{ opacity: 0 }}
 
-          className="fixed inset-0 z-[9990] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9990] flex items-center justify-center p-6"
 
         >
 
@@ -556,7 +556,7 @@ function OffersWelcomeModal({
             ================================== */}
 
             <div
-              className={`relative px-6 py-6 ${
+              className={`relative px-4 py-4 ${
                 darkMode
                   ? "bg-gray-800"
                   : "bg-gray-100"
@@ -605,7 +605,7 @@ function OffersWelcomeModal({
                     stiffness: 200,
                   }}
 
-                  className="w-16 h-16 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-4 shadow-lg"
+                  className="w-12 h-12 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-4 shadow-lg"
                 >
 
                   <FiGift size={30} />
@@ -613,7 +613,7 @@ function OffersWelcomeModal({
                 </motion.div>
 
 
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-lg md:text-3xl font-bold">
 
                   {selectedDiscount
 
@@ -1247,7 +1247,7 @@ function OffersWelcomeModal({
                         ease: "easeInOut",
                       }}
 
-                      className="mx-auto w-24 h-24 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6 shadow-xl"
+                      className="mx-auto w-20 h-20 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6 shadow-xl"
 
                     >
 
@@ -1256,7 +1256,7 @@ function OffersWelcomeModal({
                     </motion.div>
 
 
-                    <h3 className="text-2xl md:text-3xl font-bold mb-3">
+                    <h3 className="text-lg md:text-3xl font-bold mb-3">
 
                       {isArabic
                         ? "انتظر عروض فيسترو الحصرية 🎁"
