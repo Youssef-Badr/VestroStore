@@ -2004,29 +2004,6 @@ function OffersWelcomeModal({
                   </div>
 
 
-                  <h2 className="text-lg sm:text-xl font-bold leading-tight">
-
-                    {isArabic
-                      ? "عروض حصرية"
-                      : "Exclusive Offers"}
-
-                  </h2>
-
-
-                  <p
-                    className={`text-xs mt-1 ${
-                      darkMode
-                        ? "text-gray-400"
-                        : "text-gray-500"
-                    }`}
-                  >
-
-                    {isArabic
-                      ? "خصومات مختارة لفترة محدودة."
-                      : "Selected deals for a limited time."}
-
-                  </p>
-
                 </div>
 
               </div>
