@@ -443,23 +443,7 @@ function OffersWelcomeModal({
                     VESTRO
                   </div>
 
-                  <h2 className="text-base sm:text-lg font-bold mt-0.5">
-                    {isArabic
-                      ? "عروض خاصة لك"
-                      : "Special offers for you"}
-                  </h2>
-
-                  <p
-                    className={`text-[10px] mt-0.5 ${
-                      darkMode
-                        ? "text-gray-500"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {isArabic
-                      ? "استفد من العرض قبل انتهائه"
-                      : "Grab your offer before it ends"}
-                  </p>
+                
                 </div>
               </div>
             </div>
