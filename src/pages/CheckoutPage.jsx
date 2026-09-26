@@ -387,15 +387,23 @@ const validateDiscount = async (codeToValidate, isCheckout = true) => {
   }
 
   try {
-    const res = await api.post("/discounts/validate", {
-      code: code.trim(),
-      orderItems: cart.map((item) => ({
-        product: item.product || item._id,
-        quantity: item.qty || item.quantity,
-      })),
-      shippingPrice: baseShippingCost, // 🔥 ابعت الأصل مش المتغير
-    });
+   const res = await api.post("/discounts/validate", {
+  code: code.trim(),
 
+  cartItems: cart.map((item) => ({
+    productId: item.product || item._id,
+    quantity: item.qty || item.quantity,
+    price: Number(item.price) || 0,
+  })),
+
+  subtotal: cart.reduce(
+    (total, item) =>
+      total + (Number(item.price) || 0) * (Number(item.qty) || Number(item.quantity) || 0),
+    0
+  ),
+
+  shippingPrice: baseShippingCost,
+});
     // ❌ لو الكود غير صالح
     if (!res.data.valid) {
       setDiscountInfo(null);
@@ -403,21 +411,29 @@ const validateDiscount = async (codeToValidate, isCheckout = true) => {
       setShippingCost(baseShippingCost);
       return false;
     }
+// =========================
+// ✅ SUCCESS CASE
+// =========================
+setDiscountInfo({
+  ...res.data,
+  ...res.data.discount,
 
-    // =========================
-    // ✅ SUCCESS CASE
-    // =========================
-    setDiscountInfo(res.data);
-    setIsDiscountApplied(true);
-    setDiscountError("");
+  discountCode: res.data.discount?.code || code.trim(),
 
-    // 🔥 أهم جزء: reset الأول
-    setShippingCost(baseShippingCost);
+  freeShippingApplied:
+    res.data.discount?.freeShipping === true,
+});
 
-    // لو فيه شحن مجاني
-    if (res.data.freeShippingApplied) {
-      setShippingCost(0);
-    }
+setIsDiscountApplied(true);
+setDiscountError("");
+
+// 🔥 أهم جزء: reset الأول
+setShippingCost(baseShippingCost);
+
+// لو فيه شحن مجاني
+if (res.data.discount?.freeShipping === true) {
+  setShippingCost(0);
+}
 
     toast.success(
       isRTL ? "تم تطبيق الخصم بنجاح! 🔥" : "Discount applied! 🔥",
