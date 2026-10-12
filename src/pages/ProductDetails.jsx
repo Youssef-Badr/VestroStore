@@ -898,6 +898,12 @@ className="fixed top-28 left-4 md:left-8 p-3 rounded-full bg-slate-500 dark:bg-w
             <h1 className="text-2xl sm:text-5xl font-black mb-3               uppercase text-slate-900 dark:text-white leading-none">
               {product.name}
             </h1>
+            <div className={`flex items-center gap-3 mb-4 ${isRTL ? "flex-row-reverse justify-end" : "justify-start"}`}>
+              <RatingStars value={product.rating || 0} />
+              <span className="text-xs font-black uppercase text-slate-400">
+                {product.rating?.toFixed(1) || "0.0"} ({product.numReviews || 0} {isRTL ? "تقييم" : "reviews"})
+              </span>
+            </div>
              {/* Pricing Section */}
           <div translate="no" className="py-6 border-y  border-slate-100 dark:border-white/5 flex flex-wrap items-baseline gap-4">
             {product.salePrice ? (
@@ -946,13 +952,6 @@ className="fixed top-28 left-4 md:left-8 p-3 rounded-full bg-slate-500 dark:bg-w
     </p>
   </div>
 </div>
-
-            <div className="flex items-center gap-3">
-              <RatingStars value={product.rating || 0} />
-              <span className="text-xs font-black uppercase        text-slate-400">
-                {product.rating?.toFixed(1) || "0.0"} ({product.numReviews || 0} {isRTL ? "تقييم" : "reviews"})
-              </span>
-            </div>
           </div>
 
 
