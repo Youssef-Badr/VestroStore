@@ -1261,7 +1261,7 @@
 //         type="file"
 //         accept="image/jpeg,image/png,image/webp"
 //         onChange={(event) => setInstaPayProof(event.target.files?.[0] || null)}
-//         className="block w-full text-sm text-slate-600 dark:text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-red-700 file:px-4 file:py-2 file:font-bold file:text-white"
+//         className="sr-only"
 //       />
 //       {instaPayProof && <p className="text-xs text-emerald-600">{instaPayProof.name}</p>}
 //     </div>
@@ -2847,9 +2847,9 @@ isClearable
               href={paymentSettings?.instapayUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex max-w-full break-all text-red-700 underline underline-offset-4"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-red-700 px-5 py-3 text-center text-sm font-extrabold text-white shadow-md transition hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[#111111]"
             >
-              {isRTL ? "افتح صفحة الدفع على InstaPay" : "Open InstaPay payment page"}
+              {isRTL ? "\u0627\u0636\u063a\u0637 \u0647\u0646\u0627 \u0644\u0641\u062a\u062d \u0627\u0646\u0633\u062a\u0627 \u0628\u0627\u064a \u0648\u0627\u0644\u062a\u062d\u0648\u064a\u0644" : "Click here to open InstaPay and transfer"}
             </a>
           </>
         ) : (
@@ -2907,9 +2907,16 @@ isClearable
           }
           setPaymentProofs((previous) => ({ ...previous, [formData.paymentMethod]: file }));
         }}
-        className="block w-full text-sm text-slate-600 dark:text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-red-700 file:px-4 file:py-2 file:font-bold file:text-white"
+        className="sr-only"
       />
-      {paymentProofs[formData.paymentMethod] && <p className="text-xs text-emerald-600">{paymentProofs[formData.paymentMethod].name}</p>}
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-black/40 sm:flex-row sm:items-center">
+        <label htmlFor={`${formData.paymentMethod}-proof`} className="inline-flex cursor-pointer items-center justify-center rounded-lg bg-red-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-red-800">
+          {isRTL ? "\u0627\u062e\u062a\u0627\u0631 \u0635\u0648\u0631\u0629" : "Choose image"}
+        </label>
+        <span className={`min-w-0 break-all text-sm ${paymentProofs[formData.paymentMethod] ? "font-semibold text-emerald-600" : "text-slate-500 dark:text-slate-400"}`}>
+          {paymentProofs[formData.paymentMethod]?.name || (isRTL ? "\u0644\u0645 \u064a\u062a\u0645 \u0627\u062e\u062a\u064a\u0627\u0631 \u0635\u0648\u0631\u0629" : "No file selected")}
+        </span>
+      </div>
     </div>
   )}
 </section>
