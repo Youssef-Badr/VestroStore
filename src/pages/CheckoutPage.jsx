@@ -2801,8 +2801,8 @@ isClearable
         className={`p-6 rounded-[2rem] border-2 transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === "vodafone_cash" ? "border-red-700 bg-red-700/10" : "border-transparent bg-slate-50 dark:bg-[#111111]"}`}
       >
         <Phone size={28} className={formData.paymentMethod === "vodafone_cash" ? "text-red-700" : "text-slate-400"} />
-        <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Vodafone Cash</span>
-        <span className="text-[10px] text-slate-500">{isRTL ? "محفظة إلكترونية" : "Mobile wallet"}</span>
+        <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">{isRTL ? "\u0645\u062d\u0641\u0638\u0629 \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629" : "E-Wallet"}</span>
+        <span className="text-[10px] text-slate-500">{isRTL ? "محفظة إلكترونية" : "E-Wallet"}</span>
       </button>
     )}
 
@@ -2854,7 +2854,7 @@ isClearable
           </>
         ) : (
           <>
-            <p>{isRTL ? "حوّل قيمة الطلب إلى رقم فودافون كاش التالي:" : "Transfer your order total to this Vodafone Cash number:"}</p>
+            <p>{isRTL ? "\u062d\u0648\u0651\u0644 \u0642\u064a\u0645\u0629 \u0627\u0644\u0637\u0644\u0628 \u0625\u0644\u0649 \u0627\u0644\u0645\u062d\u0641\u0638\u0629 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629 \u0627\u0644\u062a\u0627\u0644\u064a\u0629:" : "Transfer your order total to this e-wallet number:"}</p>
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-black/40">
               <span className="font-mono text-xl font-black tracking-widest text-red-700" dir="ltr">
                 {showVodafoneCashNumber
