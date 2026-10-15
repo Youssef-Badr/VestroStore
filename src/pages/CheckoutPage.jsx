@@ -1958,10 +1958,12 @@ const validateDiscount = async (codeToValidate, isCheckout = true) => {
   code: code.trim(),
 
   cartItems: cart.map((item) => ({
-    productId: item.product?._id || item.product || item._id,
+    productId: item.product || item._id,
     quantity: item.qty || item.quantity,
     price: Number(item.price) || 0,
-    variantId: item.variantId,
+    isBundle: Boolean(item.isBundle || item.bundle || item.type === "bundle"),
+    bundle: item.bundle || undefined,
+    type: item.isBundle || item.bundle || item.type === "bundle" ? "bundle" : "product",
   })),
 
   subtotal: cart.reduce(
@@ -1974,9 +1976,23 @@ const validateDiscount = async (codeToValidate, isCheckout = true) => {
 });
     // ❌ لو الكود غير صالح
     if (!res.data.valid) {
-      setDiscountInfo(null);
+      const reason = res.data.reason;
+      const codeNotFound = ["not_found", "discount_not_found", "invalid_code"].includes(reason);
+      const message = reason === "bundle_not_eligible"
+        ? (isRTL
+          ? "أنت تستفيد من عرض باندل، ولا يمكن تطبيق الخصم على عرض الباندل."
+          : "Your cart includes a bundle offer. Discounts cannot be applied to bundle offers.")
+        : codeNotFound
+          ? (isRTL
+            ? "كود الخصم غير موجود أو غير صالح. تأكد من كتابة الكود بشكل صحيح."
+            : "This discount code was not found or is invalid. Check the code and try again.")
+          : (res.data.message || (isRTL
+            ? "تعذر تطبيق كود الخصم. تأكد من صلاحية الكود وشروطه."
+            : "This discount code could not be applied. Check that it is valid and meets its conditions."));      setDiscountInfo(null);
       setIsDiscountApplied(false);
       setShippingCost(baseShippingCost);
+      setDiscountError(message);
+      toast.error(message);
       return false;
     }
 // =========================
@@ -2021,13 +2037,20 @@ if (res.data.discount?.freeShipping === true) {
     const validationData = err.response?.data || {};
     const reason = validationData.reason;
     const arabicValidationMessage = {
+      invalid_code: "كود الخصم غير صالح أو غير مفعل.",
       no_applicable_products: "الخصم لا ينطبق على منتجات السلة. راجع المنتجات المشمولة بالعرض.",
       minimum_order: "قيمة الطلب أقل من الحد الأدنى المطلوب لهذا الخصم.",
     }[reason];
+    const bundleMessage = reason === "bundle_not_eligible"
+      ? (isRTL
+        ? "أنت تستفيد من عرض باندل، ولا يمكن تطبيق الخصم على عرض الباندل."
+        : "Your cart includes a bundle offer. Discounts cannot be applied to bundle offers.")
+      : "";
     const arabicBogoMessage = reason === "bogo_quantity_not_met"
       ? `أضف ${Math.max(0, Number(validationData.requiredQuantity) - Number(validationData.eligibleQuantity))} قطعة من المنتجات المشمولة لتفعيل العرض.`
       : "";
     const msg =
+      bundleMessage ||
       (isRTL && (arabicBogoMessage || arabicValidationMessage)) ||
       validationData.message ||
       (isRTL ? "⚠️ كود غير صالح" : "⚠️ Invalid code");
