@@ -2789,20 +2789,20 @@ isClearable
     {isRTL ? "طريقة الدفع" : "Payment Method"}
   </h2>
 
-  <div className="grid grid-cols-2 gap-4">
+  <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
 
     {/* 💵 Cash */}
     <div 
       onClick={() => setFormData(p => ({...p, paymentMethod: 'cash'}))}
-      className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 
+      className={`min-h-28 w-full rounded-2xl border-2 p-3 transition-all flex flex-col items-center justify-center gap-2 sm:min-h-36 sm:rounded-[2rem] sm:gap-3 sm:p-6 
       ${formData.paymentMethod === 'cash' 
         ? 'border-red-700 bg-red-700/10' 
         : 'border-transparent bg-slate-50 dark:bg-[#111111]'
       }`}
     >
-      <Banknote size={28} className={formData.paymentMethod === 'cash' ? 'text-red-700' : 'text-slate-400'} />
+      <Banknote size={28} className={`h-5 w-5 sm:h-7 sm:w-7 ${formData.paymentMethod === 'cash' ? 'text-red-700' : 'text-slate-400'}`} />
 
-      <span className={`text-[10px] font-black uppercase 
+      <span className={`text-center text-[9px] font-black leading-tight uppercase sm:text-[10px] 
         ${formData.paymentMethod === 'cash' 
           ? 'text-slate-900 dark:text-white' 
           : 'text-slate-400'
@@ -2816,9 +2816,10 @@ isClearable
       <button
         type="button"
         onClick={() => setFormData((p) => ({ ...p, paymentMethod: "instapay" }))}
-        className={`p-6 rounded-[2rem] border-2 transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === "instapay" ? "border-red-700 bg-red-700/10" : "border-transparent bg-slate-50 dark:bg-[#111111]"}`}
+        aria-pressed={formData.paymentMethod === "instapay"}
+        className={`min-h-28 w-full rounded-2xl border-2 p-3 transition-all flex flex-col items-center justify-center gap-1.5 sm:min-h-36 sm:rounded-[2rem] sm:gap-3 sm:p-6 ${formData.paymentMethod === "instapay" ? "border-red-700 bg-red-700/10" : "border-transparent bg-slate-50 dark:bg-[#111111]"}`}
       >
-        <CreditCard size={28} className={formData.paymentMethod === "instapay" ? "text-red-700" : "text-slate-400"} />
+        <CreditCard size={28} className={`h-5 w-5 sm:h-7 sm:w-7 ${formData.paymentMethod === "instapay" ? "text-red-700" : "text-slate-400"}`} />
         <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">InstaPay</span>
         <span className="text-[10px] text-slate-500">{isRTL ? "تحويل فوري" : "Instant transfer"}</span>
       </button>
@@ -2828,9 +2829,10 @@ isClearable
       <button
         type="button"
         onClick={() => setFormData((p) => ({ ...p, paymentMethod: "vodafone_cash" }))}
-        className={`p-6 rounded-[2rem] border-2 transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === "vodafone_cash" ? "border-red-700 bg-red-700/10" : "border-transparent bg-slate-50 dark:bg-[#111111]"}`}
+        aria-pressed={formData.paymentMethod === "vodafone_cash"}
+        className={`min-h-28 w-full rounded-2xl border-2 p-3 transition-all flex flex-col items-center justify-center gap-1.5 sm:min-h-36 sm:rounded-[2rem] sm:gap-3 sm:p-6 ${formData.paymentMethod === "vodafone_cash" ? "border-red-700 bg-red-700/10" : "border-transparent bg-slate-50 dark:bg-[#111111]"}`}
       >
-        <Phone size={28} className={formData.paymentMethod === "vodafone_cash" ? "text-red-700" : "text-slate-400"} />
+        <Phone size={28} className={`h-5 w-5 sm:h-7 sm:w-7 ${formData.paymentMethod === "vodafone_cash" ? "text-red-700" : "text-slate-400"}`} />
         <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">{isRTL ? "\u0645\u062d\u0641\u0638\u0629 \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629" : "E-Wallet"}</span>
         <span className="text-[10px] text-slate-500">{isRTL ? "محفظة إلكترونية" : "E-Wallet"}</span>
       </button>
@@ -2845,22 +2847,22 @@ isClearable
             : "Online payment is currently unavailable 🔧"
         );
       }}
-      className="relative p-6 rounded-[2rem] border-2 cursor-pointer transition-all flex flex-col items-center gap-3 
+      className="relative min-h-28 w-full rounded-2xl border-2 p-3 transition-all flex flex-col items-center justify-center gap-2 sm:min-h-36 sm:rounded-[2rem] sm:gap-3 sm:p-6 
                  border-dashed border-red-400 bg-slate-50 dark:bg-[#111111] opacity-70"
     >
-      <CreditCard size={28} className="text-slate-400" />
+      <CreditCard size={28} className="h-5 w-5 text-slate-400 sm:h-7 sm:w-7" />
 
-      <span className="text-[10px] font-black uppercase text-slate-400">
+      <span className="text-center text-[9px] font-black leading-tight uppercase text-slate-400 sm:text-[10px]">
         {isRTL ? "فيزا / ماستر" : "Card / Visa"}
       </span>
 
       {/* ⚠️ Badge */}
-      <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-black px-2 py-[2px] rounded-full">
+      <span className="absolute -top-2 right-2 rounded-full bg-red-600 px-2 py-[2px] text-[9px] font-black text-white sm:-right-2 sm:text-[10px]">
         {isRTL ? " غير متاح حاليا للتحديث" : "OFF"}
       </span>
 
       {/* 🔒 Overlay hint */}
-      <span className="text-[9px] font-bold text-red-500 mt-1">
+      <span className="mt-0.5 text-[9px] font-bold text-red-500 sm:mt-1">
         {isRTL ? "قيد التحديث" : "Coming soon"}
       </span>
     </div>
@@ -2868,8 +2870,8 @@ isClearable
   </div>
 
   {["instapay", "vodafone_cash"].includes(formData.paymentMethod) && (
-    <div className="rounded-2xl border border-red-700/30 bg-slate-50 dark:bg-[#111111] p-5 space-y-4">
-      <div className="space-y-2 text-sm font-bold text-slate-700 dark:text-slate-200">
+    <div className="space-y-3 rounded-2xl border border-red-700/30 bg-slate-50 p-3 dark:bg-[#111111] sm:space-y-4 sm:p-5">
+      <div className="space-y-2 text-xs font-bold leading-relaxed text-slate-700 dark:text-slate-200 sm:text-sm">
         {formData.paymentMethod === "instapay" ? (
           <>
             <p>{isRTL ? "حوّل قيمة الطلب إلى حساب InstaPay من الرابط الرسمي:" : "Transfer your order total using the official InstaPay link:"}</p>
@@ -2877,7 +2879,7 @@ isClearable
               href={paymentSettings?.instapayUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center rounded-xl bg-red-700 px-5 py-3 text-center text-sm font-extrabold text-white shadow-md transition hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[#111111]"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-red-700 px-3 py-3 text-center text-xs font-extrabold leading-tight text-white shadow-md transition hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[#111111] sm:px-5 sm:text-sm"
             >
               {isRTL ? "\u0627\u0636\u063a\u0637 \u0647\u0646\u0627 \u0644\u0641\u062a\u062d \u0627\u0646\u0633\u062a\u0627 \u0628\u0627\u064a \u0648\u0627\u0644\u062a\u062d\u0648\u064a\u0644" : "Click here to open InstaPay and transfer"}
             </a>
@@ -2885,8 +2887,8 @@ isClearable
         ) : (
           <>
             <p>{isRTL ? "\u062d\u0648\u0651\u0644 \u0642\u064a\u0645\u0629 \u0627\u0644\u0637\u0644\u0628 \u0625\u0644\u0649 \u0627\u0644\u0645\u062d\u0641\u0638\u0629 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629 \u0627\u0644\u062a\u0627\u0644\u064a\u0629:" : "Transfer your order total to this e-wallet number:"}</p>
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-black/40">
-              <span className="font-mono text-xl font-black tracking-widest text-red-700" dir="ltr">
+            <div className="grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-black/40 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 sm:px-4 sm:py-3">
+              <span className="col-span-2 text-center font-mono text-lg font-black tracking-widest text-red-700 sm:col-span-1 sm:text-left sm:text-xl" dir="ltr">
                 {showVodafoneCashNumber
                   ? paymentSettings?.vodafoneCashNumber
                   : `••••••${String(paymentSettings?.vodafoneCashNumber || "").slice(-3)}`}
@@ -2894,7 +2896,7 @@ isClearable
               <button
                 type="button"
                 onClick={() => setShowVodafoneCashNumber((visible) => !visible)}
-                className="rounded-lg border border-slate-300 px-3 py-2 text-xs font-bold dark:border-white/20"
+                className="rounded-lg border border-slate-300 px-2 py-2 text-[10px] font-bold dark:border-white/20 sm:px-3 sm:text-xs"
               >
                 {showVodafoneCashNumber ? (isRTL ? "إخفاء الرقم" : "Hide number") : (isRTL ? "إظهار الرقم" : "Show number")}
               </button>
@@ -2908,7 +2910,7 @@ isClearable
                     toast.info(paymentSettings.vodafoneCashNumber);
                   }
                 }}
-                className="rounded-lg bg-red-700 px-3 py-2 text-xs font-bold text-white"
+                className="rounded-lg bg-red-700 px-2 py-2 text-[10px] font-bold text-white sm:px-3 sm:text-xs"
               >
                 {isRTL ? "نسخ الرقم" : "Copy number"}
               </button>
@@ -2919,7 +2921,7 @@ isClearable
           {isRTL ? "بعد التحويل ارفع صورة واضحة للإيصال. لن يُعتمد الطلب قبل مراجعة التحويل." : "Upload a clear receipt after transferring. The order stays pending until the transfer is reviewed."}
         </p>
       </div>
-      <label htmlFor={`${formData.paymentMethod}-proof`} className="block text-sm font-bold text-slate-800 dark:text-white">
+      <label htmlFor={`${formData.paymentMethod}-proof`} className="block text-xs font-bold text-slate-800 dark:text-white sm:text-sm">
         {isRTL ? "إثبات التحويل (صورة واحدة، حتى 8 ميجابايت)" : "Transfer receipt (one image, up to 8 MB)"}
       </label>
       <input
@@ -2939,11 +2941,11 @@ isClearable
         }}
         className="sr-only"
       />
-      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-black/40 sm:flex-row sm:items-center">
-        <label htmlFor={`${formData.paymentMethod}-proof`} className="inline-flex cursor-pointer items-center justify-center rounded-lg bg-red-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-red-800">
+      <div className="flex min-w-0 flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-black/40 sm:flex-row sm:items-center sm:gap-3 sm:p-4">
+        <label htmlFor={`${formData.paymentMethod}-proof`} className="inline-flex cursor-pointer items-center justify-center rounded-lg bg-red-700 px-3 py-2 text-xs font-bold text-white transition hover:bg-red-800 sm:px-4 sm:py-2.5 sm:text-sm">
           {isRTL ? "\u0627\u062e\u062a\u0627\u0631 \u0635\u0648\u0631\u0629" : "Choose image"}
         </label>
-        <span className={`min-w-0 break-all text-sm ${paymentProofs[formData.paymentMethod] ? "font-semibold text-emerald-600" : "text-slate-500 dark:text-slate-400"}`}>
+        <span className={`min-w-0 break-all text-center text-xs sm:text-left sm:text-sm ${paymentProofs[formData.paymentMethod] ? "font-semibold text-emerald-600" : "text-slate-500 dark:text-slate-400"}`}>
           {paymentProofs[formData.paymentMethod]?.name || (isRTL ? "\u0644\u0645 \u064a\u062a\u0645 \u0627\u062e\u062a\u064a\u0627\u0631 \u0635\u0648\u0631\u0629" : "No file selected")}
         </span>
       </div>
@@ -3230,8 +3232,8 @@ isClearable
               </h2>
               <p className="mt-4 text-sm font-bold leading-7 text-slate-700 dark:text-slate-200">
                 {isRTL
-                  ? "\u0623\u0648\u0627\u0641\u0642 \u0639\u0644\u0649 \u0627\u0633\u062a\u0642\u0628\u0627\u0644 \u0631\u0633\u0627\u0626\u0644 \u0648\u0627\u062a\u0633\u0627\u0628 \u0627\u0644\u062a\u0633\u0648\u064a\u0642\u064a\u0629 \u0645\u0646 VESTRO\u061f"
-                  : "I agree to receive WhatsApp marketing messages from VESTRO?"}
+                  ? "\u0623\u0648\u0627\u0641\u0642 \u0639\u0644\u0649 \u0627\u0633\u062a\u0642\u0628\u0627\u0644 \u062c\u0645\u064a\u0639 \u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u062a\u0633\u0648\u064a\u0642\u064a\u0629 \u0648\u062a\u062d\u062f\u064a\u062b\u0627\u062a \u0627\u0644\u0634\u062d\u0646 \u0645\u0646 VESTRO\u061f"
+                  : "I agree to receive all types of marketing messages and shipping updates from VESTRO?"}
               </p>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 {isRTL ? "\u064a\u0645\u0643\u0646\u0643 \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u0627\u0634\u062a\u0631\u0627\u0643 \u0641\u064a \u0623\u064a \u0648\u0642\u062a" : "You can unsubscribe at any time."}
