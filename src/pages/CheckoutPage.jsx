@@ -1580,6 +1580,7 @@ const { darkMode } = useTheme();
   const [selectedCityObj, setSelectedCityObj] = useState(null);
   const [availableDiscounts, setAvailableDiscounts] = useState([]);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [showMarketingConsentModal, setShowMarketingConsentModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [discountError, setDiscountError] = useState(""); // لمسح رسائل الخطأ
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
@@ -1598,7 +1599,7 @@ const [baseShippingCost, setBaseShippingCost] = useState(0);
     email: "",
     phone: "",
     secondaryPhone: "",
-    marketingConsent: true,
+    marketingConsent: null,
     city: "",
     district: "",
     bostaDistrictId: "",
@@ -2101,8 +2102,8 @@ const scrollToRef = (ref) => {
 };
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+const handleSubmit = async (e, marketingConsentChoice = formData.marketingConsent) => {
+  e?.preventDefault();
    if (loading) return; // 🔥 منع الضغط المتكرر
   setLoading(true);
 
@@ -2195,6 +2196,12 @@ const handleSubmit = async (e) => {
       return; 
     }
 
+    if (marketingConsentChoice !== true && marketingConsentChoice !== false) {
+      setShowMarketingConsentModal(true);
+      setLoading(false);
+      return;
+    }
+
     // =========================================================
     // إرسال البيانات للـ API (باقي الكود السليم الخاص بك)
     // =========================================================
@@ -2228,7 +2235,7 @@ const handleSubmit = async (e) => {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
-      marketingConsent: formData.marketingConsent,
+      marketingConsent: marketingConsentChoice,
       secondaryPhone: formData.secondaryPhone,
       fbp,
       fbc,
@@ -2271,7 +2278,7 @@ const handleSubmit = async (e) => {
       Object.keys(commonData).forEach((key) => {
         if (key === "shippingAddress" || key === "orderItems") {
           payload.append(key, JSON.stringify(commonData[key]));
-        } else if (commonData[key]) {
+        } else if (commonData[key] !== undefined && commonData[key] !== null) {
           payload.append(key, commonData[key]);
         }
       });
@@ -3156,7 +3163,7 @@ isClearable
 
   </div>
 </div>
-<div className="rounded-[1.5rem] border border-slate-200 dark:border-white/10 p-4 bg-slate-50 dark:bg-[#111111]">
+<div className="hidden rounded-[1.5rem] border border-slate-200 dark:border-white/10 p-4 bg-slate-50 dark:bg-[#111111]">
 
   <label className="flex items-start gap-3 cursor-pointer">
 
@@ -3209,6 +3216,53 @@ isClearable
           </button>
 
         </form>
+
+        {showMarketingConsentModal && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm" dir={isRTL ? "rtl" : "ltr"}>
+            <section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="marketing-consent-title"
+              className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-[#151515] sm:p-8"
+            >
+              <h2 id="marketing-consent-title" className="text-xl font-black text-slate-900 dark:text-white">
+                {isRTL ? "\u062a\u0641\u0636\u064a\u0644\u0627\u062a \u0631\u0633\u0627\u0626\u0644 \u0648\u0627\u062a\u0633\u0627\u0628" : "WhatsApp message preference"}
+              </h2>
+              <p className="mt-4 text-sm font-bold leading-7 text-slate-700 dark:text-slate-200">
+                {isRTL
+                  ? "\u0623\u0648\u0627\u0641\u0642 \u0639\u0644\u0649 \u0627\u0633\u062a\u0642\u0628\u0627\u0644 \u0631\u0633\u0627\u0626\u0644 \u0648\u0627\u062a\u0633\u0627\u0628 \u0627\u0644\u062a\u0633\u0648\u064a\u0642\u064a\u0629 \u0645\u0646 VESTRO\u061f"
+                  : "I agree to receive WhatsApp marketing messages from VESTRO?"}
+              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                {isRTL ? "\u064a\u0645\u0643\u0646\u0643 \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u0627\u0634\u062a\u0631\u0627\u0643 \u0641\u064a \u0623\u064a \u0648\u0642\u062a" : "You can unsubscribe at any time."}
+              </p>
+              <div className="mt-7 grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData((previous) => ({ ...previous, marketingConsent: true }));
+                    setShowMarketingConsentModal(false);
+                    handleSubmit(undefined, true);
+                  }}
+                  className="rounded-xl bg-red-700 px-4 py-3 font-black text-white transition hover:bg-red-800"
+                >
+                  {isRTL ? "\u0646\u0639\u0645" : "Yes"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData((previous) => ({ ...previous, marketingConsent: false }));
+                    setShowMarketingConsentModal(false);
+                    handleSubmit(undefined, false);
+                  }}
+                  className="rounded-xl border border-slate-300 px-4 py-3 font-black text-slate-800 transition hover:bg-slate-100 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
+                >
+                  {isRTL ? "\u0644\u0627" : "No"}
+                </button>
+              </div>
+            </section>
+          </div>
+        )}
       </div>
     </div>
   );
